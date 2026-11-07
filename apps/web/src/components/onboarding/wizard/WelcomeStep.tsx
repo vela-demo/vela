@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React from "react";
 
@@ -16,9 +16,9 @@ export function WelcomeStep({ onNext, onSkip }: WelcomeStepProps) {
       {/* Welcome Message */}
       <div className="space-y-4">
         <h1 className="text-4xl font-extrabold tracking-tight">
-          Welcome to <span className="text-violet-500">PoolX</span>
+          Welcome to <span className="text-violet-500">Vela</span>
         </h1>
-        <p className="text-lg text-[var(--text-muted)] max-w-lg mx-auto">
+        <p className="text-lg text-[var(--fg-muted)] max-w-lg mx-auto">
           Your decentralized social network on Stellar. Let&apos;s get you set up in just a few
           steps!
         </p>
@@ -26,22 +26,22 @@ export function WelcomeStep({ onNext, onSkip }: WelcomeStepProps) {
 
       {/* Features Preview */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full max-w-3xl mt-8">
-        <div className="bg-[var(--muted)] p-4 rounded-lg border border-[var(--border)]">
+        <div className="bg-[var(--bg-subtle)] p-4 rounded-lg border border-[var(--border)]">
           <div className="text-3xl mb-2">👤</div>
           <h3 className="font-semibold mb-1">Create Your Profile</h3>
-          <p className="text-sm text-[var(--text-muted)]">Set up your identity and stand out</p>
+          <p className="text-sm text-[var(--fg-muted)]">Set up your identity and stand out</p>
         </div>
-        <div className="bg-[var(--muted)] p-4 rounded-lg border border-[var(--border)]">
+        <div className="bg-[var(--bg-subtle)] p-4 rounded-lg border border-[var(--border)]">
           <div className="text-3xl mb-2">🤝</div>
           <h3 className="font-semibold mb-1">Connect with Creators</h3>
-          <p className="text-sm text-[var(--text-muted)]">
+          <p className="text-sm text-[var(--fg-muted)]">
             Follow amazing people and build your network
           </p>
         </div>
-        <div className="bg-[var(--muted)] p-4 rounded-lg border border-[var(--border)]">
+        <div className="bg-[var(--bg-subtle)] p-4 rounded-lg border border-[var(--border)]">
           <div className="text-3xl mb-2">💰</div>
           <h3 className="font-semibold mb-1">Earn & Tip</h3>
-          <p className="text-sm text-[var(--text-muted)]">
+          <p className="text-sm text-[var(--fg-muted)]">
             Support creators and earn from your content
           </p>
         </div>
@@ -57,7 +57,7 @@ export function WelcomeStep({ onNext, onSkip }: WelcomeStepProps) {
         </button>
         <button
           onClick={onSkip}
-          className="px-6 py-3 text-[var(--text-muted)] hover:text-[var(--text)] transition-colors"
+          className="px-6 py-3 text-[var(--fg-muted)] hover:text-[var(--text)] transition-colors"
         >
           Skip for now
         </button>

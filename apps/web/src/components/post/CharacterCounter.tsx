@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { utf8Bytes } from "poolx-sdk";
+import { utf8Bytes } from "vela-sdk";
 
 export interface CharacterCounterProps {
   value: string;

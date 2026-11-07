@@ -1,904 +1,494 @@
-"use client";
+﻿"use client";
 
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
 import { useWallet } from "@/hooks/useWallet";
 import { PostCard, PostCardSkeleton, type Post } from "@/components/PostCard";
-import { OptimisticStore, useOptimisticLike, useOptimisticTip } from "@/lib/optimisticStore";
-import { PoolXClient } from "../../../../../packages/sdk/src/client";
+import { mockFetch } from "@/lib/mockData";
 import { validateAmount, validateStellarAddress } from "@/lib/validate";
 import { FieldError } from "@/components/forms/FieldError";
-import { OnboardingGuard } from "@/components/onboarding/OnboardingGuard";
-import { AppSidebar } from "@/components/AppSidebar";
-import { AnimatedList } from "@/components/AnimatedList";
-import { useFeedPersistence } from "@/hooks/useFeedPersistence";
-import { useMobileDetect } from "@/hooks/useMobileDetect";
-import { MobileHeader } from "@/components/mobile/MobileHeader";
-import { MobileFeed } from "@/components/mobile/MobileFeed";
-import { MasonryCard } from "@/components/cards/MasonryCard";
 import { buildSignAndSubmit } from "@/lib/tx";
 import { nativeToScVal, Address } from "@stellar/stellar-sdk";
-import { mockFetch } from "@/lib/mockData";
 
-/* ────────────────────────────────────────────────────────────────────────── */
-/*  Config & Constants                                                       */
-/* ────────────────────────────────────────────────────────────────────────── */
+/* ── Config ─────────────────────────────────────────────────────────────── */
+const CONTRACT_ID  = process.env.NEXT_PUBLIC_CONTRACT_ID  ?? "CDUMMY";
+const RPC_URL      = process.env.NEXT_PUBLIC_RPC_URL      ?? "https://soroban-testnet.stellar.org";
+const NET_PASS     = process.env.NEXT_PUBLIC_NETWORK_PASSPHRASE ?? "Test SDF Network ; September 2015";
+const INDEXER_URL  = process.env.NEXT_PUBLIC_INDEXER_URL  ?? "http://localhost:3001";
+const PAGE_SIZE    = 10;
 
-const contractId = process.env.NEXT_PUBLIC_CONTRACT_ID || "CDUMMY";
-const rpcUrl = process.env.NEXT_PUBLIC_RPC_URL || "https://soroban-testnet.stellar.org";
-const networkPassphrase =
-  process.env.NEXT_PUBLIC_NETWORK_PASSPHRASE || "Test SDF Network ; September 2015";
-const indexerUrl = process.env.NEXT_PUBLIC_INDEXER_URL || "http://localhost:3001";
-const PAGE_SIZE = 10;
-
-/* ────────────────────────────────────────────────────────────────────────── */
-/*  Interactive Post Wrapper to bind Optimistic Updates                     */
-/* ────────────────────────────────────────────────────────────────────────── */
-
-interface InteractivePostCardProps {
-  post: Post;
-  currentUserAddress: string | null;
-  onTipClick: (post: Post) => void;
-  tourAnchor?: boolean;
-  variant?: "list" | "masonry";
+/* ── Data helpers ───────────────────────────────────────────────────────── */
+async function fetchPosts(url: string): Promise<{ posts: Post[]; has_more: boolean }> {
+  try {
+    const res = await fetch(url);
+    if (res.ok) return res.json();
+  } catch { /* indexer offline */ }
+  const mock = mockFetch(url);
+  return { posts: mock?.posts ?? [], has_more: mock?.has_more ?? false };
 }
 
-function InteractivePostCard({
+async function fetchFollowing(address: string): Promise<string[]> {
+  const url = `${INDEXER_URL}/api/follows/${address}/following?limit=100`;
+  try {
+    const res = await fetch(url);
+    if (res.ok) { const d = await res.json(); return d.following ?? []; }
+  } catch { /* offline */ }
+  return mockFetch(url)?.following ?? [];
+}
+
+function relativeTime(post: Post): string {
+  const raw = post.created_at ?? post.timestamp;
+  if (!raw) return "";
+  const ms = Number(raw) < 1e12 ? Number(raw) * 1000 : Number(raw);
+  const diff = (Date.now() - ms) / 1000;
+  if (diff < 60)  return `${Math.floor(diff)}s`;
+  if (diff < 3600) return `${Math.floor(diff / 60)}m`;
+  if (diff < 86400) return `${Math.floor(diff / 3600)}h`;
+  return `${Math.floor(diff / 86400)}d`;
+}
+
+/* ── Post row ───────────────────────────────────────────────────────────── */
+function PostRow({
   post,
-  currentUserAddress,
-  onTipClick,
-  tourAnchor,
-  variant = "list",
-}: InteractivePostCardProps) {
-  const [isTipping, setIsTipping] = useState(false);
-  const postId = String(post.id);
+  address,
+  onTip,
+}: {
+  post: Post;
+  address: string | null;
+  onTip: (post: Post) => void;
+}) {
+  const [liked, setLiked] = useState(false);
+  const [likes, setLikes] = useState(Number(post.like_count ?? 0));
+  const [busy, setBusy] = useState(false);
 
-  // Determine initial liked state from the fetched user likes
-  const initialIsLiked = userLikes.has(postId);
-
-  // Optimistic Like State
-  const likeState = useOptimisticLike(currentUserAddress, postId, {
-    isLiked: initialIsLiked,
-    likeCount: Number(post.like_count ?? 0),
-  });
-
-  // Optimistic Tip State
-  const tipState = useOptimisticTip(postId, {
-    tipTotal: Number(post.tip_total ?? 0),
-  });
+  const initials = (post.username ?? post.author).slice(1, 3).toUpperCase();
+  const handle   = post.username ? `@${post.username}` : `${post.author.slice(0, 6)}…${post.author.slice(-4)}`;
+  const time     = relativeTime(post);
 
   const handleLike = async () => {
-    if (!currentUserAddress) {
-      alert("Please connect your wallet to like posts.");
-      return;
-    }
-
-    const key = `${currentUserAddress}:${post.id}`;
-    const nextIsLiked = !likeState.isLiked;
-    const nextLikeCount = likeState.likeCount + (nextIsLiked ? 1 : -1);
-
+    if (!address) return;
+    if (busy) return;
+    setBusy(true);
+    const next = !liked;
+    setLiked(next);
+    setLikes(c => c + (next ? 1 : -1));
     try {
-      // Build, sign, and submit the transaction
       await buildSignAndSubmit(
-        nextIsLiked ? "like_post" : "unlike_post",
-        [
-          Address.fromString(currentUserAddress).toScVal(),
-          nativeToScVal(Number(post.id), { type: "u32" }),
-        ],
-        currentUserAddress,
-        {
-          contractId,
-          rpcUrl,
-          networkPassphrase,
-        }
+        next ? "like_post" : "unlike_post",
+        [Address.fromString(address).toScVal(), nativeToScVal(Number(post.id), { type: "u32" })],
+        address,
+        { contractId: CONTRACT_ID, rpcUrl: RPC_URL, networkPassphrase: NET_PASS }
       );
-
-      // Apply optimistic update only after successful transaction
-      OptimisticStore.setLikeState(key, {
-        isLiked: nextIsLiked,
-        likeCount: nextLikeCount,
-      });
-    } catch (err) {
-      console.error("Failed to like/unlike post on chain:", err);
-      alert(`Failed to ${nextIsLiked ? "like" : "unlike"} post. Please try again.`);
-      // No optimistic update applied, so no rollback needed
+    } catch {
+      // roll back
+      setLiked(!next);
+      setLikes(c => c + (next ? -1 : 1));
+    } finally {
+      setBusy(false);
     }
   };
-
-  const enrichedPost = {
-    ...post,
-    like_count: likeState.likeCount,
-    tip_total: tipState.tipTotal,
-  };
-
-  if (variant === "masonry") {
-    return (
-      <MasonryCard
-        post={enrichedPost}
-        isLiked={likeState.isLiked}
-        onLike={handleLike}
-        onTip={() => onTipClick(post)}
-        isTipping={isTipping}
-      />
-    );
-  }
 
   return (
-    <PostCard
-      post={enrichedPost}
-      isLiked={likeState.isLiked}
-      onLike={handleLike}
-      onTip={() => onTipClick(post)}
-      isTipping={isTipping}
-      tourAnchor={tourAnchor}
-    />
+    <article
+      className="flex gap-3 px-4 py-4 transition-colors"
+      style={{ borderBottom: "1px solid var(--border)" }}
+    >
+      {/* Avatar */}
+      <div
+        className="shrink-0 w-10 h-10 rounded-full flex items-center justify-center text-xs font-bold text-white select-none"
+        style={{ background: "var(--brand)" }}
+        aria-hidden="true"
+      >
+        {initials}
+      </div>
+
+      <div className="min-w-0 flex-1">
+        {/* Header */}
+        <div className="flex items-baseline gap-2 flex-wrap mb-1">
+          <span className="font-semibold text-sm" style={{ color: "var(--fg)" }}>{handle}</span>
+          {time && <span className="text-xs" style={{ color: "var(--fg-subtle)" }}>{time}</span>}
+        </div>
+
+        {/* Content */}
+        <p className="text-[15px] leading-relaxed whitespace-pre-wrap break-words" style={{ color: "var(--fg)" }}>
+          {post.content}
+        </p>
+
+        {/* Actions */}
+        <div className="flex items-center gap-5 mt-3">
+          {/* Like */}
+          <button
+            onClick={handleLike}
+            disabled={!address || busy}
+            className="flex items-center gap-1.5 text-sm transition-colors group disabled:opacity-40"
+            style={{ color: liked ? "#f43f5e" : "var(--fg-subtle)" }}
+            aria-label={liked ? "Unlike" : "Like"}
+          >
+            <svg className="w-4 h-4 transition-transform group-hover:scale-110" fill={liked ? "currentColor" : "none"} viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
+            </svg>
+            <span>{likes}</span>
+          </button>
+
+          {/* Tip */}
+          <button
+            onClick={() => onTip(post)}
+            className="flex items-center gap-1.5 text-sm transition-colors group"
+            style={{ color: "var(--fg-subtle)" }}
+            aria-label="Tip creator"
+          >
+            <svg className="w-4 h-4 transition-transform group-hover:scale-110 group-hover:text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} aria-hidden="true">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span className="group-hover:text-amber-400">{Number(post.tip_total ?? 0)}</span>
+          </button>
+        </div>
+      </div>
+    </article>
   );
 }
 
-/* ────────────────────────────────────────────────────────────────────────── */
-/*  Main Feed Page Component                                                 */
-/* ────────────────────────────────────────────────────────────────────────── */
+/* ── Tip modal ──────────────────────────────────────────────────────────── */
+function TipModal({ post, onClose, address }: { post: Post; onClose: () => void; address: string }) {
+  const [token, setToken]   = useState("");
+  const [amount, setAmount] = useState("");
+  const [errors, setErrors] = useState<{ token?: string; amount?: string }>({});
+  const [busy, setBusy]     = useState(false);
 
-export default function FeedPage() {
-  const { address: currentUserAddress, connected, connect } = useWallet();
-  const [activeTab, setActiveTab] = useState<"following" | "explore">("explore");
-  const isMobile = useMobileDetect();
-
-  const {
-    isOffline,
-    servedFromCache,
-    setServedFromCache,
-    restoreScroll,
-    persistFeed,
-    getCache,
-    clearCache,
-  } = useFeedPersistence(activeTab);
-
-  // Feed items, pagination & loading states
-  const [posts, setPosts] = useState<Post[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [loadingMore, setLoadingMore] = useState(false);
-  const [hasMore, setHasMore] = useState(true);
-  const [cursor, setCursor] = useState<number | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  const [showScrollTop, setShowScrollTop] = useState(false);
-
-  // User's liked posts set (for seeding initial like state)
-  const [userLikes, setUserLikes] = useState<Set<string>>(new Set());
-  const [likesLoading, setLikesLoading] = useState(false);
-
-  // Real-time updates via WebSocket
-  const [hasNewPosts, setHasNewPosts] = useState(false);
-
-  // Whether the current user follows nobody (following tab empty state)
-  const [followsNobody, setFollowsNobody] = useState(false);
-  const socketRef = useRef<WebSocket | null>(null);
-  const reconnectTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const isMountedRef = useRef(true);
-
-  // Tipping modal state
-  const [tippingPost, setTippingPost] = useState<Post | null>(null);
-  const [tipToken, setTipToken] = useState("");
-  const [tipAmount, setTipAmount] = useState("");
-  const [tipErrors, setTipErrors] = useState<{ token?: string; amount?: string }>({});
-  const [tipSubmitting, setTipSubmitting] = useState(false);
-
-  /* ── Fetch Posts Logic ──────────────────────────────────────────────── */
-
-  // Fetch helper — falls back to mock data when the indexer is unreachable
-  const fetchWithFallback = useCallback(async (url: string) => {
-    try {
-      const res = await fetch(url);
-      if (res.ok) return await res.json();
-    } catch {
-      // indexer not running — use mock data
-    }
-    return mockFetch(url) ?? {};
-  }, []);
-
-  const fetchExploreFeed = useCallback(
-    async (cursorParam: number | null, append = false) => {
-      try {
-        if (!append) setLoading(true);
-        else setLoadingMore(true);
-
-        const cursorQuery = cursorParam !== null ? `&cursor=${cursorParam}` : "";
-        const data = await fetchWithFallback(`${indexerUrl}/api/posts?limit=${PAGE_SIZE}${cursorQuery}`);
-        const fetchedPosts: Post[] = data.posts ?? [];
-
-        setPosts((prev) => (append ? [...prev, ...fetchedPosts] : fetchedPosts));
-        setHasMore(data.has_more ?? false);
-
-        const newPosts = append ? [...posts, ...fetchedPosts] : fetchedPosts;
-        persistFeed({ posts: newPosts, cursor: cursorParam, hasMore: data.has_more ?? false });
-
-        // Reconcile optimistic state against the fresh server response (#1203)
-        OptimisticStore.reconcileFeed(currentUserAddress, newPosts);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : "An error occurred");
-      } finally {
-        setLoading(false);
-        setLoadingMore(false);
-      }
-    },
-    [posts, persistFeed, currentUserAddress, fetchWithFallback]
-  );
-
-  const fetchFollowingFeed = useCallback(
-    async (cursorParam: number | null, append = false) => {
-      if (!currentUserAddress) {
-        setPosts([]);
-        setLoading(false);
-        return;
-      }
-
-      try {
-        if (!append) setLoading(true);
-        else setLoadingMore(true);
-
-        // 1. Get followed accounts
-        const followingData = await fetchWithFallback(
-          `${indexerUrl}/api/follows/${currentUserAddress}/following?limit=100`
-        );
-        const followingList: string[] = followingData.following ?? [];
-
-        if (followingList.length === 0) {
-          setPosts([]);
-          setHasMore(false);
-          setFollowsNobody(true);
-          setLoading(false);
-          setLoadingMore(false);
-          // No visible posts — prune all optimistic entries (#1203)
-          OptimisticStore.reconcileFeed(currentUserAddress, []);
-          return;
-        }
-        setFollowsNobody(false);
-
-        // 2. Fetch posts from followed accounts in parallel
-        const postsPromises = followingList.map(async (addr) => {
-          const cursorQuery = cursorParam !== null ? `&cursor=${cursorParam}` : "";
-          const d = await fetchWithFallback(
-            `${indexerUrl}/api/posts?author=${addr}&limit=10${cursorQuery}`
-          );
-          return d.posts ?? [];
-        });
-
-        const allFetchedNested = await Promise.all(postsPromises);
-        const allFetchedPosts: Post[] = allFetchedNested.flat();
-
-        // Sort chronological descending
-        allFetchedPosts.sort((a, b) => {
-          const timeA = Number(a.created_at ?? a.timestamp ?? 0);
-          const timeB = Number(b.created_at ?? b.timestamp ?? 0);
-          return timeB - timeA;
-        });
-
-        // For following tab, we use client-side pagination with cursor
-        const startIdx = append ? posts.length : 0;
-        const paginated = allFetchedPosts.slice(startIdx, startIdx + PAGE_SIZE);
-        const newPosts = append ? [...posts, ...paginated] : paginated;
-        setPosts((prev) => (append ? [...prev, ...paginated] : paginated));
-        setHasMore(startIdx + paginated.length < allFetchedPosts.length);
-        persistFeed({
-          posts: newPosts,
-          cursor: cursorParam,
-          hasMore: startIdx + paginated.length < allFetchedPosts.length,
-        });
-
-        // Reconcile optimistic state against the fresh server response (#1203)
-        OptimisticStore.reconcileFeed(currentUserAddress, newPosts);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : "An error occurred");
-      } finally {
-        setLoading(false);
-        setLoadingMore(false);
-      }
-    },
-    [currentUserAddress, posts, persistFeed, fetchWithFallback] as const
-  );
-
-  const loadFeed = useCallback(
-    (cursorParam: number | null, append = false) => {
-      setError(null);
-      if (activeTab === "following") {
-        fetchFollowingFeed(cursorParam, append);
-      } else {
-        fetchExploreFeed(cursorParam, append);
-      }
-    },
-    [activeTab, fetchExploreFeed, fetchFollowingFeed]
-  );
-
-  // Initial load and tab switching — restore from cache when offline or on mount
-  useEffect(() => {
-    setCursor(null);
-    setHasNewPosts(false);
-    setFollowsNobody(false);
-
-    const cached = getCache();
-    if (cached && cached.posts.length > 0 && isOffline) {
-      setPosts(cached.posts);
-      setCursor(cached.cursor);
-      setHasMore(cached.hasMore);
-      setLoading(false);
-      setServedFromCache(true);
-      restoreScroll();
-      return;
-    }
-
-    loadFeed(null, false);
-  }, [activeTab, loadFeed, isOffline, getCache, setServedFromCache, restoreScroll]);
-
-  // Persist scroll position on scroll
-  useEffect(() => {
-    if (posts.length === 0) return;
-    const persistTimer = setTimeout(() => {
-      persistFeed({ posts, cursor, hasMore });
-    }, 300);
-    return () => clearTimeout(persistTimer);
-  }, [posts, cursor, hasMore, persistFeed]);
-
-  // Infinite Scroll Sentinel
-  const sentinelRef = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    if (loading || loadingMore || !hasMore) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0]?.isIntersecting) {
-          // Use the oldest post's timestamp as the next cursor
-          const oldestPost = posts[posts.length - 1];
-          const nextCursor = oldestPost
-            ? Number(oldestPost.created_at ?? oldestPost.timestamp ?? 0)
-            : null;
-          setCursor(nextCursor);
-          loadFeed(nextCursor, true);
-        }
-      },
-      { rootMargin: "150px" }
-    );
-
-    const el = sentinelRef.current;
-    if (el) observer.observe(el);
-    return () => {
-      if (el) observer.unobserve(el);
-    };
-  }, [loading, loadingMore, hasMore, posts, loadFeed]);
-
-  // Scroll to Top FAB
-  useEffect(() => {
-    const handleScroll = () => {
-      setShowScrollTop(window.scrollY > 500);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
-
-  /* ── WebSocket Setup for Real-time indicator ───────────────────────── */
-
-  useEffect(() => {
-    const wsUrl = indexerUrl.replace(/^http/, "ws") + "/ws";
-    isMountedRef.current = true;
-
-    const connectWs = () => {
-      if (!isMountedRef.current) return;
-
-      const socket = new WebSocket(wsUrl);
-      socketRef.current = socket;
-
-      socket.onopen = () => {
-        if (!isMountedRef.current) return;
-        // Subscribe to PostCreated events
-        socket.send(JSON.stringify({ action: "subscribe", types: ["PostCreated"] }));
-      };
-
-      socket.onmessage = (event) => {
-        if (!isMountedRef.current) return;
-
-        try {
-          const msg = JSON.parse(event.data);
-          if (msg.type === "PostCreated") {
-            setHasNewPosts(true);
-          }
-        } catch {}
-      };
-
-      socket.onerror = () => {
-        if (!isMountedRef.current) return;
-        socket.close();
-      };
-
-      socket.onclose = () => {
-        if (!isMountedRef.current) return;
-
-        if (reconnectTimerRef.current) {
-          clearTimeout(reconnectTimerRef.current);
-        }
-
-        reconnectTimerRef.current = setTimeout(() => {
-          if (!isMountedRef.current) {
-            reconnectTimerRef.current = null;
-            return;
-          }
-
-          reconnectTimerRef.current = null;
-          connectWs();
-        }, 5000);
-      };
-    };
-
-    connectWs();
-
-    return () => {
-      isMountedRef.current = false;
-
-      if (reconnectTimerRef.current) {
-        clearTimeout(reconnectTimerRef.current);
-        reconnectTimerRef.current = null;
-      }
-
-      if (socketRef.current) {
-        socketRef.current.onopen = null;
-        socketRef.current.onmessage = null;
-        socketRef.current.onerror = null;
-        socketRef.current.onclose = null;
-        socketRef.current.close();
-        socketRef.current = null;
-      }
-    };
-  }, []);
-
-  const handleRefreshFeed = () => {
-    setCursor(null);
-    setHasNewPosts(false);
-    loadFeed(null, false);
-  };
-
-  /* ── Tipping Form Submission ────────────────────────────────────────── */
-
-  const handleOpenTipModal = (post: Post) => {
-    setTippingPost(post);
-    setTipToken("");
-    setTipAmount("");
-    setTipErrors({});
-  };
-
-  const handleCloseTipModal = () => {
-    setTippingPost(null);
-  };
-
-  const handleTipSubmit = async (e: React.FormEvent) => {
+  const submit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!tippingPost || !currentUserAddress) return;
-
-    // Validate inputs
-    const errors: { token?: string; amount?: string } = {};
-    const addrResult = validateStellarAddress(tipToken);
-    if (!addrResult.valid) errors.token = addrResult.error;
-
-    const amountResult = validateAmount(tipAmount);
-    if (!amountResult.valid) errors.amount = amountResult.error;
-
-    if (Object.keys(errors).length > 0) {
-      setTipErrors(errors);
-      return;
-    }
-
-    setTipSubmitting(true);
-    const amountVal = parseFloat(tipAmount);
-    const postTipKey = String(tippingPost.id);
-    const currentTipTotal = Number(tippingPost.tip_total ?? 0);
-
+    const errs: typeof errors = {};
+    const tr = validateStellarAddress(token);
+    if (!tr.valid) errs.token = tr.error;
+    const ar = validateAmount(amount);
+    if (!ar.valid) errs.amount = ar.error;
+    if (Object.keys(errs).length) { setErrors(errs); return; }
+    setBusy(true);
     try {
-      // Build, sign, and submit the transaction
       await buildSignAndSubmit(
         "tip",
         [
-          Address.fromString(currentUserAddress).toScVal(),
-          nativeToScVal(Number(tippingPost.id), { type: "u64" }),
-          Address.fromString(tipToken.trim()).toScVal(),
-          nativeToScVal(BigInt(Math.floor(amountVal * 10_000_000)), { type: "i128" }),
+          Address.fromString(address).toScVal(),
+          nativeToScVal(Number(post.id), { type: "u64" }),
+          Address.fromString(token.trim()).toScVal(),
+          nativeToScVal(BigInt(Math.floor(parseFloat(amount) * 10_000_000)), { type: "i128" }),
         ],
-        currentUserAddress,
-        {
-          contractId,
-          rpcUrl,
-          networkPassphrase,
-        }
+        address,
+        { contractId: CONTRACT_ID, rpcUrl: RPC_URL, networkPassphrase: NET_PASS }
       );
-
-      // Apply optimistic update only after successful transaction
-      const nextTipTotal = currentTipTotal + amountVal;
-      OptimisticStore.setTipState(postTipKey, { tipTotal: nextTipTotal });
-
-      handleCloseTipModal();
-    } catch (err) {
-      console.error("Tipping failed:", err);
-      alert("Failed to send tip. Please try again.");
-      // No optimistic update applied, so no rollback needed
-    } finally {
-      setTipSubmitting(false);
-    }
+      onClose();
+    } catch { alert("Tip failed. Please try again."); }
+    finally { setBusy(false); }
   };
 
-  /* ── UI Render ──────────────────────────────────────────────────────── */
-
   return (
-    <OnboardingGuard>
-      <div className="min-h-screen bg-[var(--bg-primary)] text-[var(--text-primary)] pb-12">
-        {/* Offline Banner */}
-        {isOffline && (
-          <div className="bg-amber-900/40 border-b border-amber-700/50 text-amber-200 px-4 py-2.5 text-center text-sm font-medium">
-            You are offline. Showing cached feed data.
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: "rgba(0,0,0,0.6)", backdropFilter: "blur(6px)" }}>
+      <div className="w-full max-w-md rounded-2xl p-6 shadow-2xl" style={{ background: "var(--bg-elevated)", border: "1px solid var(--border)" }}>
+        <div className="flex items-center justify-between mb-5">
+          <h2 className="text-lg font-bold" style={{ color: "var(--fg)" }}>Tip Creator</h2>
+          <button onClick={onClose} className="text-lg" style={{ color: "var(--fg-muted)" }} aria-label="Close">✕</button>
+        </div>
+        <form onSubmit={submit} className="space-y-4" noValidate>
+          <div>
+            <label className="block text-sm font-medium mb-1.5" htmlFor="tip-token" style={{ color: "var(--fg)" }}>
+              Token Address <span className="text-red-500">*</span>
+            </label>
+            <input
+              id="tip-token" type="text" placeholder="G…"
+              value={token} onChange={e => setToken(e.target.value)}
+              className="w-full rounded-xl px-3.5 py-2.5 text-sm font-mono focus:outline-none focus:ring-2"
+              style={{ background: "var(--bg)", border: `1px solid ${errors.token ? "#ef4444" : "var(--border)"}`, color: "var(--fg)" }}
+            />
+            <FieldError id="tip-token-error" message={errors.token} />
           </div>
-        )}
-
-        {/* Served from cache indicator */}
-        {!isOffline && servedFromCache && (
-          <div className="bg-blue-900/30 border-b border-blue-700/40 text-blue-200 px-4 py-2 text-center text-xs">
-            Showing cached feed. Pull to refresh for latest posts.
+          <div>
+            <label className="block text-sm font-medium mb-1.5" htmlFor="tip-amount" style={{ color: "var(--fg)" }}>
+              Amount <span className="text-red-500">*</span>
+            </label>
+            <input
+              id="tip-amount" type="number" step="any" placeholder="0.00"
+              value={amount} onChange={e => setAmount(e.target.value)}
+              className="w-full rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2"
+              style={{ background: "var(--bg)", border: `1px solid ${errors.amount ? "#ef4444" : "var(--border)"}`, color: "var(--fg)" }}
+            />
+            <FieldError id="tip-amount-error" message={errors.amount} />
           </div>
-        )}
-
-        {/* Real-time Toast Banner */}
-        {hasNewPosts && (
-          <div className="fixed top-20 left-1/2 -translate-x-1/2 z-50 animate-bounce">
-            <button
-              onClick={handleRefreshFeed}
-              className="flex items-center gap-2 bg-violet-600 hover:bg-violet-500 text-white font-semibold text-sm px-5 py-2.5 rounded-full shadow-xl transition-all border border-violet-400/30"
-            >
-              ✨ New posts available! Click to refresh
+          <div className="flex gap-3 justify-end pt-2">
+            <button type="button" onClick={onClose} className="px-4 py-2 rounded-xl text-sm font-semibold" style={{ border: "1px solid var(--border)", color: "var(--fg)" }}>Cancel</button>
+            <button type="submit" disabled={busy} className="px-5 py-2 rounded-xl text-sm font-semibold text-white disabled:opacity-50" style={{ background: "var(--brand)" }}>
+              {busy ? "Sending…" : "Send Tip"}
             </button>
           </div>
-        )}
-
-        <div className="mx-auto flex max-w-5xl gap-8 px-4 py-8">
-          <div className="min-w-0 flex-1 max-w-2xl" data-tour="feed">
-            <header className="mb-8">
-              <h1 className="hidden md:block text-3xl font-extrabold tracking-tight mb-6">
-                Home Feed
-              </h1>
-
-              <MobileHeader activeTab={activeTab} onTabChange={setActiveTab} />
-
-              {/* Navigation Tabs */}
-              <div className="hidden md:flex border-b border-[var(--border)] gap-6">
-                <button
-                  onClick={() => setActiveTab("explore")}
-                  className={`pb-3 text-base font-semibold transition-all relative ${
-                    activeTab === "explore"
-                      ? "text-[var(--foreground)]"
-                      : "text-[var(--text-muted)] hover:text-[var(--foreground)]"
-                  }`}
-                >
-                  Explore
-                  {activeTab === "explore" && (
-                    <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-violet-500 rounded-full" />
-                  )}
-                </button>
-                <button
-                  onClick={() => setActiveTab("following")}
-                  className={`pb-3 text-base font-semibold transition-all relative ${
-                    activeTab === "following"
-                      ? "text-[var(--foreground)]"
-                      : "text-[var(--text-muted)] hover:text-[var(--foreground)]"
-                  }`}
-                >
-                  Following
-                  {activeTab === "following" && (
-                    <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-violet-500 rounded-full" />
-                  )}
-                </button>
-              </div>
-            </header>
-
-            {/* Auth required wall for Following Tab */}
-            {activeTab === "following" && (!connected || !currentUserAddress) ? (
-              <div className="rounded-2xl border border-[var(--border)] bg-[var(--muted)] p-6 md:p-8 text-center shadow-lg">
-                <div className="text-4xl mb-4">🔒</div>
-                <h2 className="text-xl font-bold mb-2">Connect Your Wallet</h2>
-                <p className="text-[var(--text-muted)] mb-6 max-w-sm mx-auto">
-                  Follow developers and creators to view a personalized feed of their latest posts.
-                </p>
-                <button
-                  onClick={connect}
-                  className="bg-violet-600 hover:bg-violet-500 text-white font-semibold px-6 py-2.5 rounded-xl transition-all shadow-md"
-                >
-                  Connect Wallet
-                </button>
-              </div>
-            ) : (
-              <>
-                {/* Error Message */}
-                {error && (
-                  <div
-                    className="bg-red-950/40 border border-red-800 text-red-200 px-4 py-3 rounded-xl mb-4 text-sm"
-                    role="alert"
-                  >
-                    ⚠️ {error}
-                  </div>
-                )}
-
-                {/* Skeletons on initial load */}
-                {loading ? (
-                  <div className="space-y-4">
-                    <PostCardSkeleton />
-                    <PostCardSkeleton />
-                    <PostCardSkeleton />
-                  </div>
-                ) : posts.length === 0 ? (
-                  /* Empty state */
-                  <div className="space-y-4">
-                    <div
-                      className="rounded-xl border border-dashed border-[var(--border)] bg-[var(--muted)]/40 p-4"
-                      data-tour="post-actions"
-                    >
-                      <p className="mb-3 text-sm text-[var(--text-muted)]">
-                        When posts appear, you can interact with them here:
-                      </p>
-                      <div className="flex items-center gap-6">
-                        <span className="flex items-center gap-2 text-sm text-[var(--text-muted)]">
-                          <span className="text-lg">🤍</span> Like
-                        </span>
-                        <span className="flex items-center gap-2 text-sm text-[var(--text-muted)]">
-                          <span className="text-lg">💰</span> Tip
-                        </span>
-                      </div>
-                    </div>
-                    <div className="rounded-2xl border border-[var(--border)] bg-[var(--muted)]/50 p-12 text-center">
-                      {activeTab === "following" && followsNobody ? (
-                        <>
-                          <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-[var(--bg-tertiary)]">
-                            <svg
-                              className="w-8 h-8 text-[var(--text-muted)]"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              strokeWidth={1.5}
-                              stroke="currentColor"
-                              aria-hidden="true"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z"
-                              />
-                            </svg>
-                          </div>
-                          <h2 className="text-lg font-bold mb-1">
-                            You&apos;re not following anyone yet
-                          </h2>
-                          <p className="text-[var(--text-muted)] text-sm mb-6 max-w-xs mx-auto">
-                            Follow creators you like to see their latest posts in your feed.
-                          </p>
-                          <Link
-                            href="/explore"
-                            className="inline-flex items-center gap-2 bg-violet-600 hover:bg-violet-500 text-white font-semibold text-sm px-5 py-2.5 rounded-xl transition-all shadow-md"
-                          >
-                            Find people to follow
-                            <svg
-                              className="w-4 h-4"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              strokeWidth={2}
-                              stroke="currentColor"
-                              aria-hidden="true"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
-                              />
-                            </svg>
-                          </Link>
-                        </>
-                      ) : (
-                        <>
-                          <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-[var(--bg-tertiary)]">
-                            <svg
-                              className="w-8 h-8 text-[var(--text-muted)]"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              strokeWidth={1.5}
-                              stroke="currentColor"
-                              aria-hidden="true"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 01-2.25 2.25M16.5 7.5V18a2.25 2.25 0 002.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 002.25 2.25h13.5M6 7.5h3v3H6v-3z"
-                              />
-                            </svg>
-                          </div>
-                          <h2 className="text-lg font-bold mb-1">No posts found</h2>
-                          <p className="text-[var(--text-muted)] text-sm mb-6">
-                            {activeTab === "following"
-                              ? "Accounts you follow haven't posted yet."
-                              : "Be the first one to share something with the community!"}
-                          </p>
-                          {activeTab === "following" && (
-                            <button
-                              onClick={() => setActiveTab("explore")}
-                              className="text-violet-400 hover:text-violet-300 font-semibold text-sm transition-colors"
-                            >
-                              Explore creators instead →
-                            </button>
-                          )}
-                        </>
-                      )}
-                    </div>
-                  </div>
-                ) : (
-                  /* Feed list */
-                  <>
-                    {isMobile ? (
-                      <MobileFeed onRefresh={handleRefreshFeed} refreshing={loading}>
-                        {posts.map((post, index) => (
-                          <InteractivePostCard
-                            key={post.id}
-                            post={post}
-                            currentUserAddress={currentUserAddress}
-                            onTipClick={handleOpenTipModal}
-                            tourAnchor={index === 0}
-                            variant="masonry"
-                          />
-                        ))}
-                      </MobileFeed>
-                    ) : (
-                      <div className="space-y-4">
-                        {posts.map((post, index) => (
-                          <InteractivePostCard
-                            key={post.id}
-                            post={post}
-                            currentUserAddress={currentUserAddress}
-                            onTipClick={handleOpenTipModal}
-                            tourAnchor={index === 0}
-                          />
-                        ))}
-                      </div>
-                    )}
-
-                    {/* Infinite Scroll Sentinel / Loading More */}
-                    {hasMore && (
-                      <div ref={sentinelRef} className="py-6 text-center">
-                        {loadingMore ? (
-                          <div className="flex items-center justify-center gap-2">
-                            <Spinner />
-                            <span className="text-sm text-[var(--text-muted)]">
-                              Loading more posts…
-                            </span>
-                          </div>
-                        ) : null}
-                      </div>
-                    )}
-                  </>
-                )}
-              </>
-            )}
-          </div>
-          <AppSidebar />
-        </div>
-
-        {/* Scroll to Top FAB */}
-        {showScrollTop && (
-          <button
-            onClick={scrollToTop}
-            className="fixed bottom-8 right-8 w-12 h-12 bg-violet-600 hover:bg-violet-500 text-white rounded-full shadow-xl flex items-center justify-center transition-all z-40"
-            aria-label="Scroll to top"
-          >
-            <svg
-              className="w-6 h-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={2}
-              stroke="currentColor"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 15.75l7.5-7.5 7.5 7.5" />
-            </svg>
-          </button>
-        )}
-
-        {/* Tipping Dialog Modal */}
-        {tippingPost && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-            <div className="w-full max-w-md rounded-2xl border border-[var(--border)] bg-[var(--muted)] p-4 md:p-6 shadow-2xl animate-in fade-in zoom-in duration-200">
-              <header className="flex items-center justify-between mb-4">
-                <h2 className="text-xl font-bold">Tip Creator</h2>
-                <button
-                  onClick={handleCloseTipModal}
-                  className="text-[var(--text-muted)] hover:text-[var(--foreground)] text-xl transition-colors"
-                  aria-label="Close tip modal"
-                >
-                  ✕
-                </button>
-              </header>
-
-              <form onSubmit={handleTipSubmit} className="space-y-4" noValidate>
-                <div>
-                  <label className="block text-sm font-medium mb-1.5" htmlFor="tip-token">
-                    Token Address <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    id="tip-token"
-                    type="text"
-                    placeholder="G..."
-                    value={tipToken}
-                    onChange={(e) => setTipToken(e.target.value)}
-                    className={`w-full rounded-xl border bg-[var(--bg-primary)] px-3.5 py-2.5 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-violet-500 ${
-                      tipErrors.token ? "border-red-500" : "border-[var(--border)]"
-                    }`}
-                  />
-                  <FieldError id="tip-token-error" message={tipErrors.token} />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium mb-1.5" htmlFor="tip-amount">
-                    Amount <span className="text-red-500">*</span>
-                  </label>
-                  <input
-                    id="tip-amount"
-                    type="number"
-                    step="any"
-                    placeholder="0.00"
-                    value={tipAmount}
-                    onChange={(e) => setTipAmount(e.target.value)}
-                    className={`w-full rounded-xl border bg-[var(--bg-primary)] px-3.5 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500 ${
-                      tipErrors.amount ? "border-red-500" : "border-[var(--border)]"
-                    }`}
-                  />
-                  <FieldError id="tip-amount-error" message={tipErrors.amount} />
-                </div>
-
-                <div className="flex flex-col sm:flex-row gap-3 justify-end pt-3">
-                  <button
-                    type="button"
-                    onClick={handleCloseTipModal}
-                    className="px-4.5 py-2 rounded-xl border border-[var(--border)] text-sm font-semibold hover:bg-[var(--bg-secondary)] transition-colors"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    type="submit"
-                    disabled={tipSubmitting}
-                    className="px-5 py-2 rounded-xl bg-violet-600 text-white text-sm font-semibold hover:bg-violet-500 transition-colors shadow-md disabled:opacity-50"
-                  >
-                    {tipSubmitting ? "Sending..." : "Send Tip"}
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
-        )}
+        </form>
       </div>
-    </OnboardingGuard>
+    </div>
   );
 }
 
-function Spinner() {
+/* ── Empty state ────────────────────────────────────────────────────────── */
+function EmptyState({ tab, onSwitch, onConnect }: { tab: "explore" | "following"; onSwitch: () => void; onConnect: () => void }) {
+  if (tab === "following") {
+    return (
+      <div className="px-4 py-16 text-center">
+        <div className="mx-auto mb-4 w-14 h-14 rounded-full flex items-center justify-center" style={{ background: "var(--bg-muted)" }}>
+          <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5} style={{ color: "var(--fg-muted)" }} aria-hidden="true">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" />
+          </svg>
+        </div>
+        <p className="font-semibold mb-1" style={{ color: "var(--fg)" }}>Nobody followed yet</p>
+        <p className="text-sm mb-5" style={{ color: "var(--fg-muted)" }}>Follow some creators to see their posts here.</p>
+        <button onClick={onSwitch} className="text-sm font-semibold" style={{ color: "var(--brand)" }}>Browse creators →</button>
+      </div>
+    );
+  }
   return (
-    <svg
-      className="animate-spin h-5 w-5 text-[var(--text-muted)]"
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      viewBox="0 0 24 24"
-    >
-      <circle
-        className="opacity-25"
-        cx="12"
-        cy="12"
-        r="10"
-        stroke="currentColor"
-        strokeWidth="4"
-      ></circle>
-      <path
-        className="opacity-75"
-        fill="currentColor"
-        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-      ></path>
-    </svg>
+    <div className="px-4 py-16 text-center">
+      <p className="font-semibold mb-1" style={{ color: "var(--fg)" }}>No posts yet</p>
+      <p className="text-sm" style={{ color: "var(--fg-muted)" }}>Be the first to post something.</p>
+    </div>
+  );
+}
+
+/* ── Main page ──────────────────────────────────────────────────────────── */
+export default function FeedPage() {
+  const { address, connected, connect } = useWallet();
+
+  const [tab, setTab]           = useState<"explore" | "following">("explore");
+  const [posts, setPosts]       = useState<Post[]>([]);
+  const [loading, setLoading]   = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [hasMore, setHasMore]   = useState(false);
+  const [error, setError]       = useState<string | null>(null);
+  const [tipping, setTipping]   = useState<Post | null>(null);
+  const [newPostsToast, setNewPostsToast] = useState(false);
+
+  // Stable cursor ref — never in dep arrays
+  const cursorRef    = useRef<number | null>(null);
+  const loadingRef   = useRef(false);
+  const mountedRef   = useRef(true);
+  const wsRef        = useRef<WebSocket | null>(null);
+  const sentinelRef  = useRef<HTMLDivElement>(null);
+
+  useEffect(() => { mountedRef.current = true; return () => { mountedRef.current = false; }; }, []);
+
+  /* ── Fetch ────────────────────────────────────────────────────────── */
+  const load = useCallback(async (
+    currentTab: "explore" | "following",
+    currentAddress: string | null,
+    cursor: number | null,
+    append: boolean
+  ) => {
+    if (loadingRef.current) return;
+    loadingRef.current = true;
+    if (!append) setLoading(true);
+    else setLoadingMore(true);
+    setError(null);
+
+    try {
+      let nextPosts: Post[] = [];
+      let nextHasMore = false;
+      const cursorQ = cursor != null ? `&cursor=${cursor}` : "";
+
+      if (currentTab === "explore") {
+        const data = await fetchPosts(`${INDEXER_URL}/api/posts?limit=${PAGE_SIZE}${cursorQ}`);
+        nextPosts   = data.posts;
+        nextHasMore = data.has_more;
+      } else {
+        if (!currentAddress) {
+          nextPosts   = [];
+          nextHasMore = false;
+        } else {
+          const following = await fetchFollowing(currentAddress);
+          if (following.length === 0) {
+            nextPosts   = [];
+            nextHasMore = false;
+          } else {
+            const results = await Promise.all(
+              following.map(addr =>
+                fetchPosts(`${INDEXER_URL}/api/posts?author=${addr}&limit=10${cursorQ}`)
+              )
+            );
+            const all = results.flatMap(r => r.posts).sort(
+              (a, b) => Number(b.created_at ?? b.timestamp ?? 0) - Number(a.created_at ?? a.timestamp ?? 0)
+            );
+            nextPosts   = all.slice(0, PAGE_SIZE);
+            nextHasMore = all.length > PAGE_SIZE;
+          }
+        }
+      }
+
+      if (!mountedRef.current) return;
+      setPosts(prev => append ? [...prev, ...nextPosts] : nextPosts);
+      setHasMore(nextHasMore);
+      if (nextPosts.length > 0) {
+        const last = nextPosts[nextPosts.length - 1];
+        cursorRef.current = Number(last.created_at ?? last.timestamp ?? 0);
+      }
+    } catch (err) {
+      if (mountedRef.current) setError(err instanceof Error ? err.message : "Failed to load feed");
+    } finally {
+      if (mountedRef.current) { setLoading(false); setLoadingMore(false); }
+      loadingRef.current = false;
+    }
+  }, []); // no deps — receives everything as args
+
+  // Load on tab change
+  useEffect(() => {
+    cursorRef.current = null;
+    setPosts([]);
+    setHasMore(false);
+    setNewPostsToast(false);
+    load(tab, address, null, false);
+  }, [tab, address, load]);
+
+  // Infinite scroll
+  useEffect(() => {
+    const el = sentinelRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(entries => {
+      if (entries[0]?.isIntersecting && hasMore && !loadingRef.current) {
+        load(tab, address, cursorRef.current, true);
+      }
+    }, { rootMargin: "200px" });
+    observer.observe(el);
+    return () => observer.unobserve(el);
+  }, [hasMore, tab, address, load]);
+
+  // WebSocket — new posts toast
+  useEffect(() => {
+    const wsUrl = INDEXER_URL.replace(/^http/, "ws") + "/ws";
+    let timer: ReturnType<typeof setTimeout>;
+
+    const connect = () => {
+      try {
+        const ws = new WebSocket(wsUrl);
+        wsRef.current = ws;
+        ws.onopen = () => ws.send(JSON.stringify({ action: "subscribe", types: ["PostCreated"] }));
+        ws.onmessage = e => {
+          try { if (JSON.parse(e.data).type === "PostCreated") setNewPostsToast(true); } catch {}
+        };
+        ws.onclose = () => { timer = setTimeout(connect, 5000); };
+        ws.onerror = () => ws.close();
+      } catch {}
+    };
+
+    connect();
+    return () => {
+      clearTimeout(timer);
+      wsRef.current?.close();
+      wsRef.current = null;
+    };
+  }, []);
+
+  const refresh = () => {
+    cursorRef.current = null;
+    setNewPostsToast(false);
+    load(tab, address, null, false);
+  };
+
+  /* ── Render ───────────────────────────────────────────────────────── */
+  return (
+    <div className="mx-auto max-w-2xl" style={{ minHeight: "100dvh" }}>
+      {/* Sticky tab bar */}
+      <div
+        className="sticky top-[57px] z-20 flex"
+        style={{ background: "var(--bg)", borderBottom: "1px solid var(--border)" }}
+      >
+        {(["explore", "following"] as const).map(t => (
+          <button
+            key={t}
+            onClick={() => setTab(t)}
+            className="flex-1 py-3.5 text-sm font-semibold capitalize transition-colors relative"
+            style={{ color: tab === t ? "var(--fg)" : "var(--fg-muted)" }}
+            aria-selected={tab === t}
+          >
+            {t === "explore" ? "For You" : "Following"}
+            {tab === t && (
+              <span
+                className="absolute bottom-0 left-1/4 right-1/4 h-0.5 rounded-full"
+                style={{ background: "var(--brand)" }}
+              />
+            )}
+          </button>
+        ))}
+      </div>
+
+      {/* New posts toast */}
+      {newPostsToast && (
+        <div className="sticky top-[105px] z-10 flex justify-center py-2">
+          <button
+            onClick={refresh}
+            className="text-sm font-semibold px-4 py-1.5 rounded-full text-white shadow-lg"
+            style={{ background: "var(--brand)" }}
+          >
+            ↑ New posts
+          </button>
+        </div>
+      )}
+
+      {/* Following — wallet gate */}
+      {tab === "following" && !connected && (
+        <div className="px-4 py-16 text-center">
+          <p className="font-semibold mb-2" style={{ color: "var(--fg)" }}>Connect your wallet</p>
+          <p className="text-sm mb-5" style={{ color: "var(--fg-muted)" }}>
+            Connect to see posts from people you follow.
+          </p>
+          <button
+            onClick={connect}
+            className="px-5 py-2 rounded-xl text-sm font-semibold text-white"
+            style={{ background: "var(--brand)" }}
+          >
+            Connect wallet
+          </button>
+        </div>
+      )}
+
+      {/* Error */}
+      {error && (
+        <div className="mx-4 mt-4 px-4 py-3 rounded-xl text-sm" style={{ background: "rgba(239,68,68,0.1)", border: "1px solid rgba(239,68,68,0.3)", color: "#fca5a5" }} role="alert">
+          {error}
+        </div>
+      )}
+
+      {/* Loading skeletons */}
+      {loading && (
+        <div>
+          {[1, 2, 3, 4, 5].map(i => (
+            <PostCardSkeleton key={i} />
+          ))}
+        </div>
+      )}
+
+      {/* Posts */}
+      {!loading && !(tab === "following" && !connected) && (
+        posts.length === 0
+          ? <EmptyState tab={tab} onSwitch={() => setTab("explore")} onConnect={connect} />
+          : <div>
+              {posts.map(post => (
+                <PostRow
+                  key={post.id}
+                  post={post}
+                  address={address}
+                  onTip={setTipping}
+                />
+              ))}
+
+              {/* Infinite scroll sentinel */}
+              <div ref={sentinelRef} className="py-4 flex justify-center">
+                {loadingMore && (
+                  <svg className="animate-spin w-5 h-5" fill="none" viewBox="0 0 24 24" style={{ color: "var(--fg-subtle)" }} aria-label="Loading more">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                  </svg>
+                )}
+              </div>
+            </div>
+      )}
+
+      {/* Tip modal */}
+      {tipping && address && (
+        <TipModal post={tipping} address={address} onClose={() => setTipping(null)} />
+      )}
+    </div>
   );
 }

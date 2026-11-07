@@ -41,7 +41,7 @@ export async function GET(request: NextRequest) {
 
     const response = await fetch(url, {
       headers: {
-        'User-Agent': 'Mozilla/5.0 (compatible; PoolX/1.0; +https://poolx.social)',
+        'User-Agent': 'Mozilla/5.0 (compatible; Vela/1.0; +https://vela.social)',
         'Accept': 'text/html',
       },
       signal: controller.signal,

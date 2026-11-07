@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -41,7 +41,7 @@ export function AppSidebar() {
 
   return (
     <aside className="hidden w-56 shrink-0 lg:block" aria-label="App sidebar" data-tour="sidebar">
-      <div className="sticky top-24 space-y-3 rounded-2xl border border-[var(--border)] bg-[var(--muted)]/60 p-3">
+      <div className="sticky top-24 space-y-3 rounded-2xl border border-[var(--border)] bg-[var(--bg-subtle)]/60 p-3">
         <button
           type="button"
           onClick={() => setIsModalOpen(true)}
@@ -50,7 +50,7 @@ export function AppSidebar() {
           Create Post
         </button>
 
-        <p className="px-2 text-xs font-semibold uppercase tracking-wide text-[var(--text-muted)]">
+        <p className="px-2 text-xs font-semibold uppercase tracking-wide text-[var(--fg-muted)]">
           Discover
         </p>
         <nav className="space-y-1">
@@ -65,7 +65,7 @@ export function AppSidebar() {
                 className={`flex items-start gap-3 rounded-xl px-3 py-2.5 transition-colors ${
                   isActive
                     ? "bg-violet-600/15 text-violet-300"
-                    : "text-[var(--foreground)] hover:bg-[var(--bg-tertiary)]"
+                    : "text-[var(--fg)] hover:bg-[var(--bg-tertiary)]"
                 }`}
               >
                 <svg
@@ -81,7 +81,7 @@ export function AppSidebar() {
                 </svg>
                 <span>
                   <span className="block text-sm font-semibold">{link.label}</span>
-                  <span className="block text-xs text-[var(--text-muted)]">{link.description}</span>
+                  <span className="block text-xs text-[var(--fg-muted)]">{link.description}</span>
                 </span>
               </Link>
             );

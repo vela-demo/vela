@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 
-/** Landing Page - PoolX Brand Identity */
+/** Landing Page - Vela Brand Identity */
 export default function Home() {
   redirect("/feed");
 }

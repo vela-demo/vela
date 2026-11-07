@@ -1,5 +1,5 @@
 /**
- * Typed TypeScript client for the PoolX Soroban contract.
+ * Typed TypeScript client for the Vela Soroban contract.
  *
  * Generated / maintained via:
  *   pnpm --filter contracts generate:bindings
@@ -49,7 +49,7 @@ export interface Pool {
 
 // ── Client configuration ──────────────────────────────────────────────────────
 
-export interface PoolXClientConfig {
+export interface VelaClientConfig {
   /** Stellar RPC endpoint URL */
   rpcUrl: string;
   /** Deployed contract ID (C...) */
@@ -60,12 +60,12 @@ export interface PoolXClientConfig {
 
 // ── Typed client ──────────────────────────────────────────────────────────────
 
-export class PoolXClient {
+export class VelaClient {
   private readonly contract: Contract;
   private readonly server: StellarRpc.Server;
   private readonly networkPassphrase: string;
 
-  constructor(config: PoolXClientConfig) {
+  constructor(config: VelaClientConfig) {
     this.contract = new Contract(config.contractId);
     this.server = new StellarRpc.Server(config.rpcUrl);
     this.networkPassphrase = config.networkPassphrase;

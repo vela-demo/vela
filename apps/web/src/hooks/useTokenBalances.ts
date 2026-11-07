@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useCallback, useRef } from "react";
-import { ClassicAccountClient } from "poolx-sdk";
+import { ClassicAccountClient } from "vela-sdk";
 
 const CACHE_TTL_MS = 30_000;
 const classicClient = new ClassicAccountClient();

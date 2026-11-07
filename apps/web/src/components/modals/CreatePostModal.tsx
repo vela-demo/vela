@@ -8,7 +8,7 @@ import { PostComposer } from "../post/PostComposer";
 import { useMediaUpload } from "@/hooks/useMediaUpload";
 import { useLinkPreview } from "@/hooks/useLinkPreview";
 import { useDraft } from "@/hooks/useDraft";
-import { PoolXClient } from "poolx-sdk";
+import { VelaClient } from "vela-sdk";
 
 const RPC_URL = process.env.NEXT_PUBLIC_SOROBAN_RPC_URL ?? "https://soroban-testnet.stellar.org";
 const NETWORK_PASSPHRASE =
@@ -59,7 +59,7 @@ export function CreatePostModal({ isOpen, onClose, onSubmit, author }: CreatePos
     if (!isOpen) return;
 
     let cancelled = false;
-    const client = new PoolXClient({ contractId: CONTRACT_ID, rpcUrl: RPC_URL });
+    const client = new VelaClient({ contractId: CONTRACT_ID, rpcUrl: RPC_URL });
 
     client
       .getMaxPostContentLen()

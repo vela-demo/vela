@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React, { useState } from "react";
 import { usePosts } from "@/hooks/usePosts";
@@ -30,14 +30,14 @@ export function FeedContainer({ authorAddress }: FeedContainerProps) {
   return (
     <div className="mx-auto max-w-2xl px-4 py-6 space-y-6">
       {/* Create Post Header Banner / Trigger */}
-      <div className="flex items-center justify-between rounded-xl border border-[var(--border)] bg-[var(--muted)] p-4 shadow-sm">
+      <div className="flex items-center justify-between rounded-xl border border-[var(--border)] bg-[var(--bg-subtle)] p-4 shadow-sm">
         <div className="flex items-center gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-full bg-violet-600 text-white font-bold">
             {authorAddress ? authorAddress.substring(0, 2).toUpperCase() : "U"}
           </div>
           <div>
-            <h3 className="text-sm font-semibold text-[var(--foreground)]">Share an update</h3>
-            <p className="text-xs text-[var(--text-muted)]">Compose text, images, or links</p>
+            <h3 className="text-sm font-semibold text-[var(--fg)]">Share an update</h3>
+            <p className="text-xs text-[var(--fg-muted)]">Compose text, images, or links</p>
           </div>
         </div>
         <button

@@ -288,30 +288,30 @@ describe("ConnectionHealthMonitor", () => {
     });
   });
 
-  describe("PoolXClient integration", () => {
-    let PoolXClient: typeof import("../client").PoolXClient;
+  describe("VelaClient integration", () => {
+    let VelaClient: typeof import("../client").VelaClient;
     const { Server: MockServer } = jest.mocked(
       (await import("@stellar/stellar-sdk/rpc")).Server
     );
     beforeAll(async () => {
-      ({ PoolXClient } = await import("../client"));
+      ({ VelaClient } = await import("../client"));
     });
 
     it("healthCheck() returns true on healthy RPC", async () => {
       mockGetLatestLedger.mockResolvedValue({ sequence: 1 });
-      const client = new PoolXClient({ contractId: "CDUMMY", rpcUrl: "https://rpc.example.com" });
+      const client = new VelaClient({ contractId: "CDUMMY", rpcUrl: "https://rpc.example.com" });
       expect(await client.healthCheck()).toBe(true);
     });
 
     it("healthCheck() returns false when RPC is down", async () => {
       mockGetLatestLedger.mockRejectedValue(new Error("down"));
-      const client = new PoolXClient({ contractId: "CDUMMY", rpcUrl: "https://rpc.example.com" });
+      const client = new VelaClient({ contractId: "CDUMMY", rpcUrl: "https://rpc.example.com" });
       expect(await client.healthCheck()).toBe(false);
     });
 
     it("onConnectionStatusChange starts checks and fires callback", async () => {
       mockGetLatestLedger.mockResolvedValue({ sequence: 1 });
-      const client = new PoolXClient({
+      const client = new VelaClient({
         contractId: "CDUMMY",
         rpcUrl: "https://rpc.example.com",
         healthCheck: { intervalMs: 50 },
@@ -329,7 +329,7 @@ describe("ConnectionHealthMonitor", () => {
       MockServer.mockClear();
       mockGetLatestLedger.mockResolvedValue({ sequence: 1 });
 
-      const client = new PoolXClient({ contractId: "CDUMMY", rpcUrl: "https://rpc.example.com" });
+      const client = new VelaClient({ contractId: "CDUMMY", rpcUrl: "https://rpc.example.com" });
 
       // The constructor should create exactly one rpc.Server
       expect(MockServer).toHaveBeenCalledTimes(1);

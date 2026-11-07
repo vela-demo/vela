@@ -16,7 +16,7 @@
 
 import { Router } from "express";
 import { Pool } from "pg";
-import type { RateLimitStoreStatus } from "@poolx/types/src/rate-limit-env.js";
+import type { RateLimitStoreStatus } from "@vela/types/src/rate-limit-env.js";
 import { logger } from "../logger.js";
 import { getRateLimitStoreStatus } from "../middleware/rate-limiter.js";
 

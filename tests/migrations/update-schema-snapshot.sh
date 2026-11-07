@@ -14,10 +14,10 @@ ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 MIG_DIR="$ROOT_DIR/services/indexer/migrations"
 COMPOSE_FILE="$ROOT_DIR/docker-compose.migrations.yml"
 SNAPSHOT="$ROOT_DIR/tests/migrations/expected-schema.sql"
-PROJECT="poolx-migrations-snapshot"
+PROJECT="vela-migrations-snapshot"
 SERVICE="migrations-postgres"
-DB="poolx_migtest"
-DB_USER="poolx"
+DB="vela_migtest"
+DB_USER="vela"
 
 COMPOSE=(docker compose -p "$PROJECT" -f "$COMPOSE_FILE")
 

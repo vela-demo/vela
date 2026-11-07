@@ -5,7 +5,7 @@ test("search renders post and profile results from the NavBar", async ({ page })
   page.on("request", (req) => console.log("REQ:", req.url()));
   page.on("response", (res) => console.log("RES:", res.url(), res.status()));
   await page.addInitScript(() => {
-    window.localStorage.setItem("poolx_guided_tour_dismissed", "true");
+    window.localStorage.setItem("vela_guided_tour_dismissed", "true");
   });
   await page.route(/.*/, async (route) => {
     const url = route.request().url();

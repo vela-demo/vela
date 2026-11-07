@@ -1,7 +1,7 @@
 /**
- * PoolX Indexer — entry point.
+ * Vela Indexer — entry point.
  *
- * Connects to a Soroban RPC endpoint and streams PoolX contract events
+ * Connects to a Soroban RPC endpoint and streams Vela contract events
  * through an exactly-once pipeline:
  *
  *   RPC getEvents → stream (rate-limited, adaptive, gap-aware)
@@ -348,7 +348,7 @@ gracefulShutdown.registerSignals();
 // ── Core runner ──────────────────────────────────────────────────────────────
 
 async function main(): Promise<void> {
-  logger.info("Starting PoolX indexer");
+  logger.info("Starting Vela indexer");
   logger.info(
     { rpcUrl: STELLAR_RPC_URL, contractId: CONTRACT_ID, startLedger: START_LEDGER },
     "Config"

@@ -9,7 +9,7 @@ test.describe("Follows Flow", () => {
     await injectWalletMock(page);
     await page.goto(`/profile/${targetAddress}`, { waitUntil: "domcontentloaded" });
     await page.evaluate((key) => {
-      localStorage.setItem("poolx_wallet_public_key", key);
+      localStorage.setItem("vela_wallet_public_key", key);
     }, currentUserAddress);
   });
 

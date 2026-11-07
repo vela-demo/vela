@@ -1,4 +1,4 @@
-// Post detail screen — shows full content, like count, tip total, author info.
+﻿// Post detail screen — shows full content, like count, tip total, author info.
 import React, { useMemo, useState, useEffect } from "react";
 import { Alert, Pressable, StyleSheet, Text, View, ActivityIndicator } from "react-native";
 import { Stack, useLocalSearchParams, useRouter } from "expo-router";
@@ -46,7 +46,7 @@ export default function PostDetailScreen() {
 
   const handleShare = async () => {
     if (!post) return;
-    await Clipboard.setStringAsync(`poolx://post/${post.id}`);
+    await Clipboard.setStringAsync(`vela://post/${post.id}`);
     showToast({ kind: "success", title: "Copied!", message: "Post link copied to clipboard." });
   };
 

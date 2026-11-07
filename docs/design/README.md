@@ -1,8 +1,8 @@
-# PoolX Component Library
+# Vela Component Library
 
 > **Figma file:** _[Link to published Figma file — to be added when file is published]_
 >
-> All reusable UI components for the PoolX SocialFi web application.
+> All reusable UI components for the Vela SocialFi web application.
 > This document is the canonical reference for component usage, variants, and design tokens.
 
 ---

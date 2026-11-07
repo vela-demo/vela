@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # ──────────────────────────────────────────────────────────────────────────────
-# PoolX E2E Test Runner
+# Vela E2E Test Runner
 #
 # Orchestrates the full Docker Compose environment:
 #   1. Spin up Stellar standalone, PostgreSQL, indexer, and DM relay
@@ -24,8 +24,8 @@ set -euo pipefail
 REQUIRED_STELLAR_VERSION="27.1.0"
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 COMPOSE_FILE="$ROOT_DIR/tests/integration/docker-compose.test.yml"
-PROJECT="poolx-e2e"
-CONTRACT_DIR="$ROOT_DIR/packages/contracts/contracts/poolx-contracts"
+PROJECT="vela-e2e"
+CONTRACT_DIR="$ROOT_DIR/packages/contracts/contracts/vela-contracts"
 NETWORK="local"
 NETWORK_PASSPHRASE="Standalone Network ; February 2017"
 RPC_URL="http://localhost:8000/rpc"
@@ -90,7 +90,7 @@ require_cmd() {
   fi
 }
 
-info "━━━ PoolX E2E Test Suite ━━━"
+info "━━━ Vela E2E Test Suite ━━━"
 echo "  Root:       $ROOT_DIR"
 echo "  Network:    $NETWORK ($NETWORK_PASSPHRASE)"
 echo "  RPC URL:    $RPC_URL"
@@ -256,13 +256,13 @@ fi
 
 # stellar contract build places artefacts in the cargo WORKSPACE target dir
 # (packages/contracts/target), not inside the crate directory.
-WASM_PATH="$ROOT_DIR/packages/contracts/target/wasm32v1-none/release/poolx_contracts.wasm"
+WASM_PATH="$ROOT_DIR/packages/contracts/target/wasm32v1-none/release/vela_contracts.wasm"
 if [[ ! -f "$WASM_PATH" ]]; then
   echo "error: wasm artifact not found at $WASM_PATH" >&2
   exit 1
 fi
 
-info "  Deploying PoolX contract..."
+info "  Deploying Vela contract..."
 CONTRACT_ID="$(stellar --config-dir "$CFG_DIR" contract deploy \
   --network "$NETWORK" \
   --source-account e2e-admin \
@@ -351,7 +351,7 @@ step "Phase 6/6: Running E2E test suites"
 pnpm install --frozen-lockfile --silent 2>/dev/null || pnpm install --silent 2>/dev/null || true
 
 # Build the SDK first so imports work
-pnpm --filter poolx-sdk build 2>/dev/null || true
+pnpm --filter vela-sdk build 2>/dev/null || true
 
 # Resolve Jest config path
 JEST_CONFIG="$ROOT_DIR/tests/integration/jest.config.js"
@@ -374,14 +374,14 @@ for test_file in "${TEST_FILES[@]}"; do
   # jest is not a root dependency; borrow the indexer's installation and pin
   # rootDir explicitly since pnpm exec starts inside the package directory.
   if [[ "$VERBOSE" == "1" ]]; then
-    pnpm --filter @poolx/indexer exec jest --config "$JEST_CONFIG" \
+    pnpm --filter @vela/indexer exec jest --config "$JEST_CONFIG" \
       --rootDir "$ROOT_DIR" \
       "$ROOT_DIR/$test_file" \
       --verbose \
       --bail \
       --testTimeout "$TIMEOUT"
   else
-    pnpm --filter @poolx/indexer exec jest --config "$JEST_CONFIG" \
+    pnpm --filter @vela/indexer exec jest --config "$JEST_CONFIG" \
       --rootDir "$ROOT_DIR" \
       "$ROOT_DIR/$test_file" \
       --bail \

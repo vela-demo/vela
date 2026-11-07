@@ -29,7 +29,7 @@ export const NotificationPreferences: React.FC = () => {
 
   // Hydrate local preferences state from localStorage or mock initial fetch on mount
   useEffect(() => {
-    const savedPrefs = localStorage.getItem("poolx_notification_prefs");
+    const savedPrefs = localStorage.getItem("vela_notification_prefs");
     if (savedPrefs) {
       setPreferences(JSON.parse(savedPrefs));
     }
@@ -93,7 +93,7 @@ export const NotificationPreferences: React.FC = () => {
       }
 
       // 1. Persist to local state cache
-      localStorage.setItem("poolx_notification_prefs", JSON.stringify(preferences));
+      localStorage.setItem("vela_notification_prefs", JSON.stringify(preferences));
 
       // 2. Transmit preferences state to backend database records
       // Note: address is required; caller should inject address via props

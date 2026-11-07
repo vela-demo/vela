@@ -1,22 +1,22 @@
 {
-  "name": "poolx-sdk",
+  "name": "vela-sdk",
   "version": "0.1.0",
-  "description": "Typed TypeScript client for PoolXContract on Stellar",
-  "homepage": "https://github.com/Epta-Node/PoolX-social#readme",
+  "description": "Typed TypeScript client for VelaContract on Stellar",
+  "homepage": "https://github.com/Epta-Node/vela-social#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Epta-Node/PoolX-social.git",
+    "url": "git+https://github.com/Epta-Node/vela-social.git",
     "directory": "packages/sdk"
   },
   "bugs": {
-    "url": "https://github.com/Epta-Node/PoolX-social/issues"
+    "url": "https://github.com/Epta-Node/vela-social/issues"
   },
   "license": "MIT",
-  "author": "PoolX Contributors",
+  "author": "Vela Contributors",
   "keywords": [
     "stellar",
     "soroban",
-    "poolx",
+    "vela",
     "sdk",
     "typescript",
     "client"

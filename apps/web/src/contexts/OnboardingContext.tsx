@@ -24,7 +24,7 @@ interface OnboardingContextValue {
   shouldShowOnboarding: () => boolean;
 }
 
-const ONBOARDING_STORAGE_KEY = "poolx_onboarding_state";
+const ONBOARDING_STORAGE_KEY = "vela_onboarding_state";
 
 const defaultState: OnboardingState = {
   isComplete: false,

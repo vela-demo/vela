@@ -24,7 +24,7 @@
  */
 
 import { Pool } from "pg";
-import type { RateLimitStoreStatus } from "@poolx/types/src/rate-limit-env";
+import type { RateLimitStoreStatus } from "@vela/types/src/rate-limit-env";
 import type { BackfillCoordinator, BackfillStatus, BackfillProgress } from "./backfill-coordinator";
 import { getRateLimitStoreStatus } from "../middleware/rateLimit";
 

@@ -1,6 +1,6 @@
 /**
  * Post Event Handlers
- * Handles PostCreatedEvent and PostDeletedEvent from the PoolX contract
+ * Handles PostCreatedEvent and PostDeletedEvent from the Vela contract
  */
 
 import { Pool } from "pg";

@@ -3,7 +3,7 @@ const express = require("express");
 const FRIENDLY_USERS = [
   "stellar_dev",
   "crypto_enthusiast",
-  "poolx_fan",
+  "vela_fan",
   "soroban_builder",
   "defi_explorer",
   "nft_collector",
@@ -160,7 +160,7 @@ app.get("/api/profiles/:address", (req, res) => {
   res.json({
     address: addr,
     username: user ? user.username : `user_${addr.slice(0, 6)}`,
-    bio: "PoolX community member",
+    bio: "Vela community member",
     creator_token: "",
   });
 });

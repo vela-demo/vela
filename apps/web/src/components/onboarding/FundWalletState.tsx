@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 const FRIENDBOT_URL = "https://friendbot.stellar.org";
 
@@ -20,18 +20,18 @@ export function FundWalletState({
       <div className="text-5xl">💸</div>
       <div>
         <h2 className="text-2xl font-bold mb-2">Fund Your Testnet Wallet</h2>
-        <p className="text-[var(--text-muted)] max-w-xs">
+        <p className="text-[var(--fg-muted)] max-w-xs">
           Your wallet has no XLM. Use the Friendbot faucet to get testnet funds
-          so you can create a profile and interact with PoolX.
+          so you can create a profile and interact with Vela.
         </p>
-        <p className="mt-3 font-mono text-xs text-[var(--text-muted)] break-all">
+        <p className="mt-3 font-mono text-xs text-[var(--fg-muted)] break-all">
           {address}
         </p>
       </div>
       <button onClick={handleFriendbot} className="btn-primary">
         Fund with Friendbot
       </button>
-      <button onClick={onFunded} className="text-sm text-[var(--text-muted)] underline">
+      <button onClick={onFunded} className="text-sm text-[var(--fg-muted)] underline">
         I already have funds →
       </button>
     </div>

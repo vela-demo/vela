@@ -32,7 +32,7 @@ function conversationKey(a: string, b: string): string {
 }
 
 function keyStorageKey(address: string): string {
-  return `poolx_dm_keypair_${address}`;
+  return `vela_dm_keypair_${address}`;
 }
 
 function toBase64(bytes: Uint8Array): string {
@@ -90,7 +90,7 @@ function getPeerPublicKey(
   otherAddress: string,
   myKeypair: DmKeyPair
 ): Uint8Array {
-  const key = `poolx_dm_peer_${myAddress}_${otherAddress}`;
+  const key = `vela_dm_peer_${myAddress}_${otherAddress}`;
   const raw = SecureStore.getItemSync?.(key);
   if (raw) {
     try {

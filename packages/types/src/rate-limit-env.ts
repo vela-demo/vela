@@ -1,7 +1,7 @@
 /**
  * Shared deployment-time validation for distributed rate limiting.
  *
- * Every PoolX service that enforces a rate limit can back it with either a
+ * Every Vela service that enforces a rate limit can back it with either a
  * Redis store (state shared across replicas) or a process-local in-memory
  * store. The in-memory fallback is convenient for local development but it is
  * *not* a rate limit in any multi-replica deployment: an attacker behind a

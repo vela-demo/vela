@@ -1,9 +1,9 @@
 {
-  "name": "@poolx/indexer",
+  "name": "@vela/indexer",
   "version": "0.1.0",
   "private": true,
   "license": "MIT",
-  "description": "Off-chain indexer service for PoolX social contract events",
+  "description": "Off-chain indexer service for Vela social contract events",
   "main": "dist/index.js",
   "scripts": {
     "lint": "eslint . --ext .ts,.tsx",
@@ -27,7 +27,7 @@
     "uuid": "^14.0.1",
     "web-push": "^3.6.7",
     "ws": "^8.18.0",
-    "@poolx/types": "workspace:*",
+    "@vela/types": "workspace:*",
     "zod": "^3.24.4"
   },
   "devDependencies": {

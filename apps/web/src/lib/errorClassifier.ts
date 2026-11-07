@@ -4,7 +4,7 @@ import {
   NetworkError,
   InvalidInputError,
   ValidationError,
-} from "poolx-sdk";
+} from "vela-sdk";
 
 export type ErrorCategory = "network" | "contract" | "general";
 
@@ -49,7 +49,7 @@ const TRAP_MAPPINGS: Record<string, string> = {
   CONTRACT_RECURSION: "Contract execution exceeded maximum recursion depth.",
 };
 
-/** Mappings for PoolX ContractErrorCode variants. */
+/** Mappings for Vela ContractErrorCode variants. */
 const CONTRACT_ERROR_MAPPINGS: Record<string | number, string> = {
   [ContractErrorCode.AlreadyInitialized]: "Contract is already initialized.",
   AlreadyInitialized: "Contract is already initialized.",

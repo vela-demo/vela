@@ -8,7 +8,7 @@ import { LinkPreview } from "./LinkPreview";
 import { MediaItem } from "@/hooks/useMediaUpload";
 import { LinkMetadata } from "@/hooks/useLinkPreview";
 import { Link as LinkIcon } from "lucide-react";
-import { utf8Bytes } from "poolx-sdk";
+import { utf8Bytes } from "vela-sdk";
 
 export interface PostComposerProps {
   content: string;

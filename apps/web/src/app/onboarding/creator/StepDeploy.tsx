@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import type { TokenParams } from "./CreatorTokenWizard";
@@ -38,7 +38,7 @@ export function StepDeploy({ address, tokenParams, onDeployed, onBack }: Props) 
     try {
       // Dynamic imports keep wallet/SDK code out of the server bundle.
       const { signTransaction, isConnected } = await import("@stellar/freighter-api");
-      const { PoolXClient } = await import("poolx-sdk");
+      const { VelaClient } = await import("vela-sdk");
       const { rpc: rpcModule, Transaction } = await import("@stellar/stellar-sdk");
 
       const connected = await isConnected();
@@ -52,7 +52,7 @@ export function StepDeploy({ address, tokenParams, onDeployed, onBack }: Props) 
 
       if (!factoryId) throw new Error("NEXT_PUBLIC_TOKEN_FACTORY_ID is not configured.");
 
-      const client = new PoolXClient({ contractId, rpcUrl, tokenFactoryId: factoryId });
+      const client = new VelaClient({ contractId, rpcUrl, tokenFactoryId: factoryId });
       const server = new rpcModule.Server(rpcUrl);
 
       // ── Step 1: simulate to learn the deterministic token address ─────────
@@ -123,7 +123,7 @@ export function StepDeploy({ address, tokenParams, onDeployed, onBack }: Props) 
     <div className="flex flex-col gap-6" data-testid="step-deploy">
       <div>
         <h2 className="text-xl font-bold mb-1">Sign and deploy</h2>
-        <p className="text-sm text-[var(--text-muted)]">
+        <p className="text-sm text-[var(--fg-muted)]">
           Two transactions will be submitted in sequence via Freighter.
         </p>
       </div>
@@ -132,7 +132,7 @@ export function StepDeploy({ address, tokenParams, onDeployed, onBack }: Props) 
       {(status === "idle" || status === "error") && (
         <div>
           <label htmlFor="deploy-username" className="block text-sm font-medium mb-1">
-            PoolX username
+            Vela username
           </label>
           <input
             id="deploy-username"
@@ -147,7 +147,7 @@ export function StepDeploy({ address, tokenParams, onDeployed, onBack }: Props) 
             aria-invalid={!!usernameError}
             className={[
               "w-full rounded-lg border px-3 py-2 text-sm",
-              "bg-[var(--bg-tertiary)] text-[var(--text-primary)]",
+              "bg-[var(--bg-tertiary)] text-[var(--fg)]",
               "focus:outline-none focus:ring-2 focus:ring-violet-500",
               usernameError ? "border-red-500" : "border-[var(--border)]",
             ].join(" ")}
@@ -163,7 +163,7 @@ export function StepDeploy({ address, tokenParams, onDeployed, onBack }: Props) 
 
       {/* Progress */}
       <div className="rounded-xl border border-[var(--border)] bg-[var(--bg-tertiary)] p-4 text-sm">
-        <p className="text-xs text-[var(--text-muted)] uppercase tracking-widest mb-3">Progress</p>
+        <p className="text-xs text-[var(--fg-muted)] uppercase tracking-widest mb-3">Progress</p>
         <ProgressStep
           label="Deploy token"
           done={status === "registering_profile" || status === "done"}
@@ -191,7 +191,7 @@ export function StepDeploy({ address, tokenParams, onDeployed, onBack }: Props) 
           type="button"
           onClick={onBack}
           disabled={isRunning}
-          className="flex-1 py-2 rounded-lg border border-[var(--border)] text-sm text-[var(--text-muted)] hover:border-violet-500 hover:text-white transition disabled:opacity-40"
+          className="flex-1 py-2 rounded-lg border border-[var(--border)] text-sm text-[var(--fg-muted)] hover:border-violet-500 hover:text-white transition disabled:opacity-40"
           data-testid="step3-back"
         >
           Back
@@ -237,7 +237,7 @@ function ProgressStep({ label, done, active }: { label: string; done: boolean; a
             ? "bg-green-500 text-white"
             : active
               ? "bg-violet-500 text-white animate-pulse"
-              : "bg-[var(--border)] text-[var(--text-muted)]",
+              : "bg-[var(--border)] text-[var(--fg-muted)]",
         ].join(" ")}
         aria-hidden="true"
       >
@@ -246,10 +246,10 @@ function ProgressStep({ label, done, active }: { label: string; done: boolean; a
       <span
         className={
           done
-            ? "line-through text-[var(--text-muted)]"
+            ? "line-through text-[var(--fg-muted)]"
             : active
               ? "text-white font-medium"
-              : "text-[var(--text-muted)]"
+              : "text-[var(--fg-muted)]"
         }
       >
         {label}

@@ -13,7 +13,7 @@ interface FollowButtonProps {
 }
 
 /**
- * FollowButton component for the PoolX mobile app.
+ * FollowButton component for the Vela mobile app.
  * Implements optimistic UI updates and handles contract-level blocking.
  */
 export const FollowButton: React.FC<FollowButtonProps> = ({ targetAddress }) => {

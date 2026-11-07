@@ -15,7 +15,7 @@ export interface ProfileSetEvent {
 }
 
 /**
- * Handle a ProfileSet event emitted by the PoolX contract.
+ * Handle a ProfileSet event emitted by the Vela contract.
  *
  * Idempotent: calling this multiple times with the same data produces the
  * same result (upsert semantics).

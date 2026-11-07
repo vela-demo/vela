@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React, { useState } from "react";
 import Link from "next/link";
@@ -28,13 +28,13 @@ export function Sidebar({ userAddress, onPostCreated }: SidebarProps) {
         <nav className="space-y-1">
           <Link
             href="/"
-            className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-[var(--foreground)] hover:bg-[var(--muted)] transition-colors"
+            className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-[var(--fg)] hover:bg-[var(--bg-subtle)] transition-colors"
           >
             Home Feed
           </Link>
           <Link
             href="/explore"
-            className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-[var(--foreground)] hover:bg-[var(--muted)] transition-colors"
+            className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-[var(--fg)] hover:bg-[var(--bg-subtle)] transition-colors"
           >
             Explore
           </Link>

@@ -8,9 +8,9 @@ module.exports = {
   setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],
   moduleNameMapper: {
     "^@/(.*)$": "<rootDir>/src/$1",
-    "^poolx-sdk$": "<rootDir>/../../packages/sdk/src/index.ts",
-    "^@poolx/types/src/(.*)$": "<rootDir>/../../packages/types/src/$1",
-    "^@poolx/types$": "<rootDir>/../../packages/types/src/index.ts",
+    "^vela-sdk$": "<rootDir>/../../packages/sdk/src/index.ts",
+    "^@vela/types/src/(.*)$": "<rootDir>/../../packages/types/src/$1",
+    "^@vela/types$": "<rootDir>/../../packages/types/src/index.ts",
     "^(\\.\\.?/.*)\\.js$": "$1",
   },
   transform: {

@@ -27,7 +27,7 @@ use soroban_sdk::{
     Address, BytesN, Env, String,
 };
 
-use poolx_contracts::{GovParameter, PoolXContract, PoolXContractClient, StorageKey};
+use vela_contracts::{GovParameter, VelaContract, VelaContractClient, StorageKey};
 
 fn setup_token(env: &Env, admin: &Address) -> Address {
     let token_id = env.register_stellar_asset_contract_v2(admin.clone());
@@ -35,9 +35,9 @@ fn setup_token(env: &Env, admin: &Address) -> Address {
     token_id.address()
 }
 
-fn setup_contract(env: &Env) -> (PoolXContractClient<'_>, Address, Address) {
-    let contract_id = env.register(PoolXContract, ());
-    let client = PoolXContractClient::new(env, &contract_id);
+fn setup_contract(env: &Env) -> (VelaContractClient<'_>, Address, Address) {
+    let contract_id = env.register(VelaContract, ());
+    let client = VelaContractClient::new(env, &contract_id);
     let admin = Address::generate(env);
     let treasury = Address::generate(env);
     client.initialize(&admin, &treasury, &250);
@@ -187,8 +187,8 @@ fn invariant_tip_safe_arithmetic() {
     let env = Env::default();
     env.mock_all_auths();
 
-    let contract_id = env.register(PoolXContract, ());
-    let client = PoolXContractClient::new(&env, &contract_id);
+    let contract_id = env.register(VelaContract, ());
+    let client = VelaContractClient::new(&env, &contract_id);
 
     let admin = Address::generate(&env);
     let treasury = Address::generate(&env);

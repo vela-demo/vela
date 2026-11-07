@@ -2,9 +2,9 @@
 
 import React, { createContext, useCallback, useContext, useEffect, useState } from "react";
 
-const LS_KEY = "poolx_wallet_address";
-const LS_PUBLIC_KEY = "poolx_wallet_public_key";
-const LS_NETWORK_KEY = "poolx_wallet_network";
+const LS_KEY = "vela_wallet_address";
+const LS_PUBLIC_KEY = "vela_wallet_public_key";
+const LS_NETWORK_KEY = "vela_wallet_network";
 
 export interface WalletContextValue {
   address: string | null;

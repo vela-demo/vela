@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React, { useState } from "react";
 
@@ -88,7 +88,7 @@ export function NotificationStep({ onNext, onBack, onSkip }: NotificationStepPro
           {}
         ),
       };
-      localStorage.setItem("poolx_notification_prefs", JSON.stringify(prefs));
+      localStorage.setItem("vela_notification_prefs", JSON.stringify(prefs));
 
       console.log("Notification preferences saved", prefs);
       onNext();
@@ -105,14 +105,14 @@ export function NotificationStep({ onNext, onBack, onSkip }: NotificationStepPro
       <div className="mb-8 text-center">
         <div className="text-6xl mb-4">🔔</div>
         <h2 className="text-3xl font-bold mb-2">Notification Preferences</h2>
-        <p className="text-[var(--text-muted)]">
+        <p className="text-[var(--fg-muted)]">
           Choose what updates you want to receive
         </p>
       </div>
 
       <div className="space-y-6">
         {/* Push Notifications Toggle */}
-        <div className="p-4 rounded-lg bg-[var(--muted)] border border-[var(--border)]">
+        <div className="p-4 rounded-lg bg-[var(--bg-subtle)] border border-[var(--border)]">
           <div className="flex items-start justify-between">
             <div className="flex-1">
               <div className="flex items-center gap-2 mb-1">
@@ -121,7 +121,7 @@ export function NotificationStep({ onNext, onBack, onSkip }: NotificationStepPro
                   Enable Push Notifications
                 </h3>
               </div>
-              <p className="text-sm text-[var(--text-muted)]">
+              <p className="text-sm text-[var(--fg-muted)]">
                 Receive real-time notifications on your device
               </p>
             </div>
@@ -155,7 +155,7 @@ export function NotificationStep({ onNext, onBack, onSkip }: NotificationStepPro
           {preferences.map((pref) => (
             <div
               key={pref.id}
-              className="flex items-center justify-between p-4 rounded-lg border border-[var(--border)] bg-[var(--background)] hover:bg-[var(--muted)] transition-colors"
+              className="flex items-center justify-between p-4 rounded-lg border border-[var(--border)] bg-[var(--bg)] hover:bg-[var(--bg-subtle)] transition-colors"
             >
               <div className="flex items-center gap-3">
                 <span className="text-2xl">{pref.icon}</span>
@@ -163,7 +163,7 @@ export function NotificationStep({ onNext, onBack, onSkip }: NotificationStepPro
                   <h4 className="font-medium text-[var(--text)]">
                     {pref.label}
                   </h4>
-                  <p className="text-sm text-[var(--text-muted)]">
+                  <p className="text-sm text-[var(--fg-muted)]">
                     {pref.description}
                   </p>
                 </div>
@@ -197,7 +197,7 @@ export function NotificationStep({ onNext, onBack, onSkip }: NotificationStepPro
         <button
           type="button"
           onClick={onBack}
-          className="px-6 py-3 border border-[var(--border)] rounded-lg hover:bg-[var(--muted)] transition-colors"
+          className="px-6 py-3 border border-[var(--border)] rounded-lg hover:bg-[var(--bg-subtle)] transition-colors"
         >
           Back
         </button>
@@ -212,7 +212,7 @@ export function NotificationStep({ onNext, onBack, onSkip }: NotificationStepPro
         <button
           type="button"
           onClick={onSkip}
-          className="px-6 py-3 text-[var(--text-muted)] hover:text-[var(--text)] transition-colors"
+          className="px-6 py-3 text-[var(--fg-muted)] hover:text-[var(--text)] transition-colors"
         >
           Skip
         </button>

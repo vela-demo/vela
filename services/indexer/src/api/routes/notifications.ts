@@ -4,8 +4,8 @@ import { requireStellarAuth } from "../../middleware/stellarAuth";
 import { validateBody } from "../../middleware/validate";
 import { rateLimitWrite } from "../../middleware/rateLimit";
 import { z } from "zod";
-import { stellarAddressSchema } from "@poolx/types/src/schemas";
-import { unauthorizedError, internalError, forbiddenError } from "@poolx/types/src/errors";
+import { stellarAddressSchema } from "@vela/types/src/schemas";
+import { unauthorizedError, internalError, forbiddenError } from "@vela/types/src/errors";
 
 const PLATFORMS = ["ios", "android", "web"] as const;
 

@@ -1,6 +1,6 @@
-# poolx-sdk
+# vela-sdk
 
-Typed TypeScript client for `PoolXContract` on Stellar.
+Typed TypeScript client for `VelaContract` on Stellar.
 
 ## Transaction retries: exponential backoff with jitter
 
@@ -43,7 +43,7 @@ Retry tunables default to the environment, and can be overridden per queue.
 ### Usage
 
 ```ts
-import { TransactionQueue, ConnectionHealthMonitor } from "poolx-sdk";
+import { TransactionQueue, ConnectionHealthMonitor } from "vela-sdk";
 
 const health = new ConnectionHealthMonitor(rpcUrl);
 

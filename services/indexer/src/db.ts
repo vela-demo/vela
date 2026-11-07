@@ -1,5 +1,5 @@
 /**
- * Database interface for the PoolX indexer.
+ * Database interface for the Vela indexer.
  *
  * All methods are async so implementations can use any storage backend
  * (PostgreSQL, SQLite, in-memory, etc.).  The handler tests mock this

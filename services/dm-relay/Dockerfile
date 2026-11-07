@@ -1,5 +1,5 @@
 # Runs the DM relay straight from TypeScript sources with tsx (the same way
-# migrations and local dev run), because @poolx/types exposes raw .ts source
+# migrations and local dev run), because @vela/types exposes raw .ts source
 # that cannot be consumed by plain `node dist`.
 FROM node:20-alpine
 
@@ -22,7 +22,7 @@ COPY services/analytics-oracle/package.json services/analytics-oracle/
 COPY services/dm-relay/package.json services/dm-relay/
 COPY services/indexer/package.json services/indexer/
 
-RUN pnpm install --frozen-lockfile --filter "poolx-dm-relay..."
+RUN pnpm install --frozen-lockfile --filter "vela-dm-relay..."
 
 COPY packages/types ./packages/types
 COPY services/dm-relay ./services/dm-relay

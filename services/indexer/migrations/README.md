@@ -57,7 +57,7 @@ Apply migrations with one of:
 docker compose up
 
 # Shell script (CI / bare-metal)
-DATABASE_URL=postgresql://poolx:poolx@localhost/poolx bash migrate.sh
+DATABASE_URL=postgresql://vela:vela@localhost/vela bash migrate.sh
 ```
 
 Notably, `indexer_state` is the **state-root** table

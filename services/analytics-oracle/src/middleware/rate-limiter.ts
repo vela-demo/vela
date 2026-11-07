@@ -16,7 +16,7 @@
  * instance maintains its own independent counter.
  *
  * `REDIS_URL` is mandatory when `NODE_ENV=production` — see
- * `@poolx/types/src/rate-limit-env` — so a scaled deployment can never
+ * `@vela/types/src/rate-limit-env` — so a scaled deployment can never
  * silently fall back to per-replica counters. The active store is reported on
  * `/health` as `rateLimiter: { store, shared }`.
  */
@@ -26,7 +26,7 @@ import {
   inMemoryRateLimitWarning,
   resolveRateLimitEnv,
   type RateLimitStoreStatus,
-} from "@poolx/types/src/rate-limit-env.js";
+} from "@vela/types/src/rate-limit-env.js";
 import { logger } from "../logger.js";
 import { oracleRateLimitConfig } from "../config.js";
 

@@ -75,7 +75,7 @@ describe("getClientIP & Trusted Proxy validation", () => {
 });
 import { requireStellarAuth, optionalStellarAuth, clearReplayCache } from "../stellarAuth";
 import { jsonWithRawBody } from "../rawBody";
-import { buildAuthMessage, canonicalizeAuthPath } from "@poolx/types/src/auth";
+import { buildAuthMessage, canonicalizeAuthPath } from "@vela/types/src/auth";
 
 // Generous default timeout: this suite issues ~400 HTTP requests and is run
 // concurrently (via turbo) with the cargo test suite on 2-core CI runners, so

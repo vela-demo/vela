@@ -108,7 +108,7 @@ export function Feed({ posts, loading, onLike, onTip, likedPosts = new Set() }: 
     <div style={styles.container}>
       {paused && (
         <div style={styles.pausedBanner} role="alert">
-          PoolX is temporarily paused. Writes are disabled until the protocol resumes.
+          Vela is temporarily paused. Writes are disabled until the protocol resumes.
         </div>
       )}
       {posts.map((post) => (

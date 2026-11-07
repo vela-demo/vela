@@ -60,7 +60,7 @@ export async function handleFollow(
         recipient: event.followee,
         payload: {
           followerAddress: event.follower,
-          deepLink: `poolx://profile/${event.follower}`,
+          deepLink: `vela://profile/${event.follower}`,
         },
       });
     } catch (error) {

@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 
-const THEME_STORAGE_KEY = "poolx_theme";
+const THEME_STORAGE_KEY = "vela_theme";
 const THEMES = ["light", "dark"] as const;
 
 type ThemePreference = (typeof THEMES)[number];

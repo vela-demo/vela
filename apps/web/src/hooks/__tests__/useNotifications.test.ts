@@ -57,10 +57,10 @@ const ITEM = {
 
 function seedUnread() {
   window.localStorage.setItem(
-    `poolx:notifications:items:${ADDR}`,
+    `vela:notifications:items:${ADDR}`,
     JSON.stringify([ITEM])
   );
-  window.localStorage.setItem("poolx:notifications:unread", "2");
+  window.localStorage.setItem("vela:notifications:unread", "2");
 }
 
 describe("useNotifications markRead (#1306)", () => {

@@ -1,6 +1,24 @@
 import { useState, useCallback } from "react";
+import { VelaClient } from "vela-sdk";
 import { recordPoolDeposit } from "../utils/poolStore";
 import { useSubmitTx } from "./useSubmitTx";
+
+const CONTRACT_ID = process.env.EXPO_PUBLIC_CONTRACT_ID ?? "";
+const RPC_URL = process.env.EXPO_PUBLIC_RPC_URL ?? "https://soroban-testnet.stellar.org";
+const NETWORK_PASSPHRASE =
+  process.env.EXPO_PUBLIC_NETWORK_PASSPHRASE ?? "Test SDF Network ; September 2015";
+
+let _client: VelaClient | null = null;
+function getClient(): VelaClient {
+  if (!_client) {
+    _client = new VelaClient({
+      contractId: CONTRACT_ID,
+      rpcUrl: RPC_URL,
+      networkPassphrase: NETWORK_PASSPHRASE,
+    });
+  }
+  return _client;
+}
 
 export interface DepositState {
   pending: boolean;
@@ -10,17 +28,16 @@ export interface DepositState {
 }
 
 export interface UsePoolDepositReturn extends DepositState {
-  deposit: (poolId: string, amount: string, token: string) => Promise<void>;
+  deposit: (poolId: string, amount: string, token: string, depositorAddress: string) => Promise<void>;
   reset: () => void;
 }
 
 /**
  * usePoolDeposit
  *
- * Builds a contract-call XDR descriptor for a pool deposit and routes it
- * through useSubmitTx, which signs with the connected wallet and broadcasts to
- * the Soroban RPC. The deposit is recorded locally only after the chain
- * confirms the transaction.
+ * Builds a real pool_deposit transaction XDR via VelaClient.preparePoolDepositTx,
+ * routes it through useSubmitTx (wallet sign + Soroban RPC broadcast), and
+ * records the deposit locally only after chain confirmation.
  */
 export function usePoolDeposit(): UsePoolDepositReturn {
   const [pending, setPending] = useState(false);
@@ -31,7 +48,7 @@ export function usePoolDeposit(): UsePoolDepositReturn {
   const submitTx = useSubmitTx();
 
   const deposit = useCallback(
-    async (poolId: string, amount: string, token: string) => {
+    async (poolId: string, amount: string, token: string, depositorAddress: string) => {
       setPending(true);
       setError(null);
       setSuccess(false);
@@ -40,17 +57,25 @@ export function usePoolDeposit(): UsePoolDepositReturn {
         if (!amount || parseFloat(amount) <= 0) {
           throw new Error("Amount must be greater than zero");
         }
-
         if (!token) {
-          throw new Error("Token is required");
+          throw new Error("Token address is required");
+        }
+        if (!depositorAddress) {
+          throw new Error("Wallet not connected");
         }
 
-        // Build a structured descriptor that downstream code (SDK or contract
-        // layer) turns into real XDR.  The format mirrors what useLike /
-        // useFollow use today until the full Soroban SDK integration lands.
-        const txDescriptor = `pool_deposit:${poolId}:${amount}:${token}`;
+        // Convert human-readable amount to stroops (7 decimal places for Stellar)
+        const amountStroops = BigInt(Math.floor(parseFloat(amount) * 10_000_000));
 
-        const hash = await submitTx(txDescriptor);
+        // Build the real pool_deposit transaction XDR
+        const txXdr = await getClient().preparePoolDepositTx(
+          depositorAddress,
+          poolId,
+          token,
+          amountStroops
+        );
+
+        const hash = await submitTx(txXdr);
 
         // Record the deposit locally only after the chain confirms it
         recordPoolDeposit(poolId, amount);

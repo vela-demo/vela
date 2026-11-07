@@ -485,16 +485,16 @@ fn invariant_pool_threshold_cannot_exceed_admin_count() {
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
-fn setup_test_env(env: &Env) -> (PoolXContractClient<'_>, Address, Address) {
-    let contract_id = env.register(PoolXContract, ());
-    let client = PoolXContractClient::new(env, &contract_id);
+fn setup_test_env(env: &Env) -> (VelaContractClient<'_>, Address, Address) {
+    let contract_id = env.register(VelaContract, ());
+    let client = VelaContractClient::new(env, &contract_id);
     let admin = Address::generate(env);
     let treasury = Address::generate(env);
     client.initialize(&admin, &treasury, &0);
     (client, admin, treasury)
 }
 
-fn setup_profile(client: &PoolXContractClient<'_>, user: &Address, name: &str) {
+fn setup_profile(client: &VelaContractClient<'_>, user: &Address, name: &str) {
     client.set_profile(
         user,
         &String::from_str(&client.env, name),

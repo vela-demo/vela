@@ -8,7 +8,7 @@ import { TextEncoder, TextDecoder } from "util";
 // api.ts imports the SDK client directly for fetchIsPaused; stub it so the
 // heavy @stellar/stellar-base chain isn't loaded in this unit test.
 jest.mock("../../../../packages/sdk/src/client", () => ({
-  PoolXClient: jest.fn(),
+  VelaClient: jest.fn(),
 }));
 
 import { createTtlCache } from "./api";

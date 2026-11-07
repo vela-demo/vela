@@ -1,5 +1,5 @@
 import {
-  PoolXError,
+  VelaError,
   NotFoundError,
   UnauthorizedError,
   InsufficientBalanceError,
@@ -14,26 +14,26 @@ import {
 } from "../errors";
 
 describe("Error classes", () => {
-  it("PoolXError sets name, message, and code correctly", () => {
-    const err = new PoolXError("Something went wrong");
+  it("VelaError sets name, message, and code correctly", () => {
+    const err = new VelaError("Something went wrong");
     expect(err.message).toBe("Something went wrong");
-    expect(err.name).toBe("PoolXError");
-    expect(err.code).toBe("POOLX_ERROR");
+    expect(err.name).toBe("VelaError");
+    expect(err.code).toBe("VELA_ERROR");
     expect(err.originalError).toBeUndefined();
     expect(err.details).toBeUndefined();
   });
 
-  it("PoolXError preserves original error and details", () => {
+  it("VelaError preserves original error and details", () => {
     const original = new Error("network failure");
-    const err = new PoolXError("SDK error", "CUSTOM_CODE", { foo: "bar" }, original);
+    const err = new VelaError("SDK error", "CUSTOM_CODE", { foo: "bar" }, original);
     expect(err.originalError).toBe(original);
     expect(err.details).toEqual({ foo: "bar" });
     expect(err.code).toBe("CUSTOM_CODE");
   });
 
-  it("NotFoundError has correct code and is instanceof PoolXError", () => {
+  it("NotFoundError has correct code and is instanceof VelaError", () => {
     const err = new NotFoundError("not found");
-    expect(err).toBeInstanceOf(PoolXError);
+    expect(err).toBeInstanceOf(VelaError);
     expect(err).toBeInstanceOf(NotFoundError);
     expect(err.name).toBe("NotFoundError");
     expect(err.code).toBe("NOT_FOUND");
@@ -41,31 +41,31 @@ describe("Error classes", () => {
 
   it("UnauthorizedError has correct code", () => {
     const err = new UnauthorizedError("unauthorized");
-    expect(err).toBeInstanceOf(PoolXError);
+    expect(err).toBeInstanceOf(VelaError);
     expect(err.code).toBe("UNAUTHORIZED");
   });
 
   it("InsufficientBalanceError has correct code", () => {
     const err = new InsufficientBalanceError("low balance");
-    expect(err).toBeInstanceOf(PoolXError);
+    expect(err).toBeInstanceOf(VelaError);
     expect(err.code).toBe("INSUFFICIENT_BALANCE");
   });
 
   it("CooldownError has correct code", () => {
     const err = new CooldownError("cooldown active");
-    expect(err).toBeInstanceOf(PoolXError);
+    expect(err).toBeInstanceOf(VelaError);
     expect(err.code).toBe("COOLDOWN_ACTIVE");
   });
 
   it("InvalidInputError has correct code", () => {
     const err = new InvalidInputError("bad input");
-    expect(err).toBeInstanceOf(PoolXError);
+    expect(err).toBeInstanceOf(VelaError);
     expect(err.code).toBe("INVALID_INPUT");
   });
 
   it("ValidationError has correct code and carries details", () => {
     const err = new ValidationError("field too long", { field: "username", max: 32 });
-    expect(err).toBeInstanceOf(PoolXError);
+    expect(err).toBeInstanceOf(VelaError);
     expect(err).toBeInstanceOf(ValidationError);
     expect(err.name).toBe("ValidationError");
     expect(err.code).toBe("VALIDATION_ERROR");
@@ -74,7 +74,7 @@ describe("Error classes", () => {
 
   it("NetworkError has correct code and carries details", () => {
     const err = new NetworkError("connection refused", { status: 503 });
-    expect(err).toBeInstanceOf(PoolXError);
+    expect(err).toBeInstanceOf(VelaError);
     expect(err).toBeInstanceOf(NetworkError);
     expect(err.name).toBe("NetworkError");
     expect(err.code).toBe("NETWORK_ERROR");
@@ -83,7 +83,7 @@ describe("Error classes", () => {
 
   it("SigningError has correct code and carries details", () => {
     const err = new SigningError("user rejected", { reason: "user_rejected" });
-    expect(err).toBeInstanceOf(PoolXError);
+    expect(err).toBeInstanceOf(VelaError);
     expect(err).toBeInstanceOf(SigningError);
     expect(err.name).toBe("SigningError");
     expect(err.code).toBe("SIGNING_ERROR");
@@ -92,7 +92,7 @@ describe("Error classes", () => {
 
   it("ContractError has correct code", () => {
     const err = new ContractError("simulation trapped");
-    expect(err).toBeInstanceOf(PoolXError);
+    expect(err).toBeInstanceOf(VelaError);
     expect(err).toBeInstanceOf(ContractError);
     expect(err.name).toBe("ContractError");
     expect(err.code).toBe("CONTRACT_ERROR");
@@ -264,15 +264,15 @@ describe("mapError", () => {
   });
 
   describe("default fallback", () => {
-    it("returns PoolXError for unknown errors", () => {
+    it("returns VelaError for unknown errors", () => {
       const result = mapError("something unexpected happened");
-      expect(result).toBeInstanceOf(PoolXError);
+      expect(result).toBeInstanceOf(VelaError);
       expect(result).not.toBeInstanceOf(NotFoundError);
       expect(result.message).toBe("something unexpected happened");
     });
 
     it("handles Error objects", () => {
-      expect(mapError(new Error("custom runtime error"))).toBeInstanceOf(PoolXError);
+      expect(mapError(new Error("custom runtime error"))).toBeInstanceOf(VelaError);
     });
   });
 });

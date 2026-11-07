@@ -7,7 +7,7 @@ import { test, expect, Page } from "@playwright/test";
 async function seedAllEventTypes(page: Page, addr: string) {
   await page.evaluate(
     ({ addr }) => {
-      const key = `poolx:notifications:items:${addr}`;
+      const key = `vela:notifications:items:${addr}`;
       const now = new Date().toISOString();
       const items = [
         {
@@ -32,14 +32,14 @@ async function seedAllEventTypes(page: Page, addr: string) {
           actor: "GBACTOR333AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
           postId: 99,
           amountXlm: "5.00",
-          excerpt: "My first PoolX post ever",
+          excerpt: "My first Vela post ever",
           timestamp: now,
           read: false,
         },
       ];
       localStorage.setItem(key, JSON.stringify(items));
-      localStorage.setItem("poolx:notifications:unread", "3");
-      localStorage.setItem("poolx_wallet_address", addr);
+      localStorage.setItem("vela:notifications:unread", "3");
+      localStorage.setItem("vela_wallet_address", addr);
     },
     { addr }
   );
@@ -55,7 +55,7 @@ test.describe("Notifications page", () => {
   test("shows empty state when no notifications", async ({ page }) => {
     await page.goto("/notifications");
     await page.evaluate((addr) => {
-      localStorage.setItem("poolx_wallet_address", addr);
+      localStorage.setItem("vela_wallet_address", addr);
     }, walletAddr);
     await page.reload();
 
@@ -82,14 +82,14 @@ test.describe("Notifications page", () => {
     await page.goto("/notifications");
 
     await expect(page.getByText(/Hello from the other side of the blockchain/)).toBeVisible();
-    await expect(page.getByText(/My first PoolX post ever/)).toBeVisible();
+    await expect(page.getByText(/My first Vela post ever/)).toBeVisible();
   });
 
   test("notifications without excerpt fall back to post id reference", async ({ page }) => {
     await page.goto("/");
     await page.evaluate(
       ({ addr }) => {
-        const key = `poolx:notifications:items:${addr}`;
+        const key = `vela:notifications:items:${addr}`;
         const now = new Date().toISOString();
         localStorage.setItem(
           key,
@@ -104,7 +104,7 @@ test.describe("Notifications page", () => {
             },
           ])
         );
-        localStorage.setItem("poolx_wallet_address", addr);
+        localStorage.setItem("vela_wallet_address", addr);
       },
       { addr: walletAddr }
     );
@@ -125,8 +125,8 @@ test.describe("Notifications page", () => {
   test("unread badge appears on bell icon before visiting page", async ({ page }) => {
     await page.goto("/");
     await page.evaluate((addr) => {
-      localStorage.setItem("poolx_wallet_address", addr);
-      localStorage.setItem("poolx:notifications:unread", "3");
+      localStorage.setItem("vela_wallet_address", addr);
+      localStorage.setItem("vela:notifications:unread", "3");
     }, walletAddr);
     await page.reload();
 
@@ -158,7 +158,7 @@ test.describe("Notifications page", () => {
     // markAllRead may already be hidden if visit auto-marked-read; force unread state
     if (!(await markAllRead.isVisible())) {
       await page.evaluate((addr) => {
-        const key = `poolx:notifications:items:${addr}`;
+        const key = `vela:notifications:items:${addr}`;
         const stored = localStorage.getItem(key);
         if (stored) {
           const items = JSON.parse(stored).map((n: Record<string, unknown>) => ({
@@ -180,14 +180,14 @@ test.describe("Notifications page", () => {
   }) => {
     await page.goto("/");
     await page.evaluate((addr) => {
-      localStorage.setItem("poolx_wallet_address", addr);
+      localStorage.setItem("vela_wallet_address", addr);
     }, walletAddr);
     await page.goto("/notifications");
 
     // Simulate event arriving by seeding localStorage then reloading
     await page.evaluate(
       ({ addr, actor }) => {
-        const key = `poolx:notifications:items:${addr}`;
+        const key = `vela:notifications:items:${addr}`;
         const items = [
           {
             id: `follow-${actor}-mock`,
@@ -213,7 +213,7 @@ test.describe("Notifications page", () => {
     await page.goto("/");
     await page.evaluate(
       ({ addr }) => {
-        const key = `poolx:notifications:items:${addr}`;
+        const key = `vela:notifications:items:${addr}`;
         const items = Array.from({ length: 15 }, (_, i) => ({
           id: `follow-GBACTOR${i}-${i}`,
           type: "follow",
@@ -222,7 +222,7 @@ test.describe("Notifications page", () => {
           read: false,
         }));
         localStorage.setItem(key, JSON.stringify(items));
-        localStorage.setItem("poolx_wallet_address", addr);
+        localStorage.setItem("vela_wallet_address", addr);
       },
       { addr }
     );

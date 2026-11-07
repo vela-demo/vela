@@ -2,7 +2,7 @@
 
 import React, { createContext, useCallback, useContext, useEffect, useState } from "react";
 
-export const GUIDED_TOUR_STORAGE_KEY = "poolx_guided_tour_dismissed";
+export const GUIDED_TOUR_STORAGE_KEY = "vela_guided_tour_dismissed";
 
 export interface TourStep {
   id: string;

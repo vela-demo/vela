@@ -8,7 +8,7 @@ test.describe("Search Suggestions", () => {
     page.on("request", (req) => console.log("REQ:", req.url()));
     page.on("response", (res) => console.log("RES:", res.url(), res.status()));
     await page.addInitScript(() => {
-      window.localStorage.setItem("poolx_guided_tour_dismissed", "true");
+      window.localStorage.setItem("vela_guided_tour_dismissed", "true");
     });
     // Mock search APIs specifically
     await page.route(PROFILES_SEARCH_REGEX, async (route) => {
@@ -77,7 +77,7 @@ test.describe("Search Suggestions", () => {
 
   test("shows recent searches when search bar is focused with empty query", async ({ page }) => {
     await page.evaluate(() => {
-      localStorage.setItem("poolx_recent_searches", JSON.stringify(["test query"]));
+      localStorage.setItem("vela_recent_searches", JSON.stringify(["test query"]));
     });
     await page.reload();
 
@@ -177,7 +177,7 @@ test.describe("Search Suggestions", () => {
 
   test("can clear recent searches", async ({ page }) => {
     await page.evaluate(() => {
-      localStorage.setItem("poolx_recent_searches", JSON.stringify(["test 2", "test 1"]));
+      localStorage.setItem("vela_recent_searches", JSON.stringify(["test 2", "test 1"]));
     });
     await page.reload();
 
@@ -197,7 +197,7 @@ test.describe("Search Suggestions", () => {
 
   test("can remove individual recent searches", async ({ page }) => {
     await page.evaluate(() => {
-      localStorage.setItem("poolx_recent_searches", JSON.stringify(["test 2", "test 1"]));
+      localStorage.setItem("vela_recent_searches", JSON.stringify(["test 2", "test 1"]));
     });
     await page.reload();
 
@@ -258,7 +258,7 @@ test.describe("Search Suggestions", () => {
   test("stores last 10 searches in localStorage", async ({ page }) => {
     await page.evaluate(() => {
       const items = Array.from({ length: 12 }, (_, i) => `test ${12 - i}`);
-      localStorage.setItem("poolx_recent_searches", JSON.stringify(items.slice(0, 10)));
+      localStorage.setItem("vela_recent_searches", JSON.stringify(items.slice(0, 10)));
     });
     await page.reload();
 

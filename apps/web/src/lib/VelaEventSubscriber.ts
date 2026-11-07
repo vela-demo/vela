@@ -30,7 +30,7 @@ export type EventCallback<T = unknown> = (event: T) => void;
 /*  WebSocket or SSE stream from the indexer.                                */
 /* ────────────────────────────────────────────────────────────────────────── */
 
-class PoolXEventSubscriber {
+class VelaEventSubscriber {
   private listeners: Record<string, EventCallback<any>[]> = {};
   private abortController: AbortController | null = null;
 
@@ -118,11 +118,11 @@ class PoolXEventSubscriber {
 }
 
 /* Singleton — shared across the app. */
-export const poolxEventSubscriber = new PoolXEventSubscriber();
+export const velaEventSubscriber = new VelaEventSubscriber();
 
 /* Expose on window for Playwright test access. */
 if (typeof window !== "undefined") {
-  (window as any).__poolxEventSubscriber = poolxEventSubscriber;
+  (window as any).__velaEventSubscriber = velaEventSubscriber;
 }
 
 /* ────────────────────────────────────────────────────────────────────────── */
@@ -132,14 +132,14 @@ if (typeof window !== "undefined") {
 /**
  * Subscribe to a named event for the lifetime of the component.
  */
-export function usePoolXEvent<T = unknown>(eventName: string, callback: EventCallback<T>) {
+export function useVelaEvent<T = unknown>(eventName: string, callback: EventCallback<T>) {
   // Stable ref so the latest callback is always called without re-subscribing.
   const cbRef = useRef(callback);
   cbRef.current = callback;
 
   useEffect(() => {
     const handler: EventCallback<T> = (data) => cbRef.current(data);
-    const unsubscribe = poolxEventSubscriber.on<T>(eventName, handler);
+    const unsubscribe = velaEventSubscriber.on<T>(eventName, handler);
     return unsubscribe;
   }, [eventName]);
 }
@@ -151,7 +151,7 @@ export function usePoolXEvent<T = unknown>(eventName: string, callback: EventCal
 export function useWatchAddress(address: string | undefined) {
   useEffect(() => {
     if (!address) return;
-    poolxEventSubscriber.watch(address);
-    return () => poolxEventSubscriber.unwatch(address);
+    velaEventSubscriber.watch(address);
+    return () => velaEventSubscriber.unwatch(address);
   }, [address]);
 }

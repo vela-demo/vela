@@ -1,8 +1,8 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import { useWalletContext } from "@/components/WalletProvider";
-import { PoolXClient, GovParameter, GovProposal, GovStatus } from "poolx-sdk";
+import { VelaClient, GovParameter, GovProposal, GovStatus } from "vela-sdk";
 
 const RPC_URL = process.env.NEXT_PUBLIC_SOROBAN_RPC_URL ?? "https://soroban-testnet.stellar.org";
 const CONTRACT_ID = process.env.NEXT_PUBLIC_CONTRACT_ID ?? "";
@@ -12,24 +12,9 @@ const GOVERNANCE_PARAMETERS = Object.values(GovParameter) as GovParameter[];
 const PAGE_SIZE = 10;
 
 // ── Shared Client Instance ───────────────────────────────────────────────────
-// Hoist a single PoolXClient to module scope so all handlers reuse one client
+// Hoist a single VelaClient to module scope so all handlers reuse one client
 // and one underlying rpc.Server connection, avoiding per-action overhead.
-const client = new PoolXClient({ rpcUrl: RPC_URL, contractId: CONTRACT_ID });
-
-// ── Shared Client Instance ───────────────────────────────────────────────────
-// Hoist a single PoolXClient to module scope so all handlers reuse one client
-// and one underlying rpc.Server connection, avoiding per-action overhead.
-const client = new PoolXClient({ rpcUrl: RPC_URL, contractId: CONTRACT_ID });
-
-// ── Shared Client Instance ───────────────────────────────────────────────────
-// Hoist a single PoolXClient to module scope so all handlers reuse one client
-// and one underlying rpc.Server connection, avoiding per-action overhead.
-const client = new PoolXClient({ rpcUrl: RPC_URL, contractId: CONTRACT_ID });
-
-// ── Shared Client Instance ───────────────────────────────────────────────────
-// Hoist a single PoolXClient to module scope so all handlers reuse one client
-// and one underlying rpc.Server connection, avoiding per-action overhead.
-const client = new PoolXClient({ rpcUrl: RPC_URL, contractId: CONTRACT_ID });
+const client = new VelaClient({ rpcUrl: RPC_URL, contractId: CONTRACT_ID });
 
 export default function GovernancePage() {
   const { address, connected } = useWalletContext();
@@ -146,8 +131,8 @@ export default function GovernancePage() {
   return (
     <div className="mx-auto max-w-4xl px-4 py-8">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-[var(--foreground)] mb-2">Governance</h1>
-        <p className="text-[var(--text-muted)]">
+        <h1 className="text-3xl font-bold text-[var(--fg)] mb-2">Governance</h1>
+        <p className="text-[var(--fg-muted)]">
           Participate in the protocol&apos;s parameter management.
         </p>
       </div>
@@ -161,8 +146,8 @@ export default function GovernancePage() {
                 onClick={() => setActiveTab(tab)}
                 className={`px-4 py-2 text-sm font-medium rounded-t-lg transition-colors ${
                   activeTab === tab
-                    ? "bg-[var(--muted)] text-violet-400 border-b-2 border-violet-500"
-                    : "text-[var(--text-muted)] hover:text-[var(--foreground)] hover:bg-[var(--muted)]/50"
+                    ? "bg-[var(--bg-subtle)] text-violet-400 border-b-2 border-violet-500"
+                    : "text-[var(--fg-muted)] hover:text-[var(--fg)] hover:bg-[var(--bg-subtle)]/50"
                 }`}
               >
                 {tab}
@@ -171,28 +156,28 @@ export default function GovernancePage() {
           </div>
 
           {loading ? (
-            <div className="py-12 text-center text-[var(--text-muted)] animate-pulse">
+            <div className="py-12 text-center text-[var(--fg-muted)] animate-pulse">
               Loading proposals...
             </div>
           ) : activeTab === "History" ? (
             <div className="space-y-4">
               {executedProposals.length === 0 ? (
-                <div className="py-8 text-center text-[var(--text-muted)] border border-[var(--border)] rounded-xl bg-[var(--muted)]/20">
+                <div className="py-8 text-center text-[var(--fg-muted)] border border-[var(--border)] rounded-xl bg-[var(--bg-subtle)]/20">
                   No parameter change history.
                 </div>
               ) : (
                 executedProposals.map((p) => (
                   <div
                     key={p.id.toString()}
-                    className="flex justify-between items-center p-4 border border-[var(--border)] rounded-xl bg-[var(--muted)]/40"
+                    className="flex justify-between items-center p-4 border border-[var(--border)] rounded-xl bg-[var(--bg-subtle)]/40"
                   >
                     <div>
-                      <p className="font-semibold text-[var(--foreground)]">{p.parameter}</p>
-                      <p className="text-sm text-[var(--text-muted)]">
+                      <p className="font-semibold text-[var(--fg)]">{p.parameter}</p>
+                      <p className="text-sm text-[var(--fg-muted)]">
                         Changed to {p.new_value.toString()}
                       </p>
                     </div>
-                    <div className="text-sm font-mono text-[var(--text-muted)]">
+                    <div className="text-sm font-mono text-[var(--fg-muted)]">
                       Ledger {p.created_ledger}
                     </div>
                   </div>
@@ -202,21 +187,21 @@ export default function GovernancePage() {
           ) : (
             <div className="space-y-4">
               {displayedProposals.length === 0 ? (
-                <div className="py-8 text-center text-[var(--text-muted)] border border-[var(--border)] rounded-xl bg-[var(--muted)]/20">
+                <div className="py-8 text-center text-[var(--fg-muted)] border border-[var(--border)] rounded-xl bg-[var(--bg-subtle)]/20">
                   No {activeTab.toLowerCase()} proposals.
                 </div>
               ) : (
                 displayedProposals.map((p) => (
                   <div
                     key={p.id.toString()}
-                    className="border border-[var(--border)] rounded-xl p-5 bg-[var(--background)] shadow-sm"
+                    className="border border-[var(--border)] rounded-xl p-5 bg-[var(--bg)] shadow-sm"
                   >
                     <div className="flex justify-between items-start mb-4">
                       <div>
-                        <h3 className="text-lg font-bold text-[var(--foreground)]">
+                        <h3 className="text-lg font-bold text-[var(--fg)]">
                           Proposal #{p.id.toString()}: Update {p.parameter}
                         </h3>
-                        <p className="text-sm text-[var(--text-muted)] font-mono mt-1">
+                        <p className="text-sm text-[var(--fg-muted)] font-mono mt-1">
                           Proposer: {p.proposer.slice(0, 6)}…{p.proposer.slice(-4)}
                         </p>
                       </div>
@@ -226,19 +211,19 @@ export default function GovernancePage() {
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-                      <div className="p-3 rounded-lg bg-[var(--muted)]/40 border border-[var(--border)]">
-                        <p className="text-xs text-[var(--text-muted)] uppercase tracking-wider mb-1">
+                      <div className="p-3 rounded-lg bg-[var(--bg-subtle)]/40 border border-[var(--border)]">
+                        <p className="text-xs text-[var(--fg-muted)] uppercase tracking-wider mb-1">
                           New Value
                         </p>
-                        <p className="text-lg font-semibold text-[var(--foreground)]">
+                        <p className="text-lg font-semibold text-[var(--fg)]">
                           {p.new_value.toString()}
                         </p>
                       </div>
-                      <div className="p-3 rounded-lg bg-[var(--muted)]/40 border border-[var(--border)]">
-                        <p className="text-xs text-[var(--text-muted)] uppercase tracking-wider mb-1">
+                      <div className="p-3 rounded-lg bg-[var(--bg-subtle)]/40 border border-[var(--border)]">
+                        <p className="text-xs text-[var(--fg-muted)] uppercase tracking-wider mb-1">
                           Effective Quorum
                         </p>
-                        <p className="text-lg font-semibold text-[var(--foreground)]">
+                        <p className="text-lg font-semibold text-[var(--fg)]">
                           {p.effectiveQuorum}
                         </p>
                       </div>
@@ -295,7 +280,7 @@ export default function GovernancePage() {
             <div className="mt-6 flex justify-center">
               <button
                 onClick={() => fetchProposals(page + 1)}
-                className="rounded-lg border border-[var(--border)] px-5 py-2 text-sm font-medium text-[var(--text-muted)] hover:border-violet-500/60 hover:text-violet-400 transition-colors"
+                className="rounded-lg border border-[var(--border)] px-5 py-2 text-sm font-medium text-[var(--fg-muted)] hover:border-violet-500/60 hover:text-violet-400 transition-colors"
                 data-testid="load-more"
               >
                 Load more proposals
@@ -305,23 +290,23 @@ export default function GovernancePage() {
         </div>
 
         <div className="space-y-6">
-          <div className="border border-[var(--border)] rounded-xl p-5 bg-[var(--background)] shadow-sm sticky top-24">
-            <h2 className="text-xl font-bold text-[var(--foreground)] mb-4">Create Proposal</h2>
+          <div className="border border-[var(--border)] rounded-xl p-5 bg-[var(--bg)] shadow-sm sticky top-24">
+            <h2 className="text-xl font-bold text-[var(--fg)] mb-4">Create Proposal</h2>
 
             {!connected ? (
-              <p className="text-[var(--text-muted)] text-sm">
+              <p className="text-[var(--fg-muted)] text-sm">
                 Connect your wallet to create a proposal.
               </p>
             ) : (
               <form onSubmit={handlePropose} className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-[var(--text-muted)] mb-1">
+                  <label className="block text-sm font-medium text-[var(--fg-muted)] mb-1">
                     Parameter
                   </label>
                   <select
                     value={formParam}
                     onChange={(e) => setFormParam(e.target.value as GovParameter)}
-                    className="w-full bg-[var(--muted)] border border-[var(--border)] rounded-lg px-3 py-2 text-[var(--foreground)] focus:outline-none focus:ring-2 focus:ring-violet-500/50"
+                    className="w-full bg-[var(--bg-subtle)] border border-[var(--border)] rounded-lg px-3 py-2 text-[var(--fg)] focus:outline-none focus:ring-2 focus:ring-violet-500/50"
                   >
                     {GOVERNANCE_PARAMETERS.map((parameter) => (
                       <option key={parameter} value={parameter}>
@@ -332,7 +317,7 @@ export default function GovernancePage() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-[var(--text-muted)] mb-1">
+                  <label className="block text-sm font-medium text-[var(--fg-muted)] mb-1">
                     New Value (Integer)
                   </label>
                   <input
@@ -340,7 +325,7 @@ export default function GovernancePage() {
                     required
                     value={formValue}
                     onChange={(e) => setFormValue(e.target.value)}
-                    className="w-full bg-[var(--muted)] border border-[var(--border)] rounded-lg px-3 py-2 text-[var(--foreground)] focus:outline-none focus:ring-2 focus:ring-violet-500/50"
+                    className="w-full bg-[var(--bg-subtle)] border border-[var(--border)] rounded-lg px-3 py-2 text-[var(--fg)] focus:outline-none focus:ring-2 focus:ring-violet-500/50"
                     placeholder="1000"
                   />
                 </div>

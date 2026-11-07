@@ -19,7 +19,7 @@ import { validateParams } from "./middleware/validate.js";
 import { AttestationCache } from "./attestation-cache.js";
 import { createKeystore, Keystore } from "./secrets.js";
 import { z } from "zod";
-import { notFoundError, isAppError } from "@poolx/types/src/errors.js";
+import { notFoundError, isAppError } from "@vela/types/src/errors.js";
 
 ed.etc.sha512Sync = (...m) => sha512(ed.etc.concatBytes(...m));
 

@@ -1,4 +1,4 @@
-import { PoolXClient } from "../../packages/sdk/src/index";
+import { VelaClient } from "../../packages/sdk/src/index";
 import { Keypair } from "@stellar/stellar-sdk";
 
 // ── Configuration ────────────────────────────────────────────────────────────
@@ -7,7 +7,7 @@ const CONFIG = {
   rpcUrl: process.env.STELLAR_RPC_URL || "https://soroban-testnet.stellar.org",
   networkPassphrase: process.env.STELLAR_NETWORK_PASSPHRASE || "Test SDF Network ; September 2015",
   // Standard test deployment contract ID
-  contractId: process.env.POOLX_CONTRACT_ID || "CDLDVFKHEZ2RVB3NG4UQA4VPD3TSHV6XMHXMHP2BSGCJ2IIWVTOHGDSG",
+  contractId: process.env.VELA_CONTRACT_ID || "CDLDVFKHEZ2RVB3NG4UQA4VPD3TSHV6XMHXMHP2BSGCJ2IIWVTOHGDSG",
 };
 
 // Mock admin/creator keypair for demonstration
@@ -15,13 +15,13 @@ const mockSignerKeypair = Keypair.random();
 const mockSourceAddress = mockSignerKeypair.publicKey();
 
 async function runNodeExample() {
-  console.log("=== PoolX SDK Node.js Run-Time Example ===");
+  console.log("=== Vela SDK Node.js Run-Time Example ===");
   console.log(`Connecting to RPC Endpoint: ${CONFIG.rpcUrl}`);
   console.log(`Contract ID: ${CONFIG.contractId}`);
   console.log(`Client Address: ${mockSourceAddress}\n`);
 
-  // 1. Initialize PoolXClient
-  const client = new PoolXClient(CONFIG);
+  // 1. Initialize VelaClient
+  const client = new VelaClient(CONFIG);
 
   try {
     // 2. Read profiles details on-chain
@@ -76,7 +76,7 @@ async function runNodeExample() {
 
     console.log("=== Node.js Example Execution Completed Successfully ===");
   } catch (err: any) {
-    console.error("✕ PoolX SDK Runtime Error:", err.message);
+    console.error("✕ Vela SDK Runtime Error:", err.message);
     process.exit(1);
   }
 }

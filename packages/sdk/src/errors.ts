@@ -1,10 +1,10 @@
 /**
- * Base class for all PoolX SDK errors.
+ * Base class for all Vela SDK errors.
  */
-export class PoolXError extends Error {
+export class VelaError extends Error {
   constructor(
     message: string,
-    public readonly code: string = "POOLX_ERROR",
+    public readonly code: string = "VELA_ERROR",
     public readonly details?: Record<string, unknown>,
     public readonly originalError?: unknown
   ) {
@@ -18,7 +18,7 @@ export class PoolXError extends Error {
 /**
  * Thrown when a requested resource (e.g. post, pool, or profile) does not exist on-chain.
  */
-export class NotFoundError extends PoolXError {
+export class NotFoundError extends VelaError {
   constructor(message: string, details?: Record<string, unknown>, originalError?: unknown) {
     super(message, "NOT_FOUND", details, originalError);
   }
@@ -28,7 +28,7 @@ export class NotFoundError extends PoolXError {
  * Thrown when the caller is unauthorized (e.g., trying to modify another user's post,
  * pool withdraw without being a pool admin, or trying to interact with a blocker).
  */
-export class UnauthorizedError extends PoolXError {
+export class UnauthorizedError extends VelaError {
   constructor(message: string, details?: Record<string, unknown>, originalError?: unknown) {
     super(message, "UNAUTHORIZED", details, originalError);
   }
@@ -37,7 +37,7 @@ export class UnauthorizedError extends PoolXError {
 /**
  * Thrown when the caller has insufficient funds or insufficient token allowance for operations.
  */
-export class InsufficientBalanceError extends PoolXError {
+export class InsufficientBalanceError extends VelaError {
   constructor(message: string, details?: Record<string, unknown>, originalError?: unknown) {
     super(message, "INSUFFICIENT_BALANCE", details, originalError);
   }
@@ -46,7 +46,7 @@ export class InsufficientBalanceError extends PoolXError {
 /**
  * Thrown when the tipping cooldown window is active.
  */
-export class CooldownError extends PoolXError {
+export class CooldownError extends VelaError {
   constructor(message: string, details?: Record<string, unknown>, originalError?: unknown) {
     super(message, "COOLDOWN_ACTIVE", details, originalError);
   }
@@ -55,7 +55,7 @@ export class CooldownError extends PoolXError {
 /**
  * Thrown when a mini-app manifest fails JSON schema validation.
  */
-export class InvalidManifestError extends PoolXError {
+export class InvalidManifestError extends VelaError {
   constructor(message: string, details?: Record<string, unknown>, originalError?: unknown) {
     super(message, "INVALID_MANIFEST", details, originalError);
   }
@@ -64,7 +64,7 @@ export class InvalidManifestError extends PoolXError {
 /**
  * Thrown when transaction simulation fails. Contains the full diagnostic event log.
  */
-export class SimulationError extends PoolXError {
+export class SimulationError extends VelaError {
   public error?: string;
   public hostError?: string;
 
@@ -88,7 +88,7 @@ export class SimulationError extends PoolXError {
  * Carries a machine-readable `code` and an optional `details` map
  * (e.g. `{ field: "username", constraint: "max_length" }`).
  */
-export class ValidationError extends PoolXError {
+export class ValidationError extends VelaError {
   constructor(message: string, details?: Record<string, unknown>, originalError?: unknown) {
     super(message, "VALIDATION_ERROR", details, originalError);
   }
@@ -109,7 +109,7 @@ export class InvalidInputError extends ValidationError {
  * Thrown on RPC / network-level failures (connection refused, timeout, non-200
  * HTTP responses from Soroban RPC, Horizon, or the relay).
  */
-export class NetworkError extends PoolXError {
+export class NetworkError extends VelaError {
   constructor(message: string, details?: Record<string, unknown>, originalError?: unknown) {
     super(message, "NETWORK_ERROR", details, originalError);
   }
@@ -119,7 +119,7 @@ export class NetworkError extends PoolXError {
  * Thrown when a wallet or hardware signer fails to produce a valid signature
  * (extension not found, user rejected, device disconnected, etc.).
  */
-export class SigningError extends PoolXError {
+export class SigningError extends VelaError {
   constructor(message: string, details?: Record<string, unknown>, originalError?: unknown) {
     super(message, "SIGNING_ERROR", details, originalError);
   }
@@ -128,7 +128,7 @@ export class SigningError extends PoolXError {
 /**
  * Thrown when an HTTP request exceeds the configured timeout.
  */
-export class TimeoutError extends PoolXError {
+export class TimeoutError extends VelaError {
   constructor(message: string, details?: Record<string, unknown>, originalError?: unknown) {
     super(message, "TIMEOUT", details, originalError);
   }
@@ -138,7 +138,7 @@ export class TimeoutError extends PoolXError {
  * Thrown when an on-chain contract invocation fails (simulation error, contract
  * FAILED status, or a diagnostic trap returned by Soroban).
  */
-export class ContractError extends PoolXError {
+export class ContractError extends VelaError {
   constructor(message: string, details?: Record<string, unknown>, originalError?: unknown) {
     super(message, "CONTRACT_ERROR", details, originalError);
   }
@@ -149,7 +149,7 @@ export class ContractError extends PoolXError {
  * retryable failures. Signals that the transaction queue has been paused and
  * the RPC endpoint should be treated as unhealthy until it recovers.
  */
-export class CircuitBreakerError extends PoolXError {
+export class CircuitBreakerError extends VelaError {
   constructor(message: string, details?: Record<string, unknown>, originalError?: unknown) {
     super(message, "CIRCUIT_OPEN", details, originalError);
   }
@@ -158,7 +158,7 @@ export class CircuitBreakerError extends PoolXError {
 /**
  * Thrown when the deployed contract version or capability marker does not match SDK expectation.
  */
-export class VersionMismatchError extends PoolXError {
+export class VersionMismatchError extends VelaError {
   constructor(message: string, details?: Record<string, unknown>, originalError?: unknown) {
     super(message, "VERSION_MISMATCH", details, originalError);
   }
@@ -171,7 +171,7 @@ export class VersionMismatchError extends PoolXError {
 export type ReadResult<T> =
   | { ok: true; value: T; absent?: false }
   | { ok: true; value: null; absent: true }
-  | { ok: false; error: PoolXError };
+  | { ok: false; error: VelaError };
 
 
 // ── Contract error codes ──────────────────────────────────────────────────────
@@ -196,7 +196,7 @@ type ErrorConstructor = new (
   message: string,
   details?: Record<string, unknown>,
   originalError?: unknown
-) => PoolXError;
+) => VelaError;
 
 const errorCodeRegistry: Map<ContractErrorCode, ErrorConstructor> = new Map([
   [ContractErrorCode.AlreadyInitialized, ContractError],
@@ -214,7 +214,7 @@ const errorCodeRegistry: Map<ContractErrorCode, ErrorConstructor> = new Map([
   [ContractErrorCode.SimulationFailed, ContractError],
 ]);
 
-function tryMapByErrorCode(err: unknown): PoolXError | null {
+function tryMapByErrorCode(err: unknown): VelaError | null {
   if (typeof err !== "object" || err === null) return null;
 
   const code = (err as Record<string, unknown>).code;
@@ -299,7 +299,7 @@ function tryMapTransportError(err: unknown): NetworkError | null {
   return null;
 }
 
-function mapByRegex(msg: string, err: unknown): PoolXError {
+function mapByRegex(msg: string, err: unknown): VelaError {
   if (/allowance|insufficient allowance/i.test(msg)) {
     return new InsufficientBalanceError(
       "Insufficient allowance to complete transaction.",
@@ -347,10 +347,10 @@ function mapByRegex(msg: string, err: unknown): PoolXError {
     return new NetworkError(msg, undefined, err);
   }
 
-  return new PoolXError(msg, "POOLX_ERROR", undefined, err);
+  return new VelaError(msg, "VELA_ERROR", undefined, err);
 }
 
-export function mapError(err: unknown): PoolXError {
+export function mapError(err: unknown): VelaError {
   if (err instanceof SimulationError) {
     return err;
   }

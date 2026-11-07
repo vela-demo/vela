@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef, useState } from "react";
+﻿import React, { useCallback, useMemo, useRef, useState } from "react";
 import { ActivityIndicator, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { WebView } from "react-native-webview";
@@ -8,8 +8,8 @@ import { useInstalledApps } from "../../mini-apps/store";
 
 const BRIDGE_INJECTION = `
 (function() {
-  if (window.PoolXBridge) return;
-  window.PoolXBridge = {
+  if (window.VelaBridge) return;
+  window.VelaBridge = {
     _callbacks: {},
     _nextId: 1,
     call: function(method, payload) {
@@ -66,13 +66,13 @@ export default function MiniAppHostScreen() {
         parsed = JSON.parse(event.nativeEvent.data);
         const result = await bridge.call(parsed.method, parsed.payload);
         webviewRef.current?.injectJavaScript(
-          `window.PoolXBridge._handleResponse(${parsed.id}, null, ${JSON.stringify(result)});true;`
+          `window.VelaBridge._handleResponse(${parsed.id}, null, ${JSON.stringify(result)});true;`
         );
       } catch (err) {
         const msgId = parsed?.id ?? 0;
         const message = err instanceof Error ? err.message : "Bridge call failed";
         webviewRef.current?.injectJavaScript(
-          `window.PoolXBridge._handleResponse(${msgId}, ${JSON.stringify(message)}, null);true;`
+          `window.VelaBridge._handleResponse(${msgId}, ${JSON.stringify(message)}, null);true;`
         );
       }
     },

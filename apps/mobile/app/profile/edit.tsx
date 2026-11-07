@@ -147,7 +147,7 @@ export default function EditProfileScreen() {
             <TouchableOpacity
               style={styles.ctaButton}
               onPress={() => {
-                const webUrl = process.env.EXPO_PUBLIC_WEB_URL ?? "https://poolx.social";
+                const webUrl = process.env.EXPO_PUBLIC_WEB_URL ?? "https://vela.social";
                 Linking.openURL(`${webUrl}/onboarding/creator`);
               }}
               accessibilityLabel="Launch creator token wizard"

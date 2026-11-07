@@ -55,12 +55,12 @@ jest.mock("next/navigation", () => ({
   useSearchParams: () => new URLSearchParams(),
 }));
 
-// Mock PoolXClient and poolx-sdk utilities
-jest.mock("poolx-sdk", () => {
-  const actual = jest.requireActual("poolx-sdk");
+// Mock VelaClient and vela-sdk utilities
+jest.mock("vela-sdk", () => {
+  const actual = jest.requireActual("vela-sdk");
   return {
     ...actual,
-    PoolXClient: jest.fn().mockImplementation(() => ({
+    VelaClient: jest.fn().mockImplementation(() => ({
       getProfile: jest.fn().mockResolvedValue({
         username: "testuser",
         creator_token: "GAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",

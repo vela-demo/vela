@@ -62,7 +62,7 @@ export function deriveSharedSecret(myPrivateKey: Uint8Array, theirPublicKey: Uin
  * Conversation ID should be deterministic based on participant addresses.
  */
 export function deriveConversationKey(sharedSecret: Uint8Array, conversationId: string): Uint8Array {
-  const info = new TextEncoder().encode(`poolx-dm-v1:${conversationId}`);
+  const info = new TextEncoder().encode(`vela-dm-v1:${conversationId}`);
   
   // Use HKDF to derive 32-byte key for ChaCha20-Poly1305
   return hkdf(sha256, sharedSecret, undefined, info, 32);

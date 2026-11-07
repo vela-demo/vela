@@ -49,7 +49,7 @@ export default function MiniAppsScreen() {
       ListEmptyComponent={
         <EmptyState
           title="No Mini Apps"
-          description="Discover and install mini apps to enhance your PoolX experience."
+          description="Discover and install mini apps to enhance your Vela experience."
           actionText="Browse Discovery"
           onActionPress={() => router.push("/(tabs)/explore" as Parameters<typeof router.push>[0])}
         />

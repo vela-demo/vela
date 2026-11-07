@@ -3,7 +3,7 @@ import { test, expect } from "@playwright/test";
 /**
  * Playwright E2E tests for the profile page.
  *
- * These tests intercept both the Soroban RPC (to mock PoolXClient.getProfile)
+ * These tests intercept both the Soroban RPC (to mock VelaClient.getProfile)
  * and the indexer REST API so they can run without a live backend.
  */
 
@@ -14,7 +14,7 @@ const TEST_ADDRESS = "GABC1234567890ABCDEF1234567890ABCDEF1234567890ABCDEF123456
 /* ────────────────────────────────────────────────────────────────────────── */
 
 test.beforeEach(async ({ page }) => {
-  // Mock the Soroban RPC — PoolXClient.getProfile uses simulateTransaction
+  // Mock the Soroban RPC — VelaClient.getProfile uses simulateTransaction
   await page.route("**/soroban-testnet.stellar.org", async (route) => {
     const body = JSON.parse((await route.request().postData()) || "{}");
     // Return a simulated profile struct for any simulate call
@@ -24,7 +24,7 @@ test.beforeEach(async ({ page }) => {
         jsonrpc: "2.0",
         id: body.id ?? 1,
         result: {
-          // Simplified — PoolXClient checks for result.retval
+          // Simplified — VelaClient checks for result.retval
           results: [{ xdr: "" }],
           cost: { cpuInsns: "0", memBytes: "0" },
           // Provide a non-error simulation so getProfile returns our data
@@ -151,7 +151,7 @@ test.describe("Profile Page", () => {
 
     // Trigger a mock FollowEvent via the global subscriber
     await page.evaluate((addr) => {
-      const subscriber = (window as any).__poolxEventSubscriber;
+      const subscriber = (window as any).__velaEventSubscriber;
       if (subscriber) {
         subscriber.triggerMockEvent("FollowEvent", { followee: addr });
       }

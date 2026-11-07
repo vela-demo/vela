@@ -28,7 +28,7 @@ export default function ConnectScreen() {
   return (
     <View style={styles.container}>
       <View style={styles.content}>
-        <Text style={styles.eyebrow}>PoolX Wallet</Text>
+        <Text style={styles.eyebrow}>Vela Wallet</Text>
         <Text style={styles.title}>Connect your Stellar wallet</Text>
         <Text style={styles.subtitle}>
           Use Freighter in browser contexts or WalletConnect for mobile wallets.

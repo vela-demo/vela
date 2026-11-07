@@ -26,7 +26,7 @@ export function OnboardingGuard({ children }: { children: React.ReactNode }) {
       // Check if user needs onboarding
       if (shouldShowOnboarding()) {
         // Check if this is their first time (no profile data)
-        const hasProfileDraft = localStorage.getItem("poolx_profile_draft");
+        const hasProfileDraft = localStorage.getItem("vela_profile_draft");
 
         if (!hasProfileDraft) {
           // New user - redirect to onboarding

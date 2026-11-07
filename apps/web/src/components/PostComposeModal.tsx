@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useCallback, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
@@ -167,7 +167,7 @@ export function PostComposeModal({ isOpen, onClose, publicKey }: PostComposeModa
 
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-xs flex items-center justify-center z-50 p-4" role="dialog" aria-modal="true" aria-label="Compose post">
-      <div className="bg-[var(--muted)] border border-[var(--border)] rounded-2xl w-full max-w-lg shadow-2xl flex flex-col overflow-hidden">
+      <div className="bg-[var(--bg-subtle)] border border-[var(--border)] rounded-2xl w-full max-w-lg shadow-2xl flex flex-col overflow-hidden">
         {/* Header */}
         <header className="flex items-center justify-between px-4 md:px-6 py-3 md:py-4 border-b border-[var(--border)]">
           <button
@@ -176,7 +176,7 @@ export function PostComposeModal({ isOpen, onClose, publicKey }: PostComposeModa
             disabled={
               publishState.status === "awaiting_signature" || publishState.status === "submitting"
             }
-            className="text-[var(--text-muted)] hover:text-white transition-colors text-lg"
+            className="text-[var(--fg-muted)] hover:text-white transition-colors text-lg"
             aria-label="Close compose modal"
           >
             ✕
@@ -192,7 +192,7 @@ export function PostComposeModal({ isOpen, onClose, publicKey }: PostComposeModa
             <div className="w-10 h-10 rounded-full bg-[var(--accent)] flex items-center justify-center text-white font-bold text-sm">
               {publicKey ? publicKey.slice(0, 2).toUpperCase() : "??"}
             </div>
-            <span className="text-sm font-semibold text-[var(--text-muted)]">
+            <span className="text-sm font-semibold text-[var(--fg-muted)]">
               {publicKey ? `${publicKey.slice(0, 6)}...${publicKey.slice(-4)}` : "Not Connected"}
             </span>
           </div>

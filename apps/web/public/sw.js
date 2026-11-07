@@ -1,4 +1,4 @@
-const CACHE_NAME = "poolx-feed-v1";
+const CACHE_NAME = "vela-feed-v1";
 const PRECACHE_URLS = ["/feed", "/"];
 
 self.addEventListener("install", (event) => {

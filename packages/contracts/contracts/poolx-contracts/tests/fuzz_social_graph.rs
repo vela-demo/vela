@@ -1,6 +1,6 @@
 #![cfg(test)]
 
-use poolx_contracts::{PoolXContract, PoolXContractClient};
+use vela_contracts::{VelaContract, VelaContractClient};
 use proptest::prelude::*;
 use soroban_sdk::{testutils::Address as _, Address, Env, String as SdkString};
 
@@ -8,11 +8,11 @@ use soroban_sdk::{testutils::Address as _, Address, Env, String as SdkString};
 // These tests verify that the follow/unfollow/block invariants hold
 // under arbitrary sequences of operations.
 
-fn setup_contract() -> (Env, PoolXContractClient<'static>) {
+fn setup_contract() -> (Env, VelaContractClient<'static>) {
     let env = Env::default();
     env.mock_all_auths();
-    let contract_id = env.register_contract(None, PoolXContract);
-    let client = PoolXContractClient::new(&env, &contract_id);
+    let contract_id = env.register_contract(None, VelaContract);
+    let client = VelaContractClient::new(&env, &contract_id);
 
     let admin = Address::generate(&env);
     let treasury = Address::generate(&env);
@@ -21,7 +21,7 @@ fn setup_contract() -> (Env, PoolXContractClient<'static>) {
     (env, client)
 }
 
-fn set_profile(env: &Env, client: &PoolXContractClient, user: &Address, username: &str) {
+fn set_profile(env: &Env, client: &VelaContractClient, user: &Address, username: &str) {
     let creator_token = Address::generate(env);
     client.set_profile(user, &SdkString::from_str(env, username), &creator_token);
 }

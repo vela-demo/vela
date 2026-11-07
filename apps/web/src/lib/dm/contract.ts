@@ -3,7 +3,7 @@
 /**
  * Contract helpers for DM key management in apps/web.
  *
- * Uses PoolXClient from poolx-sdk (via webpack alias → SDK TypeScript
+ * Uses VelaClient from vela-sdk (via webpack alias → SDK TypeScript
  * source) so apps/web does not need @stellar/stellar-sdk as a direct dep.
  *
  * getDmKey      – read-only simulation, no signing required.
@@ -11,7 +11,7 @@
  *                 to the Soroban RPC using a raw JSON-RPC fetch.
  */
 
-import { PoolXClient } from 'poolx-sdk';
+import { VelaClient } from 'vela-sdk';
 
 // ── Config ────────────────────────────────────────────────────────────────────
 
@@ -28,11 +28,11 @@ const NETWORK_PASSPHRASE =
 
 // ── Singleton client ──────────────────────────────────────────────────────────
 
-let _client: PoolXClient | null = null;
+let _client: VelaClient | null = null;
 
-function getClient(): PoolXClient {
+function getClient(): VelaClient {
   if (!_client) {
-    _client = new PoolXClient({
+    _client = new VelaClient({
       contractId: CONTRACT_ID,
       rpcUrl: RPC_URL,
       networkPassphrase: NETWORK_PASSPHRASE,
@@ -44,7 +44,7 @@ function getClient(): PoolXClient {
 // ── Public API ────────────────────────────────────────────────────────────────
 
 /**
- * Fetch the X25519 public key published by `address` to the PoolX contract.
+ * Fetch the X25519 public key published by `address` to the Vela contract.
  * Returns null if the user has never called publishDmKey or the contract is
  * not configured.
  */
@@ -54,7 +54,7 @@ export async function getDmKey(address: string): Promise<Uint8Array | null> {
 }
 
 /**
- * Publish the caller's X25519 public key to the PoolX contract.
+ * Publish the caller's X25519 public key to the Vela contract.
  *
  * Flow:
  *   1. SDK builds + simulates the transaction (proper source account + fees).

@@ -5,7 +5,7 @@ import { Database } from "../../db";
 import { getFeedPosts } from "../../handlers/post";
 import { validateParams, validateQuery } from "../../middleware/validate";
 import { z } from "zod";
-import { stellarAddressSchema, cursorPaginationSchema } from "@poolx/types/src/schemas";
+import { stellarAddressSchema, cursorPaginationSchema } from "@vela/types/src/schemas";
 
 const exploreQuerySchema = cursorPaginationSchema.extend({
   cursor: z.coerce.number().optional(),

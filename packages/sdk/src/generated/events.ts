@@ -164,12 +164,12 @@ export interface PoolThresholdUpdatedEvent {
  * Raw event union type generated from the contract ABI.
  * Uses PascalCase type discriminators (e.g. "TipEvent", "FollowEvent").
  *
- * NOTE: For most consumers, prefer the hand-written `PoolXEvent` from
+ * NOTE: For most consumers, prefer the hand-written `VelaEvent` from
  * `events/types.ts` which uses snake_case discriminators and includes
  * rich metadata (`meta` field). This type is exported for backward
  * compatibility and low-level RPC consumers.
  */
-export type RawPoolXEvent =
+export type RawVelaEvent =
   | ({ type: "TipEvent" } & TipEvent)
   | ({ type: "BlockEvent" } & BlockEvent)
   | ({ type: "FollowEvent" } & FollowEvent)
@@ -199,19 +199,19 @@ export type RawPoolXEvent =
   | ({ type: "PoolThresholdUpdatedEvent" } & PoolThresholdUpdatedEvent)
   | { type: "unknown"; raw: xdr.ScVal };
 
-/** @deprecated Use `RawPoolXEvent` instead. The name `PoolXEvent` now refers to the canonical hand-written type in `events/types.ts`. */
-export type PoolXEvent = RawPoolXEvent;
+/** @deprecated Use `RawVelaEvent` instead. The name `VelaEvent` now refers to the canonical hand-written type in `events/types.ts`. */
+export type VelaEvent = RawVelaEvent;
 
 /**
- * Parse a Soroban contract event into a typed RawPoolXEvent.
+ * Parse a Soroban contract event into a typed RawVelaEvent.
  * The event name in topics[0] is matched against known event types.
  * Topic fields are read from topics[1..N], and data fields from the event value.
  *
  * NOTE: For most consumers, prefer `parseContractEvent` from `events/types.ts`
  * which accepts a plain `SorobanEvent` object and returns the canonical
- * `PoolXEvent` type with rich metadata.
+ * `VelaEvent` type with rich metadata.
  */
-export function parseRawContractEvent(event: rpc.Api.EventResponse): RawPoolXEvent | null {
+export function parseRawContractEvent(event: rpc.Api.EventResponse): RawVelaEvent | null {
   if (!event.topic || event.topic.length < 1) return null;
   const topic0 = event.topic[0];
   const eventType = scValToNative(topic0);

@@ -1,7 +1,7 @@
 import { CreatorTokenWizard } from "./CreatorTokenWizard";
 
 export const metadata = {
-  title: "Launch Creator Token — PoolX",
+  title: "Launch Creator Token — Vela",
   description: "Deploy your SEP-41 creator token in one click",
 };
 

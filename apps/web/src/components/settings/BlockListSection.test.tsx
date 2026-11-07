@@ -24,7 +24,7 @@ describe("BlockListSection", () => {
   });
 
   it("should load blocked accounts from localStorage", () => {
-    localStorage.setItem("poolx_blocked_accounts", JSON.stringify([otherAddress]));
+    localStorage.setItem("vela_blocked_accounts", JSON.stringify([otherAddress]));
     render(<BlockListSection address={mockAddress} />);
 
     expect(screen.queryByText("No blocked accounts.")).not.toBeInTheDocument();
@@ -45,7 +45,7 @@ describe("BlockListSection", () => {
     });
 
     expect(screen.getByText(otherAddress)).toBeInTheDocument();
-    expect(JSON.parse(localStorage.getItem("poolx_blocked_accounts") || "[]")).toContain(
+    expect(JSON.parse(localStorage.getItem("vela_blocked_accounts") || "[]")).toContain(
       otherAddress
     );
   });
@@ -65,7 +65,7 @@ describe("BlockListSection", () => {
   });
 
   it("should allow unblocking a blocked address on-chain", async () => {
-    localStorage.setItem("poolx_blocked_accounts", JSON.stringify([otherAddress]));
+    localStorage.setItem("vela_blocked_accounts", JSON.stringify([otherAddress]));
     render(<BlockListSection address={mockAddress} />);
 
     expect(screen.getByText(otherAddress)).toBeInTheDocument();
@@ -78,13 +78,13 @@ describe("BlockListSection", () => {
     });
 
     expect(screen.queryByText(otherAddress)).not.toBeInTheDocument();
-    expect(JSON.parse(localStorage.getItem("poolx_blocked_accounts") || "[]")).not.toContain(
+    expect(JSON.parse(localStorage.getItem("vela_blocked_accounts") || "[]")).not.toContain(
       otherAddress
     );
   });
 
   it("should show error when same address is blocked twice", () => {
-    localStorage.setItem("poolx_blocked_accounts", JSON.stringify([otherAddress]));
+    localStorage.setItem("vela_blocked_accounts", JSON.stringify([otherAddress]));
     render(<BlockListSection address={mockAddress} />);
 
     const input = screen.getByPlaceholderText(/Enter Stellar address/);

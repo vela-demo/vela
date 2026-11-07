@@ -13,7 +13,7 @@
 
 import { readCachedFeed, writeCachedFeed, clearCachedFeed } from "@/hooks/useFeedPersistence";
 
-const STORAGE_KEY = "poolx_feed_explore";
+const STORAGE_KEY = "vela_feed_explore";
 
 function setLocalStorage(key: string, value: string) {
   Object.defineProperty(window, "localStorage", {

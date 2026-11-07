@@ -61,7 +61,7 @@ export class MemoryCursorStore implements CursorStore {
 }
 
 export class LocalStorageCursorStore implements CursorStore {
-  constructor(private key = "poolx:lastEventCursor") {}
+  constructor(private key = "vela:lastEventCursor") {}
 
   async get(): Promise<string | undefined> {
     const localStorage = getLocalStorage();
@@ -89,7 +89,7 @@ export interface SecureStoreAdapter {
 export class SecureStoreCursorStore implements CursorStore {
   constructor(
     private readonly secureStore: SecureStoreAdapter,
-    private readonly key = "poolx:lastEventCursor"
+    private readonly key = "vela:lastEventCursor"
   ) {}
 
   async get(): Promise<string | undefined> {
@@ -237,7 +237,7 @@ function getRequire(): ((moduleName: string) => unknown) | undefined {
 function defaultCursorPath(): string {
   const path = getPath();
   const cwd = typeof process !== "undefined" && process.cwd ? process.cwd() : ".";
-  return path ? path.join(cwd, ".poolx-event-cursor") : ".poolx-event-cursor";
+  return path ? path.join(cwd, ".vela-event-cursor") : ".vela-event-cursor";
 }
 
 function isNodeError(err: unknown): err is { code: string } {

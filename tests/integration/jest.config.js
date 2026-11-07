@@ -17,9 +17,9 @@ module.exports = {
   // Source files use ESM-style ".js" specifiers for relative imports
   moduleNameMapper: {
     "^(\\.{1,2}/.*)\\.js$": "$1",
-    // Map @poolx/sdk to its source for direct import in tests
-    "^@poolx/sdk$": "<rootDir>/packages/sdk/src/index.ts",
-    "^@poolx/sdk/(.*)$": "<rootDir>/packages/sdk/src/$1",
+    // Map @vela/sdk to its source for direct import in tests
+    "^@vela/sdk$": "<rootDir>/packages/sdk/src/index.ts",
+    "^@vela/sdk/(.*)$": "<rootDir>/packages/sdk/src/$1",
   },
   transform: {
     "^.+\\.ts$": [

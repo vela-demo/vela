@@ -180,7 +180,7 @@ describe("dm-relay loadConfig", () => {
   const saved = { ...process.env };
 
   beforeEach(() => {
-    process.env.DATABASE_URL = "postgresql://poolx:poolx@localhost:5432/poolx_dm";
+    process.env.DATABASE_URL = "postgresql://vela:vela@localhost:5432/vela_dm";
     delete process.env.REDIS_URL;
     delete process.env.ALLOW_IN_MEMORY_RATE_LIMIT;
   });

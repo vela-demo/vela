@@ -1,4 +1,4 @@
-import { PoolXClient } from "../client";
+import { VelaClient } from "../client";
 
 /**
  * Security regression tests for #1207.
@@ -8,11 +8,11 @@ import { PoolXClient } from "../client";
  * when explicitly opted-in via `allowHttp: true`.
  */
 
-describe("PoolXClient insecure HTTP RPC policy", () => {
+describe("VelaClient insecure HTTP RPC policy", () => {
   it("throws for a remote http:// RPC URL (non-localhost) without opt-in", () => {
     expect(
       () =>
-        new PoolXClient({
+        new VelaClient({
           contractId: "CDUMMY",
           rpcUrl: "http://rpc.example.com",
         })
@@ -22,7 +22,7 @@ describe("PoolXClient insecure HTTP RPC policy", () => {
   it("throws for a localhost http:// RPC URL without explicit opt-in", () => {
     expect(
       () =>
-        new PoolXClient({
+        new VelaClient({
           contractId: "CDUMMY",
           rpcUrl: "http://localhost:8000",
         })
@@ -32,12 +32,12 @@ describe("PoolXClient insecure HTTP RPC policy", () => {
   it("accepts a loopback http:// RPC URL when allowHttp is explicitly true", () => {
     const warn = jest.spyOn(console, "warn").mockImplementation(() => undefined);
     try {
-      const client = new PoolXClient({
+      const client = new VelaClient({
         contractId: "CDUMMY",
         rpcUrl: "http://127.0.0.1:8000",
         allowHttp: true,
       });
-      expect(client).toBeInstanceOf(PoolXClient);
+      expect(client).toBeInstanceOf(VelaClient);
       expect(warn).toHaveBeenCalled();
     } finally {
       warn.mockRestore();
@@ -47,7 +47,7 @@ describe("PoolXClient insecure HTTP RPC policy", () => {
   it("throws for a remote http:// RPC URL even when allowHttp is true", () => {
     expect(
       () =>
-        new PoolXClient({
+        new VelaClient({
           contractId: "CDUMMY",
           rpcUrl: "http://mainnet.sorobanrpc.com",
           allowHttp: true,
@@ -56,10 +56,10 @@ describe("PoolXClient insecure HTTP RPC policy", () => {
   });
 
   it("accepts an https:// RPC URL without opt-in", () => {
-    const client = new PoolXClient({
+    const client = new VelaClient({
       contractId: "CDUMMY",
       rpcUrl: "https://soroban-testnet.stellar.org",
     });
-    expect(client).toBeInstanceOf(PoolXClient);
+    expect(client).toBeInstanceOf(VelaClient);
   });
 });

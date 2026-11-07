@@ -1,6 +1,6 @@
 /**
  * Tip Event Handler
- * Handles TipEvent from the PoolX contract
+ * Handles TipEvent from the Vela contract
  */
 
 import { Pool, PoolClient } from "pg";

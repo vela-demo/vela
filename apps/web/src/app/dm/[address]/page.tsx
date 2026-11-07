@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
@@ -155,7 +155,7 @@ export default function DirectMessagePage() {
     try {
       const keypair = generateDmKeypair();
 
-      // Publish X25519 public key to the PoolX contract on-chain.
+      // Publish X25519 public key to the Vela contract on-chain.
       // If the contract/RPC isn't available in dev, this will throw — keys
       // are only persisted locally after a successful on-chain publish.
       await publishDmKey(myAddress, keypair.publicKey);
@@ -238,7 +238,7 @@ export default function DirectMessagePage() {
   if (!connected || !myAddress) {
     return (
       <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center px-4">
-        <p className="text-center text-[var(--text-muted)]">
+        <p className="text-center text-[var(--fg-muted)]">
           Connect your Freighter wallet to use direct messages.
         </p>
       </div>
@@ -250,18 +250,18 @@ export default function DirectMessagePage() {
   if (!loading && !keysReady) {
     return (
       <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center px-4">
-        <div className="w-full max-w-md rounded-2xl border border-[var(--border)] bg-[var(--muted)] p-8 shadow-xl">
+        <div className="w-full max-w-md rounded-2xl border border-[var(--border)] bg-[var(--bg-subtle)] p-8 shadow-xl">
           <div className="mb-6 text-center">
             <span className="text-5xl" aria-hidden>
               🔐
             </span>
-            <h2 className="mt-3 text-xl font-semibold text-[var(--foreground)]">
+            <h2 className="mt-3 text-xl font-semibold text-[var(--fg)]">
               Enable Direct Messages
             </h2>
-            <p className="mt-3 text-sm leading-relaxed text-[var(--text-muted)]">
-              PoolX DMs are end-to-end encrypted with X25519 key agreement and ChaCha20-Poly1305.
+            <p className="mt-3 text-sm leading-relaxed text-[var(--fg-muted)]">
+              Vela DMs are end-to-end encrypted with X25519 key agreement and ChaCha20-Poly1305.
               Your encryption keys are generated in the browser and your public key is published to
-              the PoolX smart contract so others can message you securely. Your private key never
+              the Vela smart contract so others can message you securely. Your private key never
               leaves your device.
             </p>
           </div>
@@ -275,7 +275,7 @@ export default function DirectMessagePage() {
           <div className="flex gap-3">
             <button
               onClick={() => router.back()}
-              className="flex-1 rounded-xl border border-[var(--border)] px-4 py-2.5 text-sm font-medium text-[var(--text-muted)] transition-colors hover:border-violet-500/60 hover:text-[var(--foreground)]"
+              className="flex-1 rounded-xl border border-[var(--border)] px-4 py-2.5 text-sm font-medium text-[var(--fg-muted)] transition-colors hover:border-violet-500/60 hover:text-[var(--fg)]"
             >
               Cancel
             </button>
@@ -300,16 +300,16 @@ export default function DirectMessagePage() {
       <header className="flex shrink-0 items-center gap-3 border-b border-[var(--border)] px-4 py-3">
         <button
           onClick={() => router.back()}
-          className="text-sm text-[var(--text-muted)] transition-colors hover:text-[var(--foreground)]"
+          className="text-sm text-[var(--fg-muted)] transition-colors hover:text-[var(--fg)]"
           aria-label="Go back"
         >
           ← Back
         </button>
 
         <div className="flex-1 overflow-hidden">
-          <h1 className="truncate font-semibold text-[var(--foreground)]">Direct Message</h1>
+          <h1 className="truncate font-semibold text-[var(--fg)]">Direct Message</h1>
           <p
-            className="truncate font-mono text-xs text-[var(--text-muted)]"
+            className="truncate font-mono text-xs text-[var(--fg-muted)]"
             title={recipientAddress}
           >
             {recipientAddress.slice(0, 10)}…{recipientAddress.slice(-8)}
@@ -346,7 +346,7 @@ export default function DirectMessagePage() {
       {/* ── Recipient notice (no DM keys) ────────────────────────────────── */}
       {recipientHasKeys === false && (
         <div className="shrink-0 border-b border-yellow-700/50 bg-yellow-900/20 px-4 py-2 text-sm text-yellow-400">
-          This address has not published DM keys yet. Ask them to enable direct messages on PoolX
+          This address has not published DM keys yet. Ask them to enable direct messages on Vela
           first.
         </div>
       )}
@@ -355,7 +355,7 @@ export default function DirectMessagePage() {
       <div className="flex-1 overflow-y-auto px-4 py-4">
         {messages.length === 0 ? (
           <div className="flex h-full items-center justify-center">
-            <div className="text-center text-[var(--text-muted)]">
+            <div className="text-center text-[var(--fg-muted)]">
               <span className="text-3xl" aria-hidden>
                 💬
               </span>
@@ -376,7 +376,7 @@ export default function DirectMessagePage() {
                       "max-w-xs rounded-2xl px-4 py-2.5 lg:max-w-md",
                       isMe
                         ? "rounded-br-sm bg-violet-600 text-white"
-                        : "rounded-bl-sm border border-[var(--border)] bg-[var(--muted)] text-[var(--foreground)]",
+                        : "rounded-bl-sm border border-[var(--border)] bg-[var(--bg-subtle)] text-[var(--fg)]",
                       msg.decryptionFailed ? "opacity-50" : "",
                     ].join(" ")}
                   >
@@ -385,7 +385,7 @@ export default function DirectMessagePage() {
                     </p>
                     <p
                       className={`mt-1 text-right text-xs ${
-                        isMe ? "text-violet-200" : "text-[var(--text-muted)]"
+                        isMe ? "text-violet-200" : "text-[var(--fg-muted)]"
                       }`}
                     >
                       {new Date(msg.timestamp * 1000).toLocaleTimeString([], {
@@ -414,7 +414,7 @@ export default function DirectMessagePage() {
             maxLength={500}
             rows={1}
             aria-label="Message input"
-            className="flex-1 resize-none rounded-xl border border-[var(--border)] bg-[var(--muted)] px-4 py-2.5 text-sm text-[var(--foreground)] placeholder-[var(--text-muted)] transition-colors focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-500 disabled:opacity-50"
+            className="flex-1 resize-none rounded-xl border border-[var(--border)] bg-[var(--bg-subtle)] px-4 py-2.5 text-sm text-[var(--fg)] placeholder-[var(--text-muted)] transition-colors focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-500 disabled:opacity-50"
             style={{ minHeight: "2.75rem", maxHeight: "8rem" }}
           />
           <button
@@ -426,7 +426,7 @@ export default function DirectMessagePage() {
             {sending ? "…" : "Send"}
           </button>
         </form>
-        <p className="mt-1.5 text-center text-xs text-[var(--text-muted)]">
+        <p className="mt-1.5 text-center text-xs text-[var(--fg-muted)]">
           Messages are end-to-end encrypted — only you and the recipient can read them.
         </p>
       </div>

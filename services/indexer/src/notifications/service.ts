@@ -225,7 +225,7 @@ export class NotificationService {
       case "POST_REMOVED_BY_MODERATION":
         return "Post removed by moderation";
       default:
-        return "PoolX update";
+        return "Vela update";
     }
   }
 

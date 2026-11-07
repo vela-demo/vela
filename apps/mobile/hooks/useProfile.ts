@@ -18,7 +18,7 @@ async function fetchMockProfile(address: string): Promise<Profile | null> {
   return {
     address,
     username: `user_${address.slice(2, 8).toLowerCase()}`,
-    bio: "Exploring the PoolX network.",
+    bio: "Exploring the Vela network.",
   };
 }
 

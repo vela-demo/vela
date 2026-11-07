@@ -1,6 +1,6 @@
 /**
  * Like Event Handler
- * Handles LikePostEvent from the PoolX contract
+ * Handles LikePostEvent from the Vela contract
  */
 
 import { Pool, PoolClient } from "pg";

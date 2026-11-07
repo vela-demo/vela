@@ -16,12 +16,12 @@
     "test:e2e:headed": "playwright test --headed"
   },
   "dependencies": {
-    "@poolx/types": "workspace:*",
+    "@vela/types": "workspace:*",
     "@radix-ui/react-dialog": "^1.1.20",
     "@stellar/freighter-api": "^2.0.0",
     "browser-image-compression": "^2.0.2",
     "framer-motion": "^12.42.2",
-    "poolx-sdk": "workspace:*",
+    "vela-sdk": "workspace:*",
     "lucide-react": "^1.25.0",
     "next": "15.5.19",
     "react": "^19.0.0",

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 
@@ -110,53 +110,82 @@ export function PostCard({
   }, [likeCount, previousLikeCount]);
 
   return (
-    <article className="rounded-xl border border-[var(--border)] bg-[var(--muted)] p-3 md:p-4 lg:p-5 shadow-lg transition-all duration-300 hover:border-violet-500/40 hover:shadow-violet-950/10">
-      <div className="mb-3 flex flex-wrap items-center justify-between gap-2 text-sm text-[var(--text-muted)]">
-        <span
-          className="font-medium hover:text-[var(--foreground)] transition-colors"
-          title={post.author}
+    <article
+      className="border-b px-4 py-4 transition-colors hover:bg-[var(--bg-subtle)] cursor-pointer"
+      style={{ borderColor: "var(--border)" }}
+      data-tour={tourAnchor ? "post-actions" : undefined}
+    >
+      {/* Author row */}
+      <div className="flex items-start gap-3 mb-2">
+        {/* Avatar */}
+        <div
+          className="shrink-0 w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold text-white"
+          style={{ background: "var(--brand)" }}
+          aria-hidden="true"
         >
-          By {formatAuthor(post.author)}
-        </span>
-        <time className="text-xs text-[var(--text-muted)]">{formatDate(post)}</time>
+          {(post.username ?? post.author).slice(1, 3).toUpperCase()}
+        </div>
+        <div className="min-w-0 flex-1">
+          <div className="flex items-baseline gap-2 flex-wrap">
+            <span className="font-semibold text-sm" style={{ color: "var(--fg)" }}>
+              {post.username ? `@${post.username}` : formatAuthor(post.author)}
+            </span>
+            <span className="text-xs" style={{ color: "var(--fg-subtle)" }}>
+              {formatDate(post)}
+            </span>
+          </div>
+          {/* Content */}
+          <p
+            className="mt-1.5 whitespace-pre-wrap break-words leading-relaxed text-[15px]"
+            style={{ color: "var(--fg)" }}
+          >
+            {highlightText(post.content, query)}
+          </p>
+        </div>
       </div>
 
-      <p className="whitespace-pre-wrap break-words leading-relaxed text-[var(--foreground)] mb-4 text-base">
-        {highlightText(post.content, query)}
-      </p>
-
-      <div
-        className="flex items-center gap-6 border-t border-[var(--border)]/40 pt-3"
-        data-tour={tourAnchor ? "post-actions" : undefined}
-      >
-        {/* Like Button */}
+      {/* Actions */}
+      <div className="flex items-center gap-6 pl-12">
+        {/* Like */}
         <button
           onClick={onLike}
           disabled={disabled}
-          className={`flex items-center gap-2 text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${
-            isLiked
-              ? "text-[var(--accent-coral)]"
-              : "text-[var(--text-muted)] hover:text-[var(--accent-coral)]"
-          }`}
+          className="flex items-center gap-1.5 text-sm transition-colors disabled:opacity-40 group"
+          style={{ color: isLiked ? "#f43f5e" : "var(--fg-subtle)" }}
           aria-label={isLiked ? "Unlike post" : "Like post"}
         >
-          <span
-            className={`text-lg transition-transform duration-200 ${animateLikeCount ? "scale-110" : "scale-100"}`}
+          <svg
+            className="w-4 h-4 transition-transform group-hover:scale-110"
+            fill={isLiked ? "currentColor" : "none"}
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2}
+            aria-hidden="true"
           >
-            {isLiked ? "❤️" : "🤍"}
-          </span>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
+          </svg>
           <span className={animateLikeCount ? "like-count-animate" : ""}>{likeCount}</span>
         </button>
 
-        {/* Tip Button */}
+        {/* Tip */}
         <button
           onClick={onTip}
           disabled={disabled || isTipping}
-          className="flex items-center gap-2 text-sm font-medium text-[var(--text-muted)] hover:text-[var(--accent-teal)] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          className="flex items-center gap-1.5 text-sm transition-colors disabled:opacity-40 group"
+          style={{ color: "var(--fg-subtle)" }}
           aria-label="Tip creator"
         >
-          <span className="text-lg">💰</span>
-          <span>Tips: {getPostTipTotal(post)}</span>
+          <svg
+            className="w-4 h-4 transition-transform group-hover:scale-110 group-hover:text-amber-400"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2}
+            aria-hidden="true"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <span className="group-hover:text-amber-400">{getPostTipTotal(post)}</span>
         </button>
       </div>
     </article>
@@ -165,19 +194,22 @@ export function PostCard({
 
 export function PostCardSkeleton() {
   return (
-    <div className="animate-pulse rounded-xl border border-[var(--border)] bg-[var(--muted)] p-3 md:p-4 lg:p-5 space-y-4">
-      <div className="flex justify-between">
-        <div className="h-4 w-28 rounded bg-zinc-800" />
-        <div className="h-4 w-20 rounded bg-zinc-800" />
-      </div>
-      <div className="space-y-3">
-        <div className="h-4 w-full rounded bg-zinc-800" />
-        <div className="h-4 w-4/5 rounded bg-zinc-800" />
-        <div className="h-4 w-2/3 rounded bg-zinc-800" />
-      </div>
-      <div className="border-t border-[var(--border)]/40 pt-3 flex gap-6">
-        <div className="h-5 w-12 rounded bg-zinc-800" />
-        <div className="h-5 w-20 rounded bg-zinc-800" />
+    <div className="border-b px-4 py-4 animate-pulse" style={{ borderColor: "var(--border)" }}>
+      <div className="flex items-start gap-3">
+        <div className="skeleton w-9 h-9 rounded-full shrink-0" />
+        <div className="flex-1 space-y-2.5">
+          <div className="flex gap-2">
+            <div className="skeleton h-3.5 w-24 rounded" />
+            <div className="skeleton h-3.5 w-16 rounded" />
+          </div>
+          <div className="skeleton h-3.5 w-full rounded" />
+          <div className="skeleton h-3.5 w-4/5 rounded" />
+          <div className="skeleton h-3.5 w-1/2 rounded" />
+          <div className="flex gap-6 pt-1">
+            <div className="skeleton h-3.5 w-10 rounded" />
+            <div className="skeleton h-3.5 w-10 rounded" />
+          </div>
+        </div>
       </div>
     </div>
   );

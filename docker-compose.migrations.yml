@@ -16,11 +16,11 @@ services:
     # and Apple-Silicon developer machines.  The amd64 image runs under Rosetta /
     # QEMU on arm64 hosts with negligible overhead for a throwaway test database.
     platform: linux/amd64
-    container_name: poolx-migrations-postgres
+    container_name: vela-migrations-postgres
     environment:
-      POSTGRES_USER: poolx
-      POSTGRES_PASSWORD: poolx
-      POSTGRES_DB: poolx_migtest
+      POSTGRES_USER: vela
+      POSTGRES_PASSWORD: vela
+      POSTGRES_DB: vela_migtest
     command:
       ["postgres", "-c", "fsync=off", "-c", "full_page_writes=off", "-c", "synchronous_commit=off"]
     ports:
@@ -31,7 +31,7 @@ services:
       # Probe over TCP (-h 127.0.0.1), not the unix socket: during first-boot
       # initdb the image runs a socket-only bootstrap server that would
       # otherwise report "ready" before the real server is accepting clients.
-      test: ["CMD-SHELL", "pg_isready -h 127.0.0.1 -U poolx -d poolx_migtest"]
+      test: ["CMD-SHELL", "pg_isready -h 127.0.0.1 -U vela -d vela_migtest"]
       interval: 2s
       timeout: 3s
       retries: 30

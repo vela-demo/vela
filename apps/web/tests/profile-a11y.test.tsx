@@ -70,10 +70,10 @@ jest.mock("@/lib/optimisticStore", () => ({
   },
 }));
 
-jest.mock("@/lib/PoolXEventSubscriber", () => ({
-  usePoolXEvent: jest.fn(),
+jest.mock("@/lib/VelaEventSubscriber", () => ({
+  useVelaEvent: jest.fn(),
   useWatchAddress: jest.fn(),
-  poolxEventSubscriber: {
+  velaEventSubscriber: {
     on: jest.fn(() => jest.fn()),
     emit: jest.fn(),
     watch: jest.fn(),
@@ -83,8 +83,8 @@ jest.mock("@/lib/PoolXEventSubscriber", () => ({
 }));
 
 // Mock the SDK import used inside the page for follow actions
-jest.mock("poolx-sdk", () => ({
-  PoolXClient: jest.fn().mockImplementation(() => ({
+jest.mock("vela-sdk", () => ({
+  VelaClient: jest.fn().mockImplementation(() => ({
     follow: jest.fn(() => "mock-xdr"),
     unfollow: jest.fn(() => "mock-xdr"),
     isBlocked: jest.fn().mockResolvedValue(false),
@@ -94,7 +94,7 @@ jest.mock("poolx-sdk", () => ({
 }));
 
 jest.mock("../../../packages/sdk/src/client", () => ({
-  PoolXClient: jest.fn().mockImplementation(() => ({
+  VelaClient: jest.fn().mockImplementation(() => ({
     follow: jest.fn(() => "mock-xdr"),
     unfollow: jest.fn(() => "mock-xdr"),
     isBlocked: jest.fn().mockResolvedValue(false),

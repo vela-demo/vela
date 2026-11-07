@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { PoolXClient, generateDmKeypair } from "poolx-sdk";
+import { VelaClient, generateDmKeypair } from "vela-sdk";
 
 interface DmKeySectionProps {
   address: string;
@@ -17,7 +17,7 @@ export function DmKeySection({ address }: DmKeySectionProps) {
   useEffect(() => {
     async function checkDmKey() {
       try {
-        const client = new PoolXClient({
+        const client = new VelaClient({
           contractId: process.env.NEXT_PUBLIC_CONTRACT_ID || "",
           rpcUrl: process.env.NEXT_PUBLIC_RPC_URL || "https://soroban-testnet.stellar.org",
         });
@@ -44,7 +44,7 @@ export function DmKeySection({ address }: DmKeySectionProps) {
       // Generate new X25519 keypair
       const keypair = generateDmKeypair();
 
-      const client = new PoolXClient({
+      const client = new VelaClient({
         contractId: process.env.NEXT_PUBLIC_CONTRACT_ID || "",
         rpcUrl: process.env.NEXT_PUBLIC_RPC_URL || "https://soroban-testnet.stellar.org",
       });

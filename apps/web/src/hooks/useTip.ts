@@ -29,7 +29,7 @@ export function useTip() {
       tokenAddress: string,
       amountRaw: string,
       decimals: number,
-      _contractAddress: string // Address of PoolX contract to approve spending limit
+      _contractAddress: string // Address of Vela contract to approve spending limit
     ) => {
       setStatus("approving");
       setError(null);

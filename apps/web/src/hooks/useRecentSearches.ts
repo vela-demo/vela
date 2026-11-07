@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 
-const RECENT_SEARCHES_KEY = "poolx_recent_searches";
+const RECENT_SEARCHES_KEY = "vela_recent_searches";
 const MAX_RECENT_SEARCHES = 10;
 
 export function useRecentSearches(maxSearches = MAX_RECENT_SEARCHES) {

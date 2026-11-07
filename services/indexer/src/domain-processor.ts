@@ -1,6 +1,6 @@
 /**
  * Domain processor — bridges the exactly-once ingestion pipeline to the
- * PoolX contract event handlers.
+ * Vela contract event handlers.
  *
  * All database writes happen through the pipeline's shared transaction
  * client (`PgClientLike`).  After each domain handler succeeds, the

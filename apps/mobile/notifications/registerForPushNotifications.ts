@@ -2,7 +2,7 @@ import * as Notifications from "expo-notifications";
 import * as SecureStore from "expo-secure-store";
 import { Platform } from "react-native";
 
-const SECURE_STORE_PUSH_TOKEN_KEY = "poolx_push_token";
+const SECURE_STORE_PUSH_TOKEN_KEY = "vela_push_token";
 
 async function registerTokenWithIndexer(address: string, token: string, platform: string) {
   const indexerUrl = process.env.EXPO_PUBLIC_INDEXER_URL;

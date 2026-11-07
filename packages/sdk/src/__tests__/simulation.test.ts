@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { PoolXClient } from "../client";
+import { VelaClient } from "../client";
 import { SimulationError } from "../errors";
 import { Account } from "@stellar/stellar-base";
 
@@ -57,10 +57,10 @@ jest.mock("@stellar/stellar-base", () => ({
   },
 }));
 
-// Stub GeneratedPoolXClient so the super() chain works without needing the
+// Stub GeneratedVelaClient so the super() chain works without needing the
 // real generated methods during unit tests of simulate / prepareTransaction / buildMultiOpTx.
 jest.mock("../generated/client", () => ({
-  GeneratedPoolXClient: class {
+  GeneratedVelaClient: class {
     contractId: string;
     rpcUrl: string;
     networkPassphrase: string;
@@ -139,12 +139,12 @@ const XDR = "AAAAfakexdrbase64encodedstring";
 const CONTRACT_ID = "CDUMMY";
 const RPC_URL = "https://dummy.example.com";
 
-describe("PoolXClient simulation and fee injection", () => {
-  let client: PoolXClient;
+describe("VelaClient simulation and fee injection", () => {
+  let client: VelaClient;
 
   beforeEach(() => {
     jest.clearAllMocks();
-    client = new PoolXClient({ contractId: CONTRACT_ID, rpcUrl: RPC_URL });
+    client = new VelaClient({ contractId: CONTRACT_ID, rpcUrl: RPC_URL });
     const builder = {
       addOperation: mockAddOperation,
       setTimeout: mockSetTimeout,

@@ -1,9 +1,9 @@
-import { NextRequest, NextResponse } from "next/server";
+﻿import { NextRequest, NextResponse } from "next/server";
 
 const FRIENDLY_USERS = [
   "stellar_dev",
   "crypto_enthusiast",
-  "poolx_fan",
+  "vela_fan",
   "soroban_builder",
   "defi_explorer",
   "nft_collector",

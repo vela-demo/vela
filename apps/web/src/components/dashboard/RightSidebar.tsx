@@ -7,7 +7,7 @@ const trendingTopics = [
   { tag: "#StellarSoroban", posts: "42.8K posts" },
   { tag: "#DecentralizedSocial", posts: "28.3K posts" },
   { tag: "#Web3Identity", posts: "19.5K posts" },
-  { tag: "#PoolXNetwork", posts: "14.2K posts" },
+  { tag: "#VelaNetwork", posts: "14.2K posts" },
 ];
 
 const suggestedConnections = [
@@ -73,8 +73,8 @@ export function RightSidebar() {
           type="text"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          placeholder="Search PoolX..."
-          aria-label="Search PoolX"
+          placeholder="Search Vela..."
+          aria-label="Search Vela"
           style={{
             width: "100%",
             padding: "10px 14px 10px 40px",

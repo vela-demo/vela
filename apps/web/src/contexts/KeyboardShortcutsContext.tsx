@@ -3,7 +3,7 @@
 /**
  * KeyboardShortcutsContext.tsx
  *
- * Global keyboard shortcut manager for PoolX.
+ * Global keyboard shortcut manager for Vela.
  *
  * Provides:
  *   - A React context with shared state (help modal, compose trigger)

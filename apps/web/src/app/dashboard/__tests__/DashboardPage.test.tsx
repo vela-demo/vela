@@ -7,7 +7,7 @@ describe("DashboardPage", () => {
     render(<DashboardPage />);
 
     // Left Sidebar elements
-    expect(screen.getByText("PoolX")).toBeInTheDocument();
+    expect(screen.getByText("Vela")).toBeInTheDocument();
     expect(screen.getByText("Ohcine")).toBeInTheDocument();
 
     // Main Content Area elements
@@ -22,7 +22,7 @@ describe("DashboardPage", () => {
     expect(screen.getAllByText("@7CAI.326")[0]).toBeInTheDocument();
 
     // Right Sidebar elements
-    expect(screen.getByPlaceholderText("Search PoolX...")).toBeInTheDocument();
+    expect(screen.getByPlaceholderText("Search Vela...")).toBeInTheDocument();
     expect(screen.getByText("Trending Topic")).toBeInTheDocument();
     expect(screen.getByText("Sorgecte Connocticins")).toBeInTheDocument();
   });

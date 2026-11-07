@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React from "react";
 import { useRouter } from "next/navigation";
@@ -27,15 +27,15 @@ export function OnboardingSettings() {
   };
 
   return (
-    <div className="bg-[var(--background)] border border-[var(--border)] rounded-lg p-6">
+    <div className="bg-[var(--bg)] border border-[var(--border)] rounded-lg p-6">
       <h2 className="text-xl font-bold mb-4">Onboarding</h2>
 
       <div className="space-y-4">
         {/* Status */}
-        <div className="flex items-center justify-between p-4 bg-[var(--muted)] rounded-lg">
+        <div className="flex items-center justify-between p-4 bg-[var(--bg-subtle)] rounded-lg">
           <div>
             <h3 className="font-medium">Onboarding Status</h3>
-            <p className="text-sm text-[var(--text-muted)]">
+            <p className="text-sm text-[var(--fg-muted)]">
               {state.isComplete || state.skipped
                 ? "Completed"
                 : `In progress (Step ${state.currentStep + 1}/5)`}
@@ -56,7 +56,7 @@ export function OnboardingSettings() {
 
         {/* Completed Steps */}
         <div className="space-y-2">
-          <h3 className="font-medium text-sm text-[var(--text-muted)]">Completed Steps:</h3>
+          <h3 className="font-medium text-sm text-[var(--fg-muted)]">Completed Steps:</h3>
           <div className="grid grid-cols-2 gap-2">
             {Object.entries(state.completedSteps).map(([key, completed]) => (
               <div
@@ -64,7 +64,7 @@ export function OnboardingSettings() {
                 className={`flex items-center gap-2 p-2 rounded border ${
                   completed
                     ? "border-green-500 bg-green-50 dark:bg-green-950/30"
-                    : "border-[var(--border)] bg-[var(--muted)]"
+                    : "border-[var(--border)] bg-[var(--bg-subtle)]"
                 }`}
               >
                 <div
@@ -93,14 +93,14 @@ export function OnboardingSettings() {
 
           <button
             onClick={handleRestartFeatureTour}
-            className="w-full px-4 py-2 border border-[var(--border)] rounded-lg hover:bg-[var(--muted)] transition-colors"
+            className="w-full px-4 py-2 border border-[var(--border)] rounded-lg hover:bg-[var(--bg-subtle)] transition-colors"
           >
             Replay Feature Tour
           </button>
 
           <button
             onClick={handleRestartOnboarding}
-            className="w-full px-4 py-2 border border-[var(--border)] rounded-lg hover:bg-[var(--muted)] transition-colors"
+            className="w-full px-4 py-2 border border-[var(--border)] rounded-lg hover:bg-[var(--bg-subtle)] transition-colors"
           >
             Restart Onboarding Wizard
           </button>

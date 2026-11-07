@@ -24,8 +24,8 @@ const mockQueueEnqueue = jest.fn();
 const mockQueueOn = jest.fn();
 let submittedHashes: string[] = [];
 
-jest.mock("poolx-sdk", () => ({
-  PoolXClient: jest.fn().mockImplementation(() => ({
+jest.mock("vela-sdk", () => ({
+  VelaClient: jest.fn().mockImplementation(() => ({
     preparePoolDepositTx: mockPreparePoolDepositTx,
     preparePoolWithdrawTx: mockPreparePoolWithdrawTx,
     prepareCreatePoolTx: mockPrepareCreatePoolTx,

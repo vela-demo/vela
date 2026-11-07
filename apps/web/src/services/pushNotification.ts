@@ -1,4 +1,4 @@
-import { buildAuthMessage, canonicalizeAuthPath } from "@poolx/types/src/auth";
+import { buildAuthMessage, canonicalizeAuthPath } from "@vela/types/src/auth";
 import { bytesToBase64, bytesToHex } from "../lib/dm/crypto";
 
 // Configuration

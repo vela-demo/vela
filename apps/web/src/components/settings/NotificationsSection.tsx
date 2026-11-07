@@ -144,7 +144,7 @@ export function NotificationsSection({ address }: { address: string }) {
               <div>
                 <p className="text-sm font-medium text-gray-900">Browser Push Notifications</p>
                 <p className="text-xs text-gray-500 mt-1">
-                  Receive notifications even when PoolX is not open
+                  Receive notifications even when Vela is not open
                 </p>
               </div>
               <button

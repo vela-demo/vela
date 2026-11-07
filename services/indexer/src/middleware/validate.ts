@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { z, ZodError } from "zod";
-import { validationError } from "@poolx/types/src/errors";
+import { validationError } from "@vela/types/src/errors";
 
 type ValidationTarget = "body" | "query" | "params";
 

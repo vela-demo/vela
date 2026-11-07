@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Deploy and initialize the PoolX contract on Stellar Testnet.
+# Deploy and initialize the Vela contract on Stellar Testnet.
 #
 # Required environment variables:
 #   ADMIN_SECRET     - Secret key of the deployer / contract admin account
@@ -36,8 +36,8 @@ ADMIN_SECRET="${ADMIN_SECRET:-SDUMMYSECRETKEYFORCI1234567890ABCDEFGHIJKLMNOPQRST
 TREASURY_ADDRESS="${TREASURY_ADDRESS:-GDUMMYTREASURYADDRESSFORCI1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ}"
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-CONTRACT_DIR="$ROOT_DIR/packages/contracts/contracts/poolx-contracts"
-WASM_PATH="$CONTRACT_DIR/target/wasm32v1-none/release/poolx_contracts.wasm"
+CONTRACT_DIR="$ROOT_DIR/packages/contracts/contracts/vela-contracts"
+WASM_PATH="$CONTRACT_DIR/target/wasm32v1-none/release/vela_contracts.wasm"
 
 # ── Validate FEE_BPS ──────────────────────────────────────────────────────────
 
@@ -82,8 +82,8 @@ fi
 CFG_DIR="$(mktemp -d)"
 trap 'rm -rf "$CFG_DIR"' EXIT
 
-stellar --config-dir "$CFG_DIR" keys add poolx_deployer --secret-key "$ADMIN_SECRET"
-ADMIN_ADDRESS="$(stellar --config-dir "$CFG_DIR" keys address poolx_deployer)"
+stellar --config-dir "$CFG_DIR" keys add vela_deployer --secret-key "$ADMIN_SECRET"
+ADMIN_ADDRESS="$(stellar --config-dir "$CFG_DIR" keys address vela_deployer)"
 
 # ── Skip or deploy ────────────────────────────────────────────────────────────
 
@@ -104,7 +104,7 @@ else
   echo "[2/3] Deploying contract to $NETWORK..."
   CONTRACT_ID="$(stellar --config-dir "$CFG_DIR" contract deploy \
     --network "$NETWORK" \
-    --source-account poolx_deployer \
+    --source-account vela_deployer \
     --wasm "$WASM_PATH")"
 
   echo "  contract_id=$CONTRACT_ID"
@@ -116,7 +116,7 @@ INIT_STEP=$([[ -n "${CONTRACT_ID:-}" ]] && echo "2/2" || echo "3/3")
 echo "[$INIT_STEP] Initializing contract..."
 stellar --config-dir "$CFG_DIR" contract invoke \
   --network "$NETWORK" \
-  --source-account poolx_deployer \
+  --source-account vela_deployer \
   --id "$CONTRACT_ID" \
   -- initialize \
     --admin "$ADMIN_ADDRESS" \

@@ -1,4 +1,4 @@
-# GitHub issue & PR label definitions for PoolX-socials.
+# GitHub issue & PR label definitions for vela-socials.
 #
 # Synced to the repository with `make labels` (uses github-label-sync).
 # Any label that exists on GitHub but is NOT listed here will be removed,

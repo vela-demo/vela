@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef, useMemo } from "react";
+﻿import React, { useState, useEffect, useCallback, useRef, useMemo } from "react";
 import { View, Text, TextInput, TouchableOpacity, FlatList, Alert, StyleSheet } from "react-native";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import { useWalletContext } from "../../context/WalletContext";
@@ -117,7 +117,7 @@ export default function DirectMessageScreen() {
       try {
         setLoading(true);
         await initDatabase();
-        const service = new DmService(wallet, "https://dm-relay.poolx.app");
+        const service = new DmService(wallet, "https://dm-relay.vela.app");
 
         // Check if user has DM keys, if not prompt to generate
         const hasKeys = await service.hasLocalKeys();

@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { PoolXClient } from "../../../../packages/sdk/src/client";
+import { VelaClient } from "vela-sdk";
 import type { Profile, Post } from "../../../../packages/sdk/src/types";
 
 /* ────────────────────────────────────────────────────────────────────────── */
@@ -54,9 +54,9 @@ export function useProfile(address: string, currentUserAddress?: string | null) 
   const [state, setState] = useState<ProfileState>({ status: "loading" });
   const postsOffsetRef = useRef(0);
 
-  const clientRef = useRef<PoolXClient | null>(null);
+  const clientRef = useRef<VelaClient | null>(null);
   if (!clientRef.current) {
-    clientRef.current = new PoolXClient({ contractId, rpcUrl });
+    clientRef.current = new VelaClient({ contractId, rpcUrl });
   }
 
   /* ── Initial fetch ──────────────────────────────────────────────────── */
@@ -74,7 +74,7 @@ export function useProfile(address: string, currentUserAddress?: string | null) 
           address,
           username: `user_${address.slice(1, 7).toLowerCase()}`,
           creator_token: "",
-          bio: "PoolX community member",
+          bio: "Vela community member",
         } as Profile & { bio?: string };
       });
       if (!profile) {

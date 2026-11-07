@@ -120,7 +120,7 @@ export function useSubmitTx() {
 
       try {
         // Obtain the wallet adapter that was injected into the global by WalletContext
-        const walletKit = (globalThis as { __POOLX_WALLET_KIT__?: {
+        const walletKit = (globalThis as { __VELA_WALLET_KIT__?: {
           signTransaction?: (payload: { txXdr: string }) => Promise<{
             signedTxXdr?: string;
             signedXdr?: string;
@@ -130,7 +130,7 @@ export function useSubmitTx() {
             txXdr: string;
             rpcUrl?: string;
           }) => Promise<{ hash?: string; txHash?: string }>;
-        } }).__POOLX_WALLET_KIT__;
+        } }).__VELA_WALLET_KIT__;
 
         if (!walletKit) {
           throw new Error("No wallet connected. Please connect your wallet first.");

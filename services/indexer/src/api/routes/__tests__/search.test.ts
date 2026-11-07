@@ -94,7 +94,7 @@ describe("GET /search/posts", () => {
     const db = makeDb({ posts, total: 20 });
     const app = buildApp(db);
 
-    const res = await request(app).get("/search/posts?q=poolx&limit=10&offset=0");
+    const res = await request(app).get("/search/posts?q=vela&limit=10&offset=0");
     expect(res.status).toBe(200);
     expect(body(res).has_more).toBe(true);
   });

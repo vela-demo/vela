@@ -218,7 +218,7 @@ export function LeftSidebar() {
                 whiteSpace: "nowrap",
               }}
             >
-              PoolX
+              Vela
             </span>
           )}
         </div>

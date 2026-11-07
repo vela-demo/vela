@@ -4,7 +4,7 @@ import { useState, useCallback, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { useWallet } from "./WalletProvider";
 import { useNotification } from "@/contexts/NotificationsContext";
-import { PoolXClient } from "poolx-sdk";
+import { VelaClient } from "vela-sdk";
 import { config } from "@/config";
 import { rpc, TransactionBuilder } from "@stellar/stellar-sdk";
 import { CharacterCounter } from "./CharacterCounter";
@@ -220,7 +220,7 @@ export function ComposeModal({ submitFn = submitPost }: ComposeModalProps = {}) 
         }
 
         // Real production flow
-        const client = new PoolXClient({
+        const client = new VelaClient({
           contractId: config.contractId,
           rpcUrl: config.sorobanRpcUrl,
           networkPassphrase: config.networkPassphrase,

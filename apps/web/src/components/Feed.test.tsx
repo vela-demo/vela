@@ -113,7 +113,7 @@ describe('Feed Component', () => {
     
     await waitFor(() => {
       expect(screen.getByRole('alert')).toHaveTextContent(
-        'PoolX is temporarily paused. Writes are disabled until the protocol resumes.'
+        'Vela is temporarily paused. Writes are disabled until the protocol resumes.'
       );
     });
   });

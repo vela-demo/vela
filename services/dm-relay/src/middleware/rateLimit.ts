@@ -13,7 +13,7 @@
  * across replicas. Without Redis each replica keeps its own counters and the
  * effective limit becomes `limit × replicaCount` — which is why `REDIS_URL` is
  * mandatory when `NODE_ENV=production` (see
- * `@poolx/types/src/rate-limit-env`). The active store is reported on
+ * `@vela/types/src/rate-limit-env`). The active store is reported on
  * `/health` as `rateLimiter: { store, shared }`.
  */
 
@@ -22,12 +22,12 @@ import { NextFunction, Request, Response } from "express";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import type { Redis } from "ioredis";
-import { rateLimitedError } from "@poolx/types/src/errors";
+import { rateLimitedError } from "@vela/types/src/errors";
 import {
   inMemoryRateLimitWarning,
   resolveRateLimitEnv,
   type RateLimitStoreStatus,
-} from "@poolx/types/src/rate-limit-env";
+} from "@vela/types/src/rate-limit-env";
 
 export const DEFAULT_TRUSTED_PROXIES = [
   "127.0.0.1/32",

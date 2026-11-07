@@ -2,7 +2,7 @@ import { Router, Request, Response } from "express";
 import { Database } from "../../db";
 import { validateParams, validateQuery } from "../../middleware/validate";
 import { z } from "zod";
-import { stellarAddressSchema, cursorPaginationSchema } from "@poolx/types/src/schemas";
+import { stellarAddressSchema, cursorPaginationSchema } from "@vela/types/src/schemas";
 
 const addressParamsSchema = z.object({
   address: stellarAddressSchema,

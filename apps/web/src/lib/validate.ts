@@ -1,5 +1,5 @@
 /**
- * Input validation and sanitisation utilities for PoolX web forms.
+ * Input validation and sanitisation utilities for Vela web forms.
  * All validation is pure (no side-effects) so it can be used in both
  * client components and server actions.
  */

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import Link from "next/link";
@@ -88,7 +88,7 @@ function NotificationRow({
       tabIndex={0}
       className={`flex cursor-pointer items-start gap-4 rounded-xl border px-5 py-4 transition-colors ${
         notification.read
-          ? "border-[var(--border)] bg-[var(--muted)]/40"
+          ? "border-[var(--border)] bg-[var(--bg-subtle)]/40"
           : "border-violet-700/50 bg-violet-900/20"
       }`}
     >
@@ -99,8 +99,8 @@ function NotificationRow({
         aria-hidden="true"
       />
       <div className="flex-1 min-w-0">
-        <p className="text-sm text-[var(--foreground)]">{buildMessage(notification)}</p>
-        <time className="text-xs text-[var(--text-muted)]" dateTime={notification.timestamp}>
+        <p className="text-sm text-[var(--fg)]">{buildMessage(notification)}</p>
+        <time className="text-xs text-[var(--fg-muted)]" dateTime={notification.timestamp}>
           {ts}
         </time>
       </div>
@@ -148,7 +148,7 @@ export default function NotificationsPage() {
   if (!connected || !address) {
     return (
       <div className="mx-auto max-w-2xl px-4 py-16 text-center">
-        <p className="text-[var(--text-muted)]">Connect your wallet to see notifications.</p>
+        <p className="text-[var(--fg-muted)]">Connect your wallet to see notifications.</p>
       </div>
     );
   }
@@ -158,7 +158,7 @@ export default function NotificationsPage() {
   return (
     <div className="mx-auto max-w-2xl px-4 py-6 md:py-8">
       <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-[var(--foreground)]">Notifications</h1>
+        <h1 className="text-2xl font-bold text-[var(--fg)]">Notifications</h1>
         {notifications.length > 0 && !markAllReadClicked && (
           <button
             onClick={() => {
@@ -175,10 +175,10 @@ export default function NotificationsPage() {
 
       {notifications.length === 0 ? (
         <div
-          className="rounded-xl border border-[var(--border)] bg-[var(--muted)]/40 px-6 py-12 text-center"
+          className="rounded-xl border border-[var(--border)] bg-[var(--bg-subtle)]/40 px-6 py-12 text-center"
           data-testid="empty-state"
         >
-          <p className="text-[var(--text-muted)]">
+          <p className="text-[var(--fg-muted)]">
             No activity yet. Share your profile to get followers.
           </p>
         </div>
@@ -187,7 +187,7 @@ export default function NotificationsPage() {
           <div className="flex flex-col gap-6" data-testid="notifications-list">
             {groups.map(({ label, items }) => (
               <section key={label}>
-                <h2 className="mb-3 text-xs font-semibold uppercase tracking-wider text-[var(--text-muted)]">
+                <h2 className="mb-3 text-xs font-semibold uppercase tracking-wider text-[var(--fg-muted)]">
                   {label}
                 </h2>
                 <ul className="flex flex-col gap-3">
@@ -203,7 +203,7 @@ export default function NotificationsPage() {
             <div className="mt-6 flex justify-center">
               <button
                 onClick={loadMore}
-                className="rounded-lg border border-[var(--border)] px-5 py-2 text-sm font-medium text-[var(--text-muted)] hover:border-violet-500/60 hover:text-violet-400 transition-colors"
+                className="rounded-lg border border-[var(--border)] px-5 py-2 text-sm font-medium text-[var(--fg-muted)] hover:border-violet-500/60 hover:text-violet-400 transition-colors"
                 data-testid="load-more"
               >
                 Load more

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React from "react";
 import { useOnboarding } from "@/contexts/OnboardingContext";
@@ -45,17 +45,17 @@ export function OnboardingWizard() {
   }
 
   return (
-    <div className="min-h-screen bg-[var(--background)] flex flex-col">
+    <div className="min-h-screen bg-[var(--bg)] flex flex-col">
       {/* Progress Bar */}
-      <div className="w-full bg-[var(--muted)] border-b border-[var(--border)]">
+      <div className="w-full bg-[var(--bg-subtle)] border-b border-[var(--border)]">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between mb-2">
-            <h3 className="text-sm font-medium text-[var(--text-muted)]">
+            <h3 className="text-sm font-medium text-[var(--fg-muted)]">
               Step {state.currentStep + 1} of {STEPS.length}
             </h3>
             <button
               onClick={handleSkip}
-              className="text-sm text-[var(--text-muted)] hover:text-[var(--text)] transition-colors"
+              className="text-sm text-[var(--fg-muted)] hover:text-[var(--text)] transition-colors"
             >
               Skip setup →
             </button>
@@ -92,7 +92,7 @@ export function OnboardingWizard() {
                 className={`text-xs ${
                   index <= state.currentStep
                     ? "text-violet-600 dark:text-violet-400 font-medium"
-                    : "text-[var(--text-muted)]"
+                    : "text-[var(--fg-muted)]"
                 }`}
               >
                 {step.label}
@@ -124,8 +124,8 @@ export function OnboardingWizard() {
       </div>
 
       {/* Footer */}
-      <div className="border-t border-[var(--border)] bg-[var(--muted)] py-4">
-        <div className="container mx-auto px-4 text-center text-sm text-[var(--text-muted)]">
+      <div className="border-t border-[var(--border)] bg-[var(--bg-subtle)] py-4">
+        <div className="container mx-auto px-4 text-center text-sm text-[var(--fg-muted)]">
           <p>
             Need help? Check out our{" "}
             <a href="/docs" className="text-violet-600 hover:underline">

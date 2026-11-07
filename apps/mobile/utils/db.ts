@@ -1,7 +1,7 @@
 import * as SQLite from "expo-sqlite";
 import { Post } from "../components/PostCard";
 
-const db = SQLite.openDatabaseSync("poolx_cache.db");
+const db = SQLite.openDatabaseSync("vela_cache.db");
 
 interface CachedPostRow {
   id: string;

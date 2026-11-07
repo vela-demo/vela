@@ -2,7 +2,7 @@ import { Router, Request, Response } from "express";
 import { Database } from "../../db";
 import { validateParams } from "../../middleware/validate";
 import { z } from "zod";
-import { notFoundError, internalError } from "@poolx/types/src/errors";
+import { notFoundError, internalError } from "@vela/types/src/errors";
 
 const poolIdParamsSchema = z.object({
   id: z

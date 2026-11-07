@@ -1,4 +1,4 @@
-import type { WalletState } from "@/hooks/useWallet";
+﻿import type { WalletState } from "@/hooks/useWallet";
 
 const STEPS = [
   { id: "install", label: "Install" },
@@ -44,7 +44,7 @@ export function StepIndicator({
                     ? "bg-violet-600 border-violet-600 text-white"
                     : active
                     ? "border-violet-500 text-violet-400 bg-transparent"
-                    : "border-[var(--border)] text-[var(--text-muted)] bg-transparent",
+                    : "border-[var(--border)] text-[var(--fg-muted)] bg-transparent",
                 ].join(" ")}
               >
                 {done ? "✓" : i + 1}
@@ -52,7 +52,7 @@ export function StepIndicator({
               <span
                 className={[
                   "text-xs mt-1",
-                  active ? "text-violet-400" : done ? "text-violet-500" : "text-[var(--text-muted)]",
+                  active ? "text-violet-400" : done ? "text-violet-500" : "text-[var(--fg-muted)]",
                 ].join(" ")}
               >
                 {step.label}

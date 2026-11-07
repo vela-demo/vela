@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import type { TokenParams } from "./CreatorTokenWizard";
@@ -26,7 +26,7 @@ export function StepReviewFees({ address, tokenParams, onFeeEstimated, onNext, o
       try {
         // Simulate the deploy_creator_token call to get the real fee.
         // We dynamically import the SDK to avoid bundling it server-side.
-        const { PoolXClient } = await import("poolx-sdk");
+        const { VelaClient } = await import("vela-sdk");
         const factoryId = process.env.NEXT_PUBLIC_TOKEN_FACTORY_ID;
         const rpcUrl = process.env.NEXT_PUBLIC_RPC_URL ?? "https://soroban-testnet.stellar.org";
 
@@ -41,7 +41,7 @@ export function StepReviewFees({ address, tokenParams, onFeeEstimated, onNext, o
           return;
         }
 
-        const client = new PoolXClient({
+        const client = new VelaClient({
           contractId: process.env.NEXT_PUBLIC_CONTRACT_ID ?? "",
           rpcUrl,
           tokenFactoryId: factoryId,
@@ -81,14 +81,14 @@ export function StepReviewFees({ address, tokenParams, onFeeEstimated, onNext, o
     <div className="flex flex-col gap-6" data-testid="step-review-fees">
       <div>
         <h2 className="text-xl font-bold mb-1">Review fees</h2>
-        <p className="text-sm text-[var(--text-muted)]">
+        <p className="text-sm text-[var(--fg-muted)]">
           Estimated cost to deploy your token on Stellar Testnet.
         </p>
       </div>
 
       {/* Token summary */}
       <div className="rounded-xl border border-[var(--border)] bg-[var(--bg-tertiary)] p-4 text-sm">
-        <p className="text-xs text-[var(--text-muted)] uppercase tracking-widest mb-3">Deploying</p>
+        <p className="text-xs text-[var(--fg-muted)] uppercase tracking-widest mb-3">Deploying</p>
         <Row label="Name" value={tokenParams.name} />
         <Row label="Symbol" value={tokenParams.symbol} />
         <Row label="Decimals" value={String(tokenParams.decimals)} />
@@ -97,11 +97,11 @@ export function StepReviewFees({ address, tokenParams, onFeeEstimated, onNext, o
 
       {/* Fee */}
       <div className="rounded-xl border border-[var(--border)] bg-[var(--bg-tertiary)] p-4 text-sm">
-        <p className="text-xs text-[var(--text-muted)] uppercase tracking-widest mb-3">
+        <p className="text-xs text-[var(--fg-muted)] uppercase tracking-widest mb-3">
           Estimated fee
         </p>
         {feeStatus === "loading" && (
-          <p className="text-[var(--text-muted)] animate-pulse">Simulating transaction…</p>
+          <p className="text-[var(--fg-muted)] animate-pulse">Simulating transaction…</p>
         )}
         {feeStatus === "ready" && feeXlm && (
           <p className="text-lg font-bold text-violet-300" data-testid="fee-estimate">
@@ -113,7 +113,7 @@ export function StepReviewFees({ address, tokenParams, onFeeEstimated, onNext, o
             Could not estimate fee: {errorMsg}. You can still proceed.
           </p>
         )}
-        <p className="text-xs text-[var(--text-muted)] mt-2">
+        <p className="text-xs text-[var(--fg-muted)] mt-2">
           Actual fee is set by the Stellar network at submission time.
         </p>
       </div>
@@ -122,7 +122,7 @@ export function StepReviewFees({ address, tokenParams, onFeeEstimated, onNext, o
         <button
           type="button"
           onClick={onBack}
-          className="flex-1 py-2 rounded-lg border border-[var(--border)] text-sm text-[var(--text-muted)] hover:border-violet-500 hover:text-white transition"
+          className="flex-1 py-2 rounded-lg border border-[var(--border)] text-sm text-[var(--fg-muted)] hover:border-violet-500 hover:text-white transition"
           data-testid="step2-back"
         >
           Back
@@ -144,7 +144,7 @@ export function StepReviewFees({ address, tokenParams, onFeeEstimated, onNext, o
 function Row({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex justify-between py-1 border-b border-[var(--border)] last:border-0">
-      <span className="text-[var(--text-muted)]">{label}</span>
+      <span className="text-[var(--fg-muted)]">{label}</span>
       <span className="font-medium">{value}</span>
     </div>
   );

@@ -1,8 +1,8 @@
-# PoolX
+# Vela
 
 > A decentralized SocialFi platform built on Stellar and Soroban. Create posts, follow creators, tip with any token, and join community pools — all on-chain. Your profile, social graph, and revenue belong to you, not a platform.
 
-[![CI](https://github.com/ijayabby/PoolX-social/actions/workflows/ci.yml/badge.svg)](https://github.com/ijayabby/PoolX-social/actions/workflows/ci.yml)
+[![CI](https://github.com/ijayabby/vela-social/actions/workflows/ci.yml/badge.svg)](https://github.com/ijayabby/vela-social/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Telegram](https://img.shields.io/badge/Telegram-Join-blue?logo=telegram)](https://t.me/+13csp8G4ccRhY2Zk)
 [![Built on Stellar](https://img.shields.io/badge/Built%20on-Stellar-black?logo=stellar)](https://stellar.org)
@@ -28,7 +28,7 @@
 
 ## Overview
 
-PoolX is an open-source SocialFi protocol that combines social networking with on-chain financial primitives. Built on the Stellar blockchain using Soroban smart contracts, it gives creators direct ownership of their audience, content, and revenue — without relying on centralized intermediaries.
+Vela is an open-source SocialFi protocol that combines social networking with on-chain financial primitives. Built on the Stellar blockchain using Soroban smart contracts, it gives creators direct ownership of their audience, content, and revenue — without relying on centralized intermediaries.
 
 The protocol supports creator profiles, on-chain follow graphs, posts, token tipping, community investment pools, end-to-end encrypted DMs, a mini app ecosystem, and on-chain governance — all governed by the community.
 
@@ -45,7 +45,7 @@ The protocol supports creator profiles, on-chain follow graphs, posts, token tip
 | **Community Pools** | Stake and earn yield while supporting creators |
 | **Governance** | On-chain proposals and voting for protocol decisions |
 | **E2EE Direct Messages** | Encrypted DMs with on-chain key publishing |
-| **Mini Apps** | Third-party apps embedded inside PoolX via a bridge API |
+| **Mini Apps** | Third-party apps embedded inside Vela via a bridge API |
 | **Analytics Oracle** | Signed, verifiable creator analytics submitted on-chain |
 | **Moderation** | Decentralized content moderation primitives |
 
@@ -62,7 +62,7 @@ The protocol supports creator profiles, on-chain follow graphs, posts, token tip
              ▼                       ▼
 ┌───────────────────────┐  ┌──────────────────────────────────────┐
 │  SDK (packages/sdk)   │  │  Indexer (services/indexer)          │
-│  PoolXClient          │  │  PostgreSQL · full-text search API   │
+│  VelaClient          │  │  PostgreSQL · full-text search API   │
 │  TransactionQueue     │  └──────────────────────────────────────┘
 └───────────┬───────────┘                  │  REST / WebSocket
             │                              ▼
@@ -79,7 +79,7 @@ The protocol supports creator profiles, on-chain follow graphs, posts, token tip
 | Layer | Technology |
 |---|---|
 | Smart Contracts | Rust — Soroban (Stellar) |
-| SDK | TypeScript — `PoolXClient` |
+| SDK | TypeScript — `VelaClient` |
 | Web App | Next.js 15, React 19, Tailwind CSS v4 |
 | Mobile | Expo / React Native |
 | Indexer | Node.js, PostgreSQL, WebSocket |
@@ -94,12 +94,12 @@ The protocol supports creator profiles, on-chain follow graphs, posts, token tip
 | Package | Status |
 |---|---|
 | `packages/contracts` | ✅ Core social + DeFi primitives, unit tested |
-| `packages/sdk` | 🔧 In progress — typed contract client |
-| `apps/web` | 🔧 In progress — Next.js web frontend |
-| `apps/mobile` | 🔧 In progress — Expo / React Native mobile app |
-| `services/indexer` | 🔧 In progress — off-chain event indexer |
-| `services/dm-relay` | 🔧 In progress — E2EE direct-message relay |
-| `services/analytics-oracle` | 🔧 In progress — on-chain analytics oracle |
+| `packages/sdk` | ✅ Typed contract client |
+| `apps/web` | ✅ Next.js web frontend |
+| `apps/mobile` | ✅ Expo / React Native mobile app |
+| `services/indexer` | ✅ Off-chain event indexer |
+| `services/dm-relay` | ✅ E2EE direct-message relay |
+| `services/analytics-oracle` | ✅ On-chain analytics oracle |
 | `examples/mini-apps` | ✅ Example mini apps available |
 
 ---
@@ -117,8 +117,8 @@ The protocol supports creator profiles, on-chain follow graphs, posts, token tip
 
 ```bash
 # Clone the repository
-git clone https://github.com/ijayabby/PoolX-social.git
-cd PoolX-social
+git clone https://github.com/ijayabby/vela-social.git
+cd vela-social
 
 # Install dependencies
 pnpm install
@@ -167,7 +167,7 @@ NEXT_PUBLIC_WEB_URL=http://localhost:3000
 For the indexer, copy and fill `services/indexer/.env.example`:
 
 ```env
-DATABASE_URL=postgresql://user:password@localhost:5432/poolx
+DATABASE_URL=postgresql://user:password@localhost:5432/vela
 SOROBAN_RPC_URL=https://soroban-testnet.stellar.org
 CONTRACT_ID=
 ```
@@ -181,7 +181,7 @@ CONTRACT_ID=
 pnpm --filter contracts test
 
 # SDK unit tests
-pnpm --filter poolx-sdk test
+pnpm --filter vela-sdk test
 
 # Indexer migration tests (requires Docker)
 bash tests/migrations/test-migrations.sh
@@ -201,7 +201,7 @@ pnpm --filter apps-web test:e2e
 | [Mobile Developer Guide](./docs/mobile/DEVELOPER_GUIDE.md) | Expo setup, simulators, EAS builds |
 | [Indexer Design](./docs/indexer/INDEXER_DESIGN.md) | Event indexing strategy and search API |
 | [Indexer Migrations](./services/indexer/migrations/README.md) | Migration authoring rules and testing |
-| [Mini Apps Developer Guide](./docs/mini-apps/DEVELOPER_GUIDE.md) | Build and submit a PoolX mini app |
+| [Mini Apps Developer Guide](./docs/mini-apps/DEVELOPER_GUIDE.md) | Build and submit a Vela mini app |
 | [Mini Apps Bridge API](./docs/mini-apps/BRIDGE_API.md) | Bridge method reference |
 | [Security Policy](./SECURITY.md) | Vulnerability disclosure guidance |
 
@@ -220,4 +220,4 @@ Contributions are welcome. See [CONTRIBUTING.md](./CONTRIBUTING.md) for environm
 
 ## License
 
-[MIT](./LICENSE) © PoolX Contributors
+[MIT](./LICENSE) © Vela Contributors

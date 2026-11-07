@@ -1,7 +1,7 @@
 version: "3.9"
 
 # ─────────────────────────────────────────────────────────────────────────────
-# PoolX E2E Test Environment
+# Vela E2E Test Environment
 #
 # Spins up:
 #   1. Local Stellar standalone network (quickstart)
@@ -41,16 +41,16 @@ services:
     image: postgres:16-alpine
     restart: unless-stopped
     environment:
-      POSTGRES_USER: ${POSTGRES_USER:-poolx}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-poolx}
-      POSTGRES_DB: ${POSTGRES_DB:-poolx}
+      POSTGRES_USER: ${POSTGRES_USER:-vela}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-vela}
+      POSTGRES_DB: ${POSTGRES_DB:-vela}
     ports:
       - "127.0.0.1:5432:5432"
     volumes:
       - ./initdb.sql:/docker-entrypoint-initdb.d/initdb.sql:ro
       - pg_test_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-poolx}"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-vela}"]
       interval: 5s
       timeout: 5s
       retries: 10
@@ -77,7 +77,7 @@ services:
       dockerfile: services/indexer/Dockerfile
     restart: unless-stopped
     environment:
-      DATABASE_URL: postgresql://${POSTGRES_USER:-poolx}:${POSTGRES_PASSWORD:-poolx}@postgres:5432/${POSTGRES_DB:-poolx}
+      DATABASE_URL: postgresql://${POSTGRES_USER:-vela}:${POSTGRES_PASSWORD:-vela}@postgres:5432/${POSTGRES_DB:-vela}
       STELLAR_RPC_URL: http://stellar:8000/rpc
       CONTRACT_ID: ${CONTRACT_ID:-}
       # Overridable so CI can start streaming near the chain tip instead of
@@ -115,7 +115,7 @@ services:
       dockerfile: services/dm-relay/Dockerfile
     restart: unless-stopped
     environment:
-      DATABASE_URL: postgresql://${POSTGRES_USER:-poolx}:${POSTGRES_PASSWORD:-poolx}@postgres:5432/${POSTGRES_DB:-poolx}_dm_relay
+      DATABASE_URL: postgresql://${POSTGRES_USER:-vela}:${POSTGRES_PASSWORD:-vela}@postgres:5432/${POSTGRES_DB:-vela}_dm_relay
       PORT: "3001"
       NODE_ENV: test
       REDIS_URL: redis://redis:6379

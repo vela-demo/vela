@@ -1,7 +1,7 @@
 "use client";
 
 /**
- * HTTP client for the PoolX DM relay service.
+ * HTTP client for the Vela DM relay service.
  *
  * The relay is transport-only: stores and routes encrypted blobs without
  * ever seeing plaintext.  Authentication uses Stellar Ed25519 signatures so

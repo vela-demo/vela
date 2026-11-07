@@ -2,7 +2,7 @@
 
 //! Property-based invariant tests for the social graph contract.
 //!
-//! These exercise the real contract (via `PoolXContractClient`) with
+//! These exercise the real contract (via `VelaContractClient`) with
 //! randomized inputs and assert that core accounting invariants hold no
 //! matter what sequence of operations proptest generates. See
 //! `tests/FUZZING.md` for how to add more targets.
@@ -14,13 +14,13 @@ use soroban_sdk::{
     Address, Env, String as SdkString,
 };
 
-use poolx_contracts::{PoolXContract, PoolXContractClient};
+use vela_contracts::{VelaContract, VelaContractClient};
 
-fn setup(fee_bps: u32) -> (Env, PoolXContractClient<'static>, Address, Address) {
+fn setup(fee_bps: u32) -> (Env, VelaContractClient<'static>, Address, Address) {
     let env = Env::default();
     env.mock_all_auths();
-    let contract_id = env.register_contract(None, PoolXContract);
-    let client = PoolXContractClient::new(&env, &contract_id);
+    let contract_id = env.register_contract(None, VelaContract);
+    let client = VelaContractClient::new(&env, &contract_id);
 
     let admin = Address::generate(&env);
     let treasury = Address::generate(&env);
@@ -38,7 +38,7 @@ fn name(env: &Env, s: &str) -> SdkString {
     SdkString::from_str(env, s)
 }
 
-fn set_profile(env: &Env, client: &PoolXContractClient, user: &Address, username: &str) {
+fn set_profile(env: &Env, client: &VelaContractClient, user: &Address, username: &str) {
     let creator_token = Address::generate(env);
     client.set_profile(user, &name(env, username), &creator_token);
 }

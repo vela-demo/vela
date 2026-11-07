@@ -10,12 +10,14 @@ export * from "./health.js";
 export * from "./config.js";
 export * from "./utils/retry.js";
 export type { FollowEvent, LikePostEvent as LikeEvent, TipEvent } from "./events/types.js";
-export type { PoolXEvent } from "./events/types.js";
+export type { VelaEvent } from "./events/types.js";
 export { parseContractEvent } from "./events/types.js";
-export type { RawPoolXEvent, parseRawContractEvent } from "./generated/events.js";
+export type { RawVelaEvent, parseRawContractEvent } from "./generated/events.js";
 export * as dm from "./dm/index.js";
 export * from "./dm/index.js";
-// TODO(#1045): Ensure DmService and PoolXEventSubscriber are explicitly re-exported here
+// Explicit named re-exports so consumers can import DmService and VelaEventSubscriber directly
+export { DmService } from "./dm/index.js";
+export { VelaEventSubscriber } from "./events/subscriber.js";
 export * from "./signers/freighter.js";
 export * from "./queue.js";
 export * from "./classic.js";

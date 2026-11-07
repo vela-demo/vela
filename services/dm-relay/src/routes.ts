@@ -13,7 +13,7 @@ import {
   createCursor,
   getMaxMessageBytes,
 } from "./validation";
-import { stellarAddressSchema } from "@poolx/types/src/schemas";
+import { stellarAddressSchema } from "@vela/types/src/schemas";
 import { createConversationId, sanitizeError } from "./utils";
 import { z, ZodError } from "zod";
 import { idempotencyMiddleware } from "./middleware/idempotency";
@@ -23,7 +23,7 @@ import {
   unauthorizedError,
   conflictError,
   internalError,
-} from "@poolx/types/src/errors";
+} from "@vela/types/src/errors";
 import type { InflightCounter } from "./inflight-counter";
 
 const CLOSE_MESSAGE_TOO_LARGE = 1009;
@@ -323,6 +323,7 @@ export function createRouter(database: Database, authService: AuthService): Rout
 
   router.get(
     "/messages/conversation/:conversationId",
+    addressAuth,
     validateParams(ConversationIdParamSchema),
     validateQuery(GetMessagesQuerySchema),
     async (req: Request, res: Response) => {

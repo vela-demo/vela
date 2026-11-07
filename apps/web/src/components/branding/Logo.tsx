@@ -14,7 +14,7 @@ export interface LogoProps {
 
 export const logoPaths = {
   icon: "M 12 8 H 32 V 46 H 12 Z M 18 34 H 56 V 54 H 18 Z",
-  wordmark: "PoolX",
+  wordmark: "Vela",
 };
 
 const sizeHeightMap = {
@@ -49,7 +49,7 @@ export const Logo: React.FC<LogoProps> = ({
             className="font-sans font-semibold tracking-tight text-white"
             style={{ fontSize: height * 0.75 }}
           >
-            PoolX
+            Vela
           </span>
         </div>
       );
@@ -65,7 +65,7 @@ export const Logo: React.FC<LogoProps> = ({
             className="font-sans font-semibold tracking-tight text-current"
             style={{ fontSize: height * 0.75 }}
           >
-            PoolX
+            Vela
           </span>
         </div>
       );
@@ -81,7 +81,7 @@ export const Logo: React.FC<LogoProps> = ({
           className="font-sans font-semibold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-[#1E3A5F] to-[#6366F1] dark:from-white dark:to-violet-200"
           style={{ fontSize: height * 0.75 }}
         >
-          PoolX
+          Vela
         </span>
       </div>
     );
@@ -95,7 +95,7 @@ export const Logo: React.FC<LogoProps> = ({
         href={href}
         onClick={onClick}
         className="inline-flex items-center focus:outline-none focus-visible:ring-2 focus-visible:ring-[#6366F1] rounded-lg logo-hover-effect"
-        aria-label="PoolX home"
+        aria-label="Vela home"
       >
         {content}
       </Link>

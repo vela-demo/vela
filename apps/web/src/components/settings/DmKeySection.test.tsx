@@ -46,8 +46,8 @@ describe("DmKeySection", () => {
 
   it("should show rotate option when key exists", async () => {
     // Mock getDmKey to return a key
-    const { PoolXClient } = require("poolx-sdk");
-    PoolXClient.mockImplementation(() => ({
+    const { VelaClient } = require("vela-sdk");
+    VelaClient.mockImplementation(() => ({
       getDmKey: jest.fn().mockResolvedValue("existingKey"),
     }));
 

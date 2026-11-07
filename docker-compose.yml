@@ -8,9 +8,9 @@ services:
       # Dev-only default credentials — postgres:16-alpine refuses to start
       # without POSTGRES_PASSWORD. Override via a .env file for anything
       # beyond local development.
-      POSTGRES_USER: ${POSTGRES_USER:-poolx}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-poolx}
-      POSTGRES_DB: ${POSTGRES_DB:-poolx}
+      POSTGRES_USER: ${POSTGRES_USER:-vela}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-vela}
+      POSTGRES_DB: ${POSTGRES_DB:-vela}
     ports:
       - "127.0.0.1:5432:5432"
     volumes:
@@ -18,7 +18,7 @@ services:
     networks:
       - database
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-poolx}"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-vela}"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -46,7 +46,7 @@ services:
       context: ./services/indexer
     restart: unless-stopped
     environment:
-      DATABASE_URL: postgresql://${POSTGRES_USER:-poolx}:${POSTGRES_PASSWORD:-poolx}@postgres:5432/${POSTGRES_DB:-poolx}
+      DATABASE_URL: postgresql://${POSTGRES_USER:-vela}:${POSTGRES_PASSWORD:-vela}@postgres:5432/${POSTGRES_DB:-vela}
       STELLAR_RPC_URL: ${STELLAR_RPC_URL:-https://soroban-testnet.stellar.org}
       CONTRACT_ID: ${CONTRACT_ID:-}
       START_LEDGER: ${START_LEDGER:-0}
@@ -76,7 +76,7 @@ services:
       context: ./services/dm-relay
     restart: unless-stopped
     environment:
-      DATABASE_URL: postgresql://${POSTGRES_USER:-poolx}:${POSTGRES_PASSWORD:-poolx}@postgres:5432/${POSTGRES_DB:-poolx}_dm_relay
+      DATABASE_URL: postgresql://${POSTGRES_USER:-vela}:${POSTGRES_PASSWORD:-vela}@postgres:5432/${POSTGRES_DB:-vela}_dm_relay
       PORT: 3001
       STELLAR_NETWORK: ${STELLAR_NETWORK:-Testnet}
       # Required for shared rate limiting (HTTP and WebSocket).
@@ -103,7 +103,7 @@ services:
       context: ./services/analytics-oracle
     restart: unless-stopped
     environment:
-      DATABASE_URL: postgresql://${POSTGRES_USER:-poolx}:${POSTGRES_PASSWORD:-poolx}@postgres:5432/${POSTGRES_DB:-poolx}
+      DATABASE_URL: postgresql://${POSTGRES_USER:-vela}:${POSTGRES_PASSWORD:-vela}@postgres:5432/${POSTGRES_DB:-vela}
       SOROBAN_RPC_URL: ${STELLAR_RPC_URL:-https://soroban-testnet.stellar.org}
       CONTRACT_ID: ${CONTRACT_ID:-}
       # Signing key is read from a mounted secret FILE (hex-encoded 32-byte

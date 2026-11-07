@@ -12,10 +12,10 @@
     "noEmit": true,
     "baseUrl": "../..",
     "paths": {
-      "@poolx/sdk": ["packages/sdk/src"],
-      "@poolx/sdk/*": ["packages/sdk/src/*"],
-      "@poolx/types": ["packages/types/src"],
-      "@poolx/types/*": ["packages/types/src/*"]
+      "@vela/sdk": ["packages/sdk/src"],
+      "@vela/sdk/*": ["packages/sdk/src/*"],
+      "@vela/types": ["packages/types/src"],
+      "@vela/types/*": ["packages/types/src/*"]
     }
   },
   "include": ["./**/*.ts"],

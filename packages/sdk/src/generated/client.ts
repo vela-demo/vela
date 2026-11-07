@@ -70,7 +70,7 @@ function scvAddressVec(addresses: string[]): xdr.ScVal {
  * If a new function uses Vec<non-address>, add a dedicated helper.
  */
 
-export class GeneratedPoolXClient {
+export class GeneratedVelaClient {
   private contractId: string;
   private rpcUrl: string;
   private networkPassphrase: string;

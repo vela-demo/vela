@@ -5,8 +5,8 @@ import { createWriteStream, promises as fsp } from "node:fs";
 import { extname, join } from "node:path";
 import { validateQuery, validateParams } from "../../middleware/validate";
 import { z } from "zod";
-import { cursorPaginationSchema, numericIdStringSchema } from "@poolx/types/src/schemas";
-import { notFoundError, internalError } from "@poolx/types/src/errors";
+import { cursorPaginationSchema, numericIdStringSchema } from "@vela/types/src/schemas";
+import { notFoundError, internalError } from "@vela/types/src/errors";
 import { MediaUploadConfig } from "../../config";
 import { Database } from "../../db";
 

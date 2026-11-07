@@ -1,4 +1,4 @@
-import { PoolXClient } from "../../../../packages/sdk/src/client";
+import { VelaClient } from "vela-sdk";
 
 const INDEXER_URL = process.env.NEXT_PUBLIC_INDEXER_URL || "http://localhost:3001";
 const CONTRACT_ID = process.env.NEXT_PUBLIC_CONTRACT_ID || "CDUMMY";
@@ -147,7 +147,7 @@ export function invalidateCreatorTokenPrice(): void {
  */
 export async function fetchIsPaused(): Promise<boolean> {
   try {
-    const client = new PoolXClient({ contractId: CONTRACT_ID, rpcUrl: RPC_URL });
+    const client = new VelaClient({ contractId: CONTRACT_ID, rpcUrl: RPC_URL });
     return await client.isPaused();
   } catch {
     return false;

@@ -634,7 +634,7 @@ pub struct RentRateUpdatedEvent {
 // ── Contract ──────────────────────────────────────────────────────────────────
 
 #[contract]
-pub struct PoolXContract;
+pub struct VelaContract;
 
 // ── Validation Helpers ────────────────────────────────────────────────────────
 
@@ -657,7 +657,7 @@ where
 }
 
 #[contractimpl]
-impl PoolXContract {
+impl VelaContract {
     // ── Initialization ────────────────────────────────────────────────────────
 
     /// Initializes the contract with an admin, treasury address, and protocol fee.
@@ -4190,7 +4190,7 @@ impl PoolXContract {
                             let slash_amount = (balance * slash_bps as i128) / 10_000;
                             if slash_amount > 0 {
                                 // Creator tokens are deployed by the token factory contract.
-                                // PoolX contract has no burn authority by default.
+                                // Vela contract has no burn authority by default.
                                 // We use burn_from, or gracefully skip if allowance/authority is missing.
                                 let current_allowance = token_client
                                     .allowance(&author, &env.current_contract_address());

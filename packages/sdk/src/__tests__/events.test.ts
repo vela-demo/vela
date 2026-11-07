@@ -1,9 +1,9 @@
 /**
  * events.test.ts
  *
- * Test suite for the PoolX SDK event subscription layer covering:
+ * Test suite for the Vela SDK event subscription layer covering:
  *   1. parseContractEvent – typed decoding of all contract event types
- *   2. PoolXEventSubscriber – subscribe / start / stop lifecycle
+ *   2. VelaEventSubscriber – subscribe / start / stop lifecycle
  *   3. Cursor persistence – reload resumes without duplicates
  *   4. Reconnection with exponential backoff after RPC 503 errors
  *   5. CursorStore backends (Memory, LocalStorage, File)
@@ -34,8 +34,8 @@ jest.mock("@stellar/stellar-base", () => ({
   },
 }));
 
-import { parseContractEvent, SorobanEvent, FollowEvent, PoolXEvent } from "../events/types";
-import { PoolXEventSubscriber, PoolXEventSubscriberConfig } from "../events/subscriber";
+import { parseContractEvent, SorobanEvent, FollowEvent, VelaEvent } from "../events/types";
+import { VelaEventSubscriber, VelaEventSubscriberConfig } from "../events/subscriber";
 import {
   MemoryCursorStore,
   LocalStorageCursorStore,
@@ -102,7 +102,7 @@ describe("parseContractEvent", () => {
       topics: [enc("post_created")],
       data: enc({ id: 42, author: "GAUTHOR" }),
     });
-    const evt = parseContractEvent(raw) as Extract<PoolXEvent, { type: "post_created" }>;
+    const evt = parseContractEvent(raw) as Extract<VelaEvent, { type: "post_created" }>;
     expect(evt).not.toBeNull();
     expect(evt.type).toBe("post_created");
     expect(evt.id).toBe(42n);
@@ -114,7 +114,7 @@ describe("parseContractEvent", () => {
       topics: [enc("post_deleted")],
       data: enc({ post_id: 7, author: "GAUTHOR" }),
     });
-    const evt = parseContractEvent(raw) as Extract<PoolXEvent, { type: "post_deleted" }>;
+    const evt = parseContractEvent(raw) as Extract<VelaEvent, { type: "post_deleted" }>;
     expect(evt).not.toBeNull();
     expect(evt.type).toBe("post_deleted");
     expect(evt.post_id).toBe(7n);
@@ -126,7 +126,7 @@ describe("parseContractEvent", () => {
       topics: [enc("like")],
       data: enc({ user: "GUSER", post_id: 5 }),
     });
-    const evt = parseContractEvent(raw) as Extract<PoolXEvent, { type: "like" }>;
+    const evt = parseContractEvent(raw) as Extract<VelaEvent, { type: "like" }>;
     expect(evt).not.toBeNull();
     expect(evt.type).toBe("like");
     expect(evt.user).toBe("GUSER");
@@ -138,7 +138,7 @@ describe("parseContractEvent", () => {
       topics: [enc("unfollow")],
       data: enc({ follower: "GFOLLOWER", followee: "GFOLLOWEE" }),
     });
-    const evt = parseContractEvent(raw) as Extract<PoolXEvent, { type: "unfollow" }>;
+    const evt = parseContractEvent(raw) as Extract<VelaEvent, { type: "unfollow" }>;
     expect(evt).not.toBeNull();
     expect(evt.type).toBe("unfollow");
     expect(evt.follower).toBe("GFOLLOWER");
@@ -150,7 +150,7 @@ describe("parseContractEvent", () => {
       topics: [enc("tip")],
       data: enc({ tipper: "GTIPPER", post_id: 3, amount: "5000000", fee: "250000" }),
     });
-    const evt = parseContractEvent(raw) as Extract<PoolXEvent, { type: "tip" }>;
+    const evt = parseContractEvent(raw) as Extract<VelaEvent, { type: "tip" }>;
     expect(evt).not.toBeNull();
     expect(evt.type).toBe("tip");
     expect(evt.tipper).toBe("GTIPPER");
@@ -164,7 +164,7 @@ describe("parseContractEvent", () => {
       topics: [enc("pool_deposit")],
       data: enc({ depositor: "GDEPOSITOR", pool_id: "rewards", amount: "10000" }),
     });
-    const evt = parseContractEvent(raw) as Extract<PoolXEvent, { type: "pool_deposit" }>;
+    const evt = parseContractEvent(raw) as Extract<VelaEvent, { type: "pool_deposit" }>;
     expect(evt).not.toBeNull();
     expect(evt.type).toBe("pool_deposit");
     expect(evt.depositor).toBe("GDEPOSITOR");
@@ -177,7 +177,7 @@ describe("parseContractEvent", () => {
       topics: [enc("pool_withdraw")],
       data: enc({ recipient: "GRECIPIENT", pool_id: "rewards", amount: "500" }),
     });
-    const evt = parseContractEvent(raw) as Extract<PoolXEvent, { type: "pool_withdraw" }>;
+    const evt = parseContractEvent(raw) as Extract<VelaEvent, { type: "pool_withdraw" }>;
     expect(evt).not.toBeNull();
     expect(evt.type).toBe("pool_withdraw");
     expect(evt.recipient).toBe("GRECIPIENT");
@@ -190,7 +190,7 @@ describe("parseContractEvent", () => {
       topics: [enc("gov_proposal_created")],
       data: enc({ proposal_id: 1, proposer: "GPROPOSER", parameter: "FeeBps", new_value: 200 }),
     });
-    const evt = parseContractEvent(raw) as Extract<PoolXEvent, { type: "gov_proposal_created" }>;
+    const evt = parseContractEvent(raw) as Extract<VelaEvent, { type: "gov_proposal_created" }>;
     expect(evt).not.toBeNull();
     expect(evt.type).toBe("gov_proposal_created");
     expect(evt.proposal_id).toBe(1n);
@@ -204,7 +204,7 @@ describe("parseContractEvent", () => {
       topics: [enc("gov_vote")],
       data: enc({ proposal_id: 1, voter: "GVOTER", support: true }),
     });
-    const evt = parseContractEvent(raw) as Extract<PoolXEvent, { type: "gov_vote" }>;
+    const evt = parseContractEvent(raw) as Extract<VelaEvent, { type: "gov_vote" }>;
     expect(evt).not.toBeNull();
     expect(evt.type).toBe("gov_vote");
     expect(evt.proposal_id).toBe(1n);
@@ -217,7 +217,7 @@ describe("parseContractEvent", () => {
       topics: [enc("gov_proposal_executed")],
       data: enc({ proposal_id: 1, parameter: "FeeBps", new_value: 200 }),
     });
-    const evt = parseContractEvent(raw) as Extract<PoolXEvent, { type: "gov_proposal_executed" }>;
+    const evt = parseContractEvent(raw) as Extract<VelaEvent, { type: "gov_proposal_executed" }>;
     expect(evt).not.toBeNull();
     expect(evt.type).toBe("gov_proposal_executed");
     expect(evt.proposal_id).toBe(1n);
@@ -230,7 +230,7 @@ describe("parseContractEvent", () => {
       topics: [enc("dm_key_published")],
       data: enc({ user: "GUSER", key: "BASE64_PUBKEY==" }),
     });
-    const evt = parseContractEvent(raw) as Extract<PoolXEvent, { type: "dm_key_published" }>;
+    const evt = parseContractEvent(raw) as Extract<VelaEvent, { type: "dm_key_published" }>;
     expect(evt).not.toBeNull();
     expect(evt.type).toBe("dm_key_published");
     expect(evt.user).toBe("GUSER");
@@ -242,7 +242,7 @@ describe("parseContractEvent", () => {
       topics: [enc("emergency_bypass")],
       data: enc({ action: "pause" }),
     });
-    const evt = parseContractEvent(raw) as Extract<PoolXEvent, { type: "emergency_bypass" }>;
+    const evt = parseContractEvent(raw) as Extract<VelaEvent, { type: "emergency_bypass" }>;
     expect(evt).not.toBeNull();
     expect(evt.type).toBe("emergency_bypass");
     expect(evt.action).toBe("pause");
@@ -260,14 +260,14 @@ describe("parseContractEvent", () => {
           window_end: 20,
         }),
       })
-    ) as Extract<PoolXEvent, { type: "attestation_verified" }>;
+    ) as Extract<VelaEvent, { type: "attestation_verified" }>;
 
     const report = parseContractEvent(
       rawEvent({
         topics: [enc("PostReportedEvent")],
         data: enc({ post_id: 12, reporter: "GREPORTER", stake_amount: "7000000" }),
       })
-    ) as Extract<PoolXEvent, { type: "post_reported" }>;
+    ) as Extract<VelaEvent, { type: "post_reported" }>;
 
     expect(attestation.type).toBe("attestation_verified");
     expect(attestation.oracle_name).toBe("oracle");
@@ -356,7 +356,7 @@ describe("parseContractEvent", () => {
     expect(parseContractEvent(raw)).toBeNull();
   });
 
-  it("populates PoolXEventMeta on all events", () => {
+  it("populates VelaEventMeta on all events", () => {
     const raw = rawEvent({
       id: "evt-meta-99",
       pagingToken: "paging-99",
@@ -389,12 +389,12 @@ type SubscriberPrivate = {
   loop(): Promise<void>;
 };
 
-function priv(sub: PoolXEventSubscriber): SubscriberPrivate {
+function priv(sub: VelaEventSubscriber): SubscriberPrivate {
   return sub as unknown as SubscriberPrivate;
 }
 
 /** Drive exactly n poll cycles (without sleeping between them). */
-async function driveCycles(sub: PoolXEventSubscriber, n: number): Promise<void> {
+async function driveCycles(sub: VelaEventSubscriber, n: number): Promise<void> {
   for (let i = 0; i < n; i++) {
     if (priv(sub).stopRequested) break;
     try {
@@ -408,10 +408,10 @@ async function driveCycles(sub: PoolXEventSubscriber, n: number): Promise<void> 
 }
 
 function makeSub(
-  extra?: Partial<PoolXEventSubscriberConfig>,
+  extra?: Partial<VelaEventSubscriberConfig>,
   cursorStore?: MemoryCursorStore
-): PoolXEventSubscriber {
-  return new PoolXEventSubscriber({
+): VelaEventSubscriber {
+  return new VelaEventSubscriber({
     rpcUrl: "https://rpc.example.com",
     contractId: "CCONTRACT000",
     cursorStore: cursorStore ?? new MemoryCursorStore(),
@@ -434,10 +434,10 @@ function rpcResponses(pages: SorobanEvent[][]): jest.Mock {
 }
 
 // ---------------------------------------------------------------------------
-// 2. PoolXEventSubscriber – subscribe / start / stop lifecycle
+// 2. VelaEventSubscriber – subscribe / start / stop lifecycle
 // ---------------------------------------------------------------------------
 
-describe("PoolXEventSubscriber", () => {
+describe("VelaEventSubscriber", () => {
   let savedFetch: typeof globalThis.fetch;
   beforeEach(() => {
     savedFetch = globalThis.fetch;
@@ -737,7 +737,7 @@ describe("Reconnection with backoff after RPC errors", () => {
 
     const cursorStore = new MemoryCursorStore();
     const sub = makeSub({ minPollIntervalMs: 100, maxPollIntervalMs: 5000 }, cursorStore);
-    const received: PoolXEvent[] = [];
+    const received: VelaEvent[] = [];
     sub.subscribe({
       follow: (e) => {
         received.push(e);

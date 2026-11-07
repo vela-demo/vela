@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { PoolXClient } from "poolx-sdk";
+import { VelaClient } from "vela-sdk";
 
 interface DangerZoneSectionProps {
   address: string;
@@ -28,7 +28,7 @@ export function DangerZoneSection({ address }: DangerZoneSectionProps) {
       const { signTransaction } = await import("@stellar/freighter-api");
       const { rpc: rpcModule, Transaction } = await import("@stellar/stellar-sdk");
 
-      const client = new PoolXClient({
+      const client = new VelaClient({
         contractId: process.env.NEXT_PUBLIC_CONTRACT_ID || "",
         rpcUrl: process.env.NEXT_PUBLIC_RPC_URL || "https://soroban-testnet.stellar.org",
       });

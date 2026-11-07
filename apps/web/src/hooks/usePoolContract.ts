@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import type { PoolXClient, QueueSigner, RpcClient } from "poolx-sdk";
+import type { VelaClient, QueueSigner, RpcClient } from "vela-sdk";
 import { parseTokenAmount } from "./usePools";
 import { config } from "@/config";
 
@@ -36,15 +36,15 @@ export function classifyError(err: unknown): string {
 }
 
 // ── Real contract calls via the shared sign + submit flow ─────────────────────
-// These use the SDK's PoolXClient to build transactions, sign them through the
+// These use the SDK's VelaClient to build transactions, sign them through the
 // wallet, and submit / confirm them on chain through the TransactionQueue.
 
-let poolClient: PoolXClient | null = null;
+let poolClient: VelaClient | null = null;
 
-async function getPoolClient(): Promise<PoolXClient> {
+async function getPoolClient(): Promise<VelaClient> {
   if (!poolClient) {
-    const { PoolXClient } = await import("poolx-sdk");
-    poolClient = new PoolXClient({
+    const { VelaClient } = await import("vela-sdk");
+    poolClient = new VelaClient({
       contractId: config.contractId,
       rpcUrl: config.sorobanRpcUrl,
       networkPassphrase: config.networkPassphrase,
@@ -68,12 +68,12 @@ function makeFreighterSigner(networkPassphrase: string): QueueSigner {
  * on-chain broadcast state. Resolves with the confirmed transaction hash.
  */
 async function submitToNetwork(
-  client: PoolXClient,
+  client: VelaClient,
   xdr: string,
   networkPassphrase: string,
   onBroadcast?: () => void
 ): Promise<string> {
-  const { TransactionQueue } = await import("poolx-sdk");
+  const { TransactionQueue } = await import("vela-sdk");
   const queue = new TransactionQueue({
     signer: makeFreighterSigner(networkPassphrase),
     // The SDK's `createRpcServer` satisfies the queue's `RpcClient` contract at

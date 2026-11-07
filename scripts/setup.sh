@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# One-command local development setup for PoolX-social.
+# One-command local development setup for vela-social.
 # Safe to run multiple times (idempotent).
 #
 # Usage:

@@ -1,5 +1,5 @@
 /**
- * Cryptographic state root computation for the PoolX indexer.
+ * Cryptographic state root computation for the Vela indexer.
  *
  * ## Root definition (unchanged, verifiable)
  *

@@ -73,8 +73,8 @@ type WalletConnectRequestArgs = {
   };
 };
 
-type PoolXGlobal = typeof globalThis & {
-  __POOLX_WALLET_KIT__?: WalletConnectLike;
+type VelaGlobal = typeof globalThis & {
+  __VELA_WALLET_KIT__?: WalletConnectLike;
 };
 
 async function createWalletConnectAdapter(): Promise<WalletConnectLike> {
@@ -99,9 +99,9 @@ async function createWalletConnectAdapter(): Promise<WalletConnectLike> {
         (await SignClient.init({
           projectId,
           metadata: {
-            name: "PoolX",
-            description: "PoolX SocialFi mobile app",
-            url: "https://github.com/Epta-Node/PoolX-social",
+            name: "Vela",
+            description: "Vela SocialFi mobile app",
+            url: "https://github.com/Epta-Node/vela-social",
             icons: [],
           },
         }));
@@ -208,7 +208,7 @@ async function createWalletConnectAdapter(): Promise<WalletConnectLike> {
 
 declare global {
   // eslint-disable-next-line no-var
-  var __POOLX_WALLET_KIT__: WalletConnectLike | undefined;
+  var __VELA_WALLET_KIT__: WalletConnectLike | undefined;
 }
 
 export interface WalletContextType {
@@ -236,7 +236,7 @@ export function WalletProvider({ children }: { children: ReactNode }): JSX.Eleme
   const [error, setError] = useState<string | null>(null);
 
   const [walletKit, setWalletKit] = useState<WalletConnectLike | null>(
-    () => globalThis.__POOLX_WALLET_KIT__ ?? null
+    () => globalThis.__VELA_WALLET_KIT__ ?? null
   );
 
   useEffect(() => {
@@ -244,8 +244,8 @@ export function WalletProvider({ children }: { children: ReactNode }): JSX.Eleme
 
     const init = async () => {
       try {
-        if (globalThis.__POOLX_WALLET_KIT__) {
-          setWalletKit(globalThis.__POOLX_WALLET_KIT__);
+        if (globalThis.__VELA_WALLET_KIT__) {
+          setWalletKit(globalThis.__VELA_WALLET_KIT__);
           return;
         }
 
@@ -253,7 +253,7 @@ export function WalletProvider({ children }: { children: ReactNode }): JSX.Eleme
           const adapter = await createWalletConnectAdapter();
           // Expose globally for other modules that expect a wallet kit
           // (tests or mini-app bridges may rely on this global).
-          (globalThis as PoolXGlobal).__POOLX_WALLET_KIT__ = adapter;
+          (globalThis as VelaGlobal).__VELA_WALLET_KIT__ = adapter;
           setWalletKit(adapter);
         }
       } catch {

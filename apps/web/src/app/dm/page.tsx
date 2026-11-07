@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
@@ -62,8 +62,8 @@ export default function MessagesPage() {
       <h1 className="mb-6 text-2xl font-bold text-[var(--color-text-primary)]">Messages</h1>
 
       {!connected || !address ? (
-        <div className="rounded-2xl border border-[var(--border)] bg-[var(--muted)] p-6 text-center shadow-lg">
-          <p className="mb-4 text-[var(--text-muted)]">
+        <div className="rounded-2xl border border-[var(--border)] bg-[var(--bg-subtle)] p-6 text-center shadow-lg">
+          <p className="mb-4 text-[var(--fg-muted)]">
             Connect your wallet to see your conversations.
           </p>
           <button
@@ -76,7 +76,7 @@ export default function MessagesPage() {
       ) : loading ? (
         <div className="flex items-center justify-center gap-2 p-6" aria-live="polite">
           <div className="h-5 w-5 animate-spin rounded-full border-2 border-[var(--border)] border-t-[var(--color-info)]" />
-          <p className="text-sm text-[var(--text-muted)]">Loading conversations...</p>
+          <p className="text-sm text-[var(--fg-muted)]">Loading conversations...</p>
         </div>
       ) : error ? (
         <div
@@ -86,11 +86,11 @@ export default function MessagesPage() {
           {error}
         </div>
       ) : conversations.length === 0 ? (
-        <div className="rounded-2xl border border-[var(--border)] bg-[var(--muted)]/50 p-12 text-center">
+        <div className="rounded-2xl border border-[var(--border)] bg-[var(--bg-subtle)]/50 p-12 text-center">
           <p className="mb-1 text-lg font-bold text-[var(--color-text-primary)]">
             No conversations yet
           </p>
-          <p className="text-sm text-[var(--text-muted)]">
+          <p className="text-sm text-[var(--fg-muted)]">
             Follow people to start a direct message with them.
           </p>
         </div>
@@ -100,7 +100,7 @@ export default function MessagesPage() {
             <li key={user.address}>
               <Link
                 href={`/dm/${user.address}`}
-                className="flex items-center gap-3 rounded-xl border border-[var(--border)] bg-[var(--muted)] p-3 transition-colors hover:border-[var(--color-info)]/40"
+                className="flex items-center gap-3 rounded-xl border border-[var(--border)] bg-[var(--bg-subtle)] p-3 transition-colors hover:border-[var(--color-info)]/40"
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
@@ -112,7 +112,7 @@ export default function MessagesPage() {
                   <p className="truncate font-semibold text-[var(--color-text-primary)]">
                     @{user.username}
                   </p>
-                  <p className="truncate font-mono text-xs text-[var(--text-muted)]">
+                  <p className="truncate font-mono text-xs text-[var(--fg-muted)]">
                     {formatAddress(user.address)}
                   </p>
                 </div>

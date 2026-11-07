@@ -1,5 +1,5 @@
 // ============================================================================
-// Service Worker for Browser Push API (PoolX Social)
+// Service Worker for Browser Push API (Vela Social)
 // ============================================================================
 
 // 1. Listen for incoming push notifications from the backend server
@@ -13,11 +13,11 @@ self.addEventListener('push', function(event) {
   try {
     // Parse the incoming JSON payload from the Web Push protocol
     const data = event.data.json();
-    const title = data.title || 'PoolX Social';
+    const title = data.title || 'Vela Social';
     
     const options = {
       body: data.body || 'You have received a new update!',
-      icon: data.icon || '/logo192.png',     // Adjust if PoolX uses a different logo name
+      icon: data.icon || '/logo192.png',     // Adjust if Vela uses a different logo name
       badge: data.badge || '/badge.png',    // Small monochrome icon shown in status bars
       vibrate: [100, 50, 100],              // Vibration pattern for mobile devices
       data: {

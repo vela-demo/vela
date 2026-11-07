@@ -4,7 +4,7 @@ import {
   base64Schema,
   hex64BytesSchema,
   conversationIdSchema,
-} from "@poolx/types/src/schemas";
+} from "@vela/types/src/schemas";
 
 export const DEFAULT_MAX_MESSAGE_BYTES = 64 * 1024; // 64 KB
 

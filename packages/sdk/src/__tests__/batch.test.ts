@@ -1,4 +1,4 @@
-import { PoolXClient } from "../client.js";
+import { VelaClient } from "../client.js";
 import * as rpc from "@stellar/stellar-sdk/rpc";
 
 const mockSimulate = jest.fn();
@@ -19,7 +19,7 @@ describe("Issue #1360: SDK request batching and single rpc.Server reuse", () => 
   });
 
   it("reuses a single rpc.Server instance across calls", () => {
-    const client = new PoolXClient({
+    const client = new VelaClient({
       contractId: "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD2KM",
       rpcUrl: "https://rpc.example.com",
     });
@@ -32,7 +32,7 @@ describe("Issue #1360: SDK request batching and single rpc.Server reuse", () => 
   });
 
   it("executes batchSimulate in a single multi-op simulation RPC roundtrip", async () => {
-    const client = new PoolXClient({
+    const client = new VelaClient({
       contractId: "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD2KM",
       rpcUrl: "https://rpc.example.com",
     });

@@ -1,7 +1,7 @@
 #![cfg(test)]
 
 use ed25519_dalek::{Signer, SigningKey};
-use poolx_contracts::{PoolXContract, PoolXContractClient};
+use vela_contracts::{VelaContract, VelaContractClient};
 use proptest::prelude::*;
 use soroban_sdk::{testutils::Address as _, vec, Address, Bytes, BytesN, Env};
 
@@ -10,9 +10,9 @@ use soroban_sdk::{testutils::Address as _, vec, Address, Bytes, BytesN, Env};
 // real contract (not a model), so a passing run is evidence the crypto is wired
 // correctly rather than just internally consistent.
 
-fn setup(env: &Env) -> (PoolXContractClient<'_>, Address) {
-    let contract_id = env.register(PoolXContract, ());
-    let client = PoolXContractClient::new(env, &contract_id);
+fn setup(env: &Env) -> (VelaContractClient<'_>, Address) {
+    let contract_id = env.register(VelaContract, ());
+    let client = VelaContractClient::new(env, &contract_id);
     let admin = Address::generate(env);
     let treasury = Address::generate(env);
     client.initialize(&admin, &treasury, &0);
@@ -27,7 +27,7 @@ fn pubkey_of(env: &Env, key: &SigningKey) -> BytesN<32> {
     BytesN::from_array(env, &key.verifying_key().to_bytes())
 }
 
-/// Mirrors the private `PoolXContract::credential_root_message_hash`.
+/// Mirrors the private `VelaContract::credential_root_message_hash`.
 fn message_hash(env: &Env, root: &BytesN<32>) -> BytesN<32> {
     let mut data = Bytes::new(env);
     data.append(&root.to_bytes());
@@ -47,7 +47,7 @@ fn sign_root(env: &Env, key: &SigningKey, root: &BytesN<32>) -> BytesN<64> {
     BytesN::from_array(env, &signature.to_bytes())
 }
 
-/// Mirrors the private `PoolXContract::hash_merkle_pair` (order-independent
+/// Mirrors the private `VelaContract::hash_merkle_pair` (order-independent
 /// pairwise hash used by the Merkle proof check in `verify_credential`).
 fn hash_pair(env: &Env, left: &[u8; 32], right: &[u8; 32]) -> [u8; 32] {
     let (lo, hi) = if left <= right {

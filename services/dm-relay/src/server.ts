@@ -1,5 +1,5 @@
 /**
- * DM Relay Server - Transport-only encrypted message relay for PoolX.
+ * DM Relay Server - Transport-only encrypted message relay for Vela.
  *
  * This server never has access to plaintext message content. All messages
  * are end-to-end encrypted using X25519 + ChaCha20-Poly1305.
@@ -132,7 +132,7 @@ async function createApp() {
 
   // Root info
   app.get("/", (_req, res) => {
-    res.json({ service: "poolx-dm-relay", version: SERVICE_VERSION, status: "running" });
+    res.json({ service: "vela-dm-relay", version: SERVICE_VERSION, status: "running" });
   });
 
   // Error handling

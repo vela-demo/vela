@@ -1,15 +1,15 @@
 {
   "expo": {
-    "name": "PoolX",
-    "slug": "poolx-mobile",
-    "scheme": "poolx",
+    "name": "Vela",
+    "slug": "vela-mobile",
+    "scheme": "vela",
     "userInterfaceStyle": "dark",
     "ios": {
-      "bundleIdentifier": "social.poolx.app",
-      "associatedDomains": ["applinks:poolx.social"]
+      "bundleIdentifier": "social.vela.app",
+      "associatedDomains": ["applinks:vela.social"]
     },
     "android": {
-      "package": "social.poolx.app"
+      "package": "social.vela.app"
     },
     "plugins": ["expo-router"]
   }

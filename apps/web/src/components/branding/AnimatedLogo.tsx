@@ -21,7 +21,7 @@ export const AnimatedLogo: React.FC<AnimatedLogoProps> = ({
       </div>
       {showWordmark && (
         <span className="text-sm font-semibold tracking-wide bg-gradient-to-r from-[#1E3A5F] to-[#6366F1] bg-clip-text text-transparent animate-pulse">
-          PoolX
+          Vela
         </span>
       )}
       {label && <span className="sr-only">{label}</span>}

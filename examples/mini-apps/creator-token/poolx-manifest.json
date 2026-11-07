@@ -4,8 +4,8 @@
   "description": "View a creator token balance and tip with the creator token.",
   "entry": "index.html",
   "permissions": ["profile.get", "wallet.getAddress", "wallet.signTransaction"],
-  "author": "PoolX Contributors",
-  "homepage": "https://github.com/Epta-Node/PoolX-social",
+  "author": "Vela Contributors",
+  "homepage": "https://github.com/Epta-Node/vela-social",
   "categories": ["creator", "payments"],
   "minSdkVersion": "1.0.0"
 }

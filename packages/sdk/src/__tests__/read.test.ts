@@ -1,4 +1,4 @@
-import { PoolXClient } from "../client";
+import { VelaClient } from "../client";
 import { Profile, Post, Pool } from "../types";
 import { NetworkError } from "../errors";
 
@@ -44,12 +44,12 @@ jest.mock("@stellar/stellar-base", () => ({
   xdr: {},
 }));
 
-describe("PoolXClient read methods", () => {
-  let client: PoolXClient;
+describe("VelaClient read methods", () => {
+  let client: VelaClient;
 
   beforeEach(() => {
     jest.clearAllMocks();
-    client = new PoolXClient({ contractId: "CDUMMY", rpcUrl: "https://dummy.example.com" });
+    client = new VelaClient({ contractId: "CDUMMY", rpcUrl: "https://dummy.example.com" });
     mockAddOperation.mockReturnValue({ setTimeout: mockSetTimeout });
     mockSetTimeout.mockReturnValue({ build: mockBuild });
     mockBuild.mockReturnValue({ toEnvelope: mockToEnvelope });
@@ -371,7 +371,7 @@ describe("PoolXClient read methods", () => {
 
 describe("custom network Horizon URL", () => {
   it("uses provided horizonUrl from config", async () => {
-    const customClient = new PoolXClient({
+    const customClient = new VelaClient({
       contractId: "CDUMMY",
       rpcUrl: "https://dummy.example.com",
       networkPassphrase: "Custom Network",
@@ -396,7 +396,7 @@ describe("custom network Horizon URL", () => {
   it("throws ValidationError for custom network without horizonUrl", () => {
     expect(
       () =>
-        new PoolXClient({
+        new VelaClient({
           contractId: "CDUMMY",
           rpcUrl: "https://dummy.example.com",
           networkPassphrase: "Custom Network",
@@ -405,7 +405,7 @@ describe("custom network Horizon URL", () => {
   });
 
   it("defaults to testnet Horizon for Test passphrase", async () => {
-    const testClient = new PoolXClient({
+    const testClient = new VelaClient({
       contractId: "CDUMMY",
       rpcUrl: "https://dummy.example.com",
       networkPassphrase: "Test SDF Network ; September 2015",

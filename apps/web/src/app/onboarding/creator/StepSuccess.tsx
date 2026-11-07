@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 const STELLAR_EXPERT_BASE = "https://stellar.expert/explorer/testnet/contract";
 
@@ -11,7 +11,7 @@ export function StepSuccess({ walletAddress, tokenAddress }: Props) {
   const explorerUrl = `${STELLAR_EXPERT_BASE}/${tokenAddress}`;
   const profileUrl = `/profile/${walletAddress}`;
   const shareText = encodeURIComponent(
-    `I just launched my creator token on @PoolXSocial! Check my profile: https://poolx.xyz/profile/${walletAddress}`
+    `I just launched my creator token on @VelaSocial! Check my profile: https://vela.xyz/profile/${walletAddress}`
   );
   const twitterUrl = `https://twitter.com/intent/tweet?text=${shareText}`;
 
@@ -21,7 +21,7 @@ export function StepSuccess({ walletAddress, tokenAddress }: Props) {
 
       <div>
         <h2 className="text-2xl font-bold mb-2">Token deployed!</h2>
-        <p className="text-sm text-[var(--text-muted)] max-w-xs">
+        <p className="text-sm text-[var(--fg-muted)] max-w-xs">
           Your creator token is live on Stellar Testnet and your profile is registered.
         </p>
       </div>
@@ -31,7 +31,7 @@ export function StepSuccess({ walletAddress, tokenAddress }: Props) {
         className="w-full rounded-xl border border-[var(--border)] bg-[var(--bg-tertiary)] p-4 text-left"
         aria-label="Token address"
       >
-        <p className="text-xs text-[var(--text-muted)] uppercase tracking-widest mb-1">
+        <p className="text-xs text-[var(--fg-muted)] uppercase tracking-widest mb-1">
           Token address
         </p>
         <p className="font-mono text-xs text-violet-300 break-all" data-testid="token-address">
@@ -57,7 +57,7 @@ export function StepSuccess({ walletAddress, tokenAddress }: Props) {
           href={twitterUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="py-2 rounded-xl border border-[var(--border)] text-sm text-[var(--text-muted)] hover:border-violet-500 hover:text-white transition text-center"
+          className="py-2 rounded-xl border border-[var(--border)] text-sm text-[var(--fg-muted)] hover:border-violet-500 hover:text-white transition text-center"
           data-testid="share-cta"
         >
           Share your profile

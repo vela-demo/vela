@@ -11,7 +11,7 @@ import {
   NetworkError,
   InvalidInputError,
   ValidationError,
-} from "poolx-sdk";
+} from "vela-sdk";
 
 // ---------------------------------------------------------------------------
 // Network errors

@@ -13,7 +13,7 @@
  *                               deployments.
  */
 
-import { resolveRateLimitEnv } from "@poolx/types/src/rate-limit-env.js";
+import { resolveRateLimitEnv } from "@vela/types/src/rate-limit-env.js";
 
 export interface OracleRateLimitConfig {
   windowMs: number;

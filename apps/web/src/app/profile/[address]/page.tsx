@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
@@ -7,11 +7,11 @@ import { useProfile, type IndexerPost } from "@/hooks/useProfile";
 import { useWallet } from "@/hooks/useWallet";
 import { OptimisticStore, useOptimisticFollow } from "@/lib/optimisticStore";
 import {
-  usePoolXEvent,
+  useVelaEvent,
   useWatchAddress,
   type FollowEventData,
   type TipEventData,
-} from "@/lib/PoolXEventSubscriber";
+} from "@/lib/VelaEventSubscriber";
 import { FollowDrawer } from "@/components/profile/FollowDrawer";
 import { CreatorTokenPanel } from "@/components/profile/CreatorTokenPanel";
 import {
@@ -23,7 +23,7 @@ import {
   nativeToScVal,
 } from "@stellar/stellar-sdk";
 import { signTransaction } from "@stellar/freighter-api";
-import { PoolXClient } from "poolx-sdk";
+import { VelaClient } from "vela-sdk";
 import { buildSignAndSubmit } from "@/lib/tx";
 import { addToBlockedList, removeFromBlockedList } from "@/lib/blockedStore";
 
@@ -87,19 +87,19 @@ export default function ProfilePage() {
 
   useWatchAddress(address);
 
-  usePoolXEvent<FollowEventData>("FollowEvent", (event) => {
+  useVelaEvent<FollowEventData>("FollowEvent", (event) => {
     if (event.followee === address) {
       refetch();
     }
   });
 
-  usePoolXEvent<FollowEventData>("UnfollowEvent", (event) => {
+  useVelaEvent<FollowEventData>("UnfollowEvent", (event) => {
     if (event.followee === address) {
       refetch();
     }
   });
 
-  usePoolXEvent<TipEventData>("TipEvent", () => {
+  useVelaEvent<TipEventData>("TipEvent", () => {
     refetch();
   });
 
@@ -185,7 +185,7 @@ export default function ProfilePage() {
       setIsBlocked(false);
       return;
     }
-    const client = new PoolXClient({
+    const client = new VelaClient({
       contractId: process.env.NEXT_PUBLIC_CONTRACT_ID || "CDUMMY",
       rpcUrl: process.env.NEXT_PUBLIC_RPC_URL || "https://soroban-testnet.stellar.org",
     });
@@ -285,7 +285,7 @@ export default function ProfilePage() {
 
   if (state.status === "loading") {
     return (
-      <div className="flex h-screen items-center justify-center bg-[var(--bg-primary)]">
+      <div className="flex h-screen items-center justify-center bg-[var(--bg)]">
         <div className="animate-pulse flex space-x-4 w-80">
           <div className="rounded-full bg-[var(--bg-tertiary)] h-14 w-14 shrink-0" />
           <div className="flex-1 space-y-3 py-1">
@@ -300,7 +300,7 @@ export default function ProfilePage() {
   if (state.status === "error") {
     return (
       <div
-        className="flex h-screen items-center justify-center bg-[var(--bg-primary)] text-[var(--error)]"
+        className="flex h-screen items-center justify-center bg-[var(--bg)] text-[var(--error)]"
         role="alert"
       >
         Failed to load profile: {state.error.message}
@@ -310,7 +310,7 @@ export default function ProfilePage() {
 
   if (state.status === "not-found") {
     return (
-      <div className="flex h-screen items-center justify-center bg-[var(--bg-primary)] text-[var(--text-muted)]">
+      <div className="flex h-screen items-center justify-center bg-[var(--bg)] text-[var(--fg-muted)]">
         Profile not found
       </div>
     );
@@ -320,13 +320,13 @@ export default function ProfilePage() {
   const isSelf = currentUserAddress === address;
 
   return (
-    <div className="min-h-screen bg-[var(--bg-primary)] text-[var(--text-primary)]">
+    <div className="min-h-screen bg-[var(--bg)] text-[var(--fg)]">
       <div className="max-w-4xl mx-auto p-4 md:p-8">
         {/* ── Profile header ───────────────────────────────────────────── */}
         <section
           id="profile-header"
           aria-label="Profile header"
-          className="flex flex-col md:flex-row items-start md:items-center gap-4 md:gap-6 bg-[var(--bg-secondary)] p-4 md:p-6 rounded-2xl border border-[var(--bg-tertiary)]"
+          className="flex flex-col md:flex-row items-start md:items-center gap-4 md:gap-6 bg-[var(--bg-subtle)] p-4 md:p-6 rounded-2xl border border-[var(--bg-tertiary)]"
         >
           {/* Avatar */}
           <img
@@ -342,7 +342,7 @@ export default function ProfilePage() {
               {profile.username}
             </h1>
 
-            <p className="text-[var(--text-muted)] font-mono text-sm mt-1 flex items-center gap-2">
+            <p className="text-[var(--fg-muted)] font-mono text-sm mt-1 flex items-center gap-2">
               <span id="profile-address">{truncate(address)}</span>
               <button
                 onClick={handleCopy}
@@ -365,7 +365,7 @@ export default function ProfilePage() {
                 <span className="font-bold" id="followers-count">
                   {followState.followersCount}
                 </span>{" "}
-                <span className="text-[var(--text-muted)]">Followers</span>
+                <span className="text-[var(--fg-muted)]">Followers</span>
               </Link>
 
               <Link
@@ -377,7 +377,7 @@ export default function ProfilePage() {
                 <span className="font-bold" id="following-count">
                   {followState.followingCount}
                 </span>{" "}
-                <span className="text-[var(--text-muted)]">Following</span>
+                <span className="text-[var(--fg-muted)]">Following</span>
               </Link>
             </div>
           </div>
@@ -394,7 +394,7 @@ export default function ProfilePage() {
                   id="follow-btn"
                   className={`w-full sm:w-auto px-6 py-2 rounded-full font-bold transition-all ${
                     followState.isFollowing
-                      ? "bg-transparent border border-[var(--text-muted)] text-[var(--text-primary)] hover:bg-[var(--error)] hover:border-[var(--error)] hover:text-white"
+                      ? "bg-transparent border border-[var(--text-muted)] text-[var(--fg)] hover:bg-[var(--error)] hover:border-[var(--error)] hover:text-white"
                       : "bg-[var(--accent-coral)] text-white hover:opacity-90"
                   }`}
                   aria-label={
@@ -410,7 +410,7 @@ export default function ProfilePage() {
                 <div ref={menuRef} className="relative">
                   <button
                     onClick={() => setMenuOpen((prev) => !prev)}
-                    className="flex items-center justify-center w-10 h-10 rounded-full hover:bg-[var(--bg-tertiary)] transition-colors text-[var(--text-muted)] hover:text-[var(--text-primary)]"
+                    className="flex items-center justify-center w-10 h-10 rounded-full hover:bg-[var(--bg-tertiary)] transition-colors text-[var(--fg-muted)] hover:text-[var(--fg)]"
                     aria-label="More actions"
                     aria-expanded={menuOpen}
                   >
@@ -432,11 +432,11 @@ export default function ProfilePage() {
 
                   {/* Dropdown menu */}
                   {menuOpen && (
-                    <div className="absolute right-0 top-full mt-2 z-50 min-w-[180px] rounded-xl border border-[var(--border)] bg-[var(--muted)] p-1.5 shadow-2xl">
+                    <div className="absolute right-0 top-full mt-2 z-50 min-w-[180px] rounded-xl border border-[var(--border)] bg-[var(--bg-subtle)] p-1.5 shadow-2xl">
                       <button
                         onClick={handleBlockToggle}
                         disabled={blocking}
-                        className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)] transition-colors disabled:opacity-50"
+                        className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-[var(--fg)] hover:bg-[var(--bg-tertiary)] transition-colors disabled:opacity-50"
                       >
                         {blocking ? (
                           <span className="animate-pulse">Processing...</span>
@@ -497,7 +497,7 @@ export default function ProfilePage() {
             </div>
 
             {posts.length === 0 ? (
-              <div className="bg-[var(--bg-secondary)] p-4 rounded-xl border border-[var(--bg-tertiary)] text-center text-[var(--text-muted)] py-12">
+              <div className="bg-[var(--bg-subtle)] p-4 rounded-xl border border-[var(--bg-tertiary)] text-center text-[var(--fg-muted)] py-12">
                 No posts yet.
               </div>
             ) : (
@@ -510,7 +510,7 @@ export default function ProfilePage() {
                 {postsHasMore && (
                   <div
                     ref={sentinelRef}
-                    className="text-center text-sm text-[var(--text-muted)] py-4"
+                    className="text-center text-sm text-[var(--fg-muted)] py-4"
                     aria-hidden="true"
                   >
                     Loading more…
@@ -549,18 +549,18 @@ export default function ProfilePage() {
 function PostCard({ post }: { post: IndexerPost }) {
   return (
     <article
-      className="bg-[var(--bg-secondary)] p-4 rounded-xl border border-[var(--bg-tertiary)]"
+      className="bg-[var(--bg-subtle)] p-4 rounded-xl border border-[var(--bg-tertiary)]"
       aria-label={`Post ${post.id}`}
     >
       <div className="flex items-center gap-3 mb-3">
         <img src={blockieUrl(post.author)} alt="" className="w-8 h-8 rounded-full" />
-        <span className="font-mono text-sm text-[var(--text-muted)]">{truncate(post.author)}</span>
-        <span className="text-xs text-[var(--text-muted)] ml-auto">
+        <span className="font-mono text-sm text-[var(--fg-muted)]">{truncate(post.author)}</span>
+        <span className="text-xs text-[var(--fg-muted)] ml-auto">
           {ledgerToRelative(post.created_ledger)}
         </span>
       </div>
 
-      <div className="flex items-center gap-4 text-sm text-[var(--text-muted)] mt-3 pt-3 border-t border-[var(--bg-tertiary)]">
+      <div className="flex items-center gap-4 text-sm text-[var(--fg-muted)] mt-3 pt-3 border-t border-[var(--bg-tertiary)]">
         <span aria-label={`${post.like_count} likes`}>❤️ {post.like_count}</span>
         <span aria-label={`${post.tip_total} tips`}>
           💰 {Number(post.tip_total).toLocaleString()}

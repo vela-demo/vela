@@ -18,9 +18,9 @@ fn setup_token(env: &Env, admin: &Address) -> Address {
     token_id.address()
 }
 
-pub fn setup_contract(env: &Env) -> (PoolXContractClient<'_>, Address, Address) {
-    let contract_id = env.register(PoolXContract, ());
-    let client = PoolXContractClient::new(env, &contract_id);
+pub fn setup_contract(env: &Env) -> (VelaContractClient<'_>, Address, Address) {
+    let contract_id = env.register(VelaContract, ());
+    let client = VelaContractClient::new(env, &contract_id);
     let admin = Address::generate(env);
     let treasury = Address::generate(env);
     client.initialize(&admin, &treasury, &0);
@@ -28,13 +28,13 @@ pub fn setup_contract(env: &Env) -> (PoolXContractClient<'_>, Address, Address) 
 }
 
 fn upload_upgrade_wasm(env: &Env) -> BytesN<32> {
-    let wasm = Bytes::from_slice(env, include_bytes!("../poolx_contracts.wasm"));
+    let wasm = Bytes::from_slice(env, include_bytes!("../vela_contracts.wasm"));
     env.deployer().upload_contract_wasm(wasm)
 }
 
 // ── Credential authority signing helpers ──────────────────────────────────
 //
-// Mirrors `PoolXContract::credential_root_message_hash` so tests can produce
+// Mirrors `VelaContract::credential_root_message_hash` so tests can produce
 // signatures the contract will accept, without exposing that private helper.
 
 pub(crate) fn credential_authority_signing_key(seed: u8) -> SigningKey {
@@ -64,7 +64,7 @@ pub(crate) fn sign_credential_root(
     BytesN::from_array(env, &signature.to_bytes())
 }
 
-/// Mirrors `PoolXContract::hash_merkle_pair`/`hash_ordered_pair`: at each
+/// Mirrors `VelaContract::hash_merkle_pair`/`hash_ordered_pair`: at each
 /// proof step, sha256 the current node and sibling concatenated in ascending
 /// byte order, so tests can compute the root a given (leaf, proof) verifies
 /// against without exposing the contract's private helper.
@@ -175,8 +175,8 @@ fn test_username_duplicate_rejected() {
 fn test_get_following_first_page() {
     let env = Env::default();
     env.mock_all_auths();
-    let contract_id = env.register(PoolXContract, ());
-    let client = PoolXContractClient::new(&env, &contract_id);
+    let contract_id = env.register(VelaContract, ());
+    let client = VelaContractClient::new(&env, &contract_id);
 
     let alice = Address::generate(&env);
     let mut followees = soroban_sdk::vec![&env];
@@ -198,8 +198,8 @@ fn test_get_following_first_page() {
 fn test_get_following_second_page() {
     let env = Env::default();
     env.mock_all_auths();
-    let contract_id = env.register(PoolXContract, ());
-    let client = PoolXContractClient::new(&env, &contract_id);
+    let contract_id = env.register(VelaContract, ());
+    let client = VelaContractClient::new(&env, &contract_id);
 
     let alice = Address::generate(&env);
     let mut followees = soroban_sdk::vec![&env];
@@ -221,8 +221,8 @@ fn test_get_following_second_page() {
 fn test_get_following_offset_beyond_end() {
     let env = Env::default();
     env.mock_all_auths();
-    let contract_id = env.register(PoolXContract, ());
-    let client = PoolXContractClient::new(&env, &contract_id);
+    let contract_id = env.register(VelaContract, ());
+    let client = VelaContractClient::new(&env, &contract_id);
 
     let alice = Address::generate(&env);
     let bob = Address::generate(&env);
@@ -238,8 +238,8 @@ fn test_get_following_offset_beyond_end() {
 fn test_get_following_limit_exceeds_maximum() {
     let env = Env::default();
     env.mock_all_auths();
-    let contract_id = env.register(PoolXContract, ());
-    let client = PoolXContractClient::new(&env, &contract_id);
+    let contract_id = env.register(VelaContract, ());
+    let client = VelaContractClient::new(&env, &contract_id);
 
     let alice = Address::generate(&env);
     let bob = Address::generate(&env);
@@ -254,8 +254,8 @@ fn test_get_following_limit_exceeds_maximum() {
 fn test_get_following_zero_limit() {
     let env = Env::default();
     env.mock_all_auths();
-    let contract_id = env.register(PoolXContract, ());
-    let client = PoolXContractClient::new(&env, &contract_id);
+    let contract_id = env.register(VelaContract, ());
+    let client = VelaContractClient::new(&env, &contract_id);
 
     let alice = Address::generate(&env);
     let bob = Address::generate(&env);
@@ -269,8 +269,8 @@ fn test_get_following_zero_limit() {
 fn test_get_posts_by_author_first_page() {
     let env = Env::default();
     env.mock_all_auths();
-    let contract_id = env.register(PoolXContract, ());
-    let client = PoolXContractClient::new(&env, &contract_id);
+    let contract_id = env.register(VelaContract, ());
+    let client = VelaContractClient::new(&env, &contract_id);
 
     let author = Address::generate(&env);
 
@@ -309,8 +309,8 @@ fn test_get_posts_by_author_first_page() {
 fn test_get_posts_by_author_second_page() {
     let env = Env::default();
     env.mock_all_auths();
-    let contract_id = env.register(PoolXContract, ());
-    let client = PoolXContractClient::new(&env, &contract_id);
+    let contract_id = env.register(VelaContract, ());
+    let client = VelaContractClient::new(&env, &contract_id);
 
     let author = Address::generate(&env);
 
@@ -349,8 +349,8 @@ fn test_get_posts_by_author_second_page() {
 fn test_get_posts_by_author_offset_beyond_end() {
     let env = Env::default();
     env.mock_all_auths();
-    let contract_id = env.register(PoolXContract, ());
-    let client = PoolXContractClient::new(&env, &contract_id);
+    let contract_id = env.register(VelaContract, ());
+    let client = VelaContractClient::new(&env, &contract_id);
 
     let author = Address::generate(&env);
 
@@ -365,8 +365,8 @@ fn test_get_posts_by_author_offset_beyond_end() {
 fn test_get_posts_by_author_limit_exceeds_maximum() {
     let env = Env::default();
     env.mock_all_auths();
-    let contract_id = env.register(PoolXContract, ());
-    let client = PoolXContractClient::new(&env, &contract_id);
+    let contract_id = env.register(VelaContract, ());
+    let client = VelaContractClient::new(&env, &contract_id);
 
     let author = Address::generate(&env);
 
@@ -379,8 +379,8 @@ fn test_get_posts_by_author_limit_exceeds_maximum() {
 fn test_get_posts_by_author_offset_beyond_list_length_returns_empty() {
     let env = Env::default();
     env.mock_all_auths();
-    let contract_id = env.register(PoolXContract, ());
-    let client = PoolXContractClient::new(&env, &contract_id);
+    let contract_id = env.register(VelaContract, ());
+    let client = VelaContractClient::new(&env, &contract_id);
 
     let author = Address::generate(&env);
 
@@ -403,8 +403,8 @@ fn test_get_posts_by_author_offset_beyond_list_length_returns_empty() {
 fn test_get_posts_by_author_offset_plus_limit_beyond_end_returns_remaining() {
     let env = Env::default();
     env.mock_all_auths();
-    let contract_id = env.register(PoolXContract, ());
-    let client = PoolXContractClient::new(&env, &contract_id);
+    let contract_id = env.register(VelaContract, ());
+    let client = VelaContractClient::new(&env, &contract_id);
 
     let author = Address::generate(&env);
 
@@ -428,8 +428,8 @@ fn test_get_posts_by_author_offset_plus_limit_beyond_end_returns_remaining() {
 fn test_get_posts_by_author_limit_50_max_allowed_returns_all() {
     let env = Env::default();
     env.mock_all_auths();
-    let contract_id = env.register(PoolXContract, ());
-    let client = PoolXContractClient::new(&env, &contract_id);
+    let contract_id = env.register(VelaContract, ());
+    let client = VelaContractClient::new(&env, &contract_id);
 
     let author = Address::generate(&env);
 
@@ -449,8 +449,8 @@ fn test_get_posts_by_author_limit_50_max_allowed_returns_all() {
 fn test_get_posts_by_author_after_delete() {
     let env = Env::default();
     env.mock_all_auths();
-    let contract_id = env.register(PoolXContract, ());
-    let client = PoolXContractClient::new(&env, &contract_id);
+    let contract_id = env.register(VelaContract, ());
+    let client = VelaContractClient::new(&env, &contract_id);
 
     let author = Address::generate(&env);
 
@@ -491,8 +491,8 @@ fn test_tip_fee_split() {
     let env = Env::default();
     env.mock_all_auths();
 
-    let contract_id = env.register(PoolXContract, ());
-    let client = PoolXContractClient::new(&env, &contract_id);
+    let contract_id = env.register(VelaContract, ());
+    let client = VelaContractClient::new(&env, &contract_id);
 
     let admin = Address::generate(&env);
     let treasury = Address::generate(&env);
@@ -530,8 +530,8 @@ fn test_tip_blocked_by_author() {
     let env = Env::default();
     env.mock_all_auths();
 
-    let contract_id = env.register(PoolXContract, ());
-    let client = PoolXContractClient::new(&env, &contract_id);
+    let contract_id = env.register(VelaContract, ());
+    let client = VelaContractClient::new(&env, &contract_id);
 
     let admin = Address::generate(&env);
     let treasury = Address::generate(&env);
@@ -561,8 +561,8 @@ fn test_tip_after_unblock() {
     let env = Env::default();
     env.mock_all_auths();
 
-    let contract_id = env.register(PoolXContract, ());
-    let client = PoolXContractClient::new(&env, &contract_id);
+    let contract_id = env.register(VelaContract, ());
+    let client = VelaContractClient::new(&env, &contract_id);
 
     let admin = Address::generate(&env);
     let treasury = Address::generate(&env);
@@ -598,8 +598,8 @@ fn test_tip_non_blocked_user() {
     let env = Env::default();
     env.mock_all_auths();
 
-    let contract_id = env.register(PoolXContract, ());
-    let client = PoolXContractClient::new(&env, &contract_id);
+    let contract_id = env.register(VelaContract, ());
+    let client = VelaContractClient::new(&env, &contract_id);
 
     let admin = Address::generate(&env);
     let treasury = Address::generate(&env);
@@ -640,8 +640,8 @@ fn test_tip_block_preserves_no_state_changes_on_panic() {
     let env = Env::default();
     env.mock_all_auths();
 
-    let contract_id = env.register(PoolXContract, ());
-    let client = PoolXContractClient::new(&env, &contract_id);
+    let contract_id = env.register(VelaContract, ());
+    let client = VelaContractClient::new(&env, &contract_id);
 
     let admin = Address::generate(&env);
     let treasury = Address::generate(&env);
@@ -731,8 +731,8 @@ fn test_tip_block_is_unidirectional_blocker_can_still_tip_blocked() {
     let env = Env::default();
     env.mock_all_auths();
 
-    let contract_id = env.register(PoolXContract, ());
-    let client = PoolXContractClient::new(&env, &contract_id);
+    let contract_id = env.register(VelaContract, ());
+    let client = VelaContractClient::new(&env, &contract_id);
 
     let admin = Address::generate(&env);
     let treasury = Address::generate(&env);
@@ -790,8 +790,8 @@ fn test_tip_block_multiple_blocked_tippers_panic_independently() {
     let env = Env::default();
     env.mock_all_auths();
 
-    let contract_id = env.register(PoolXContract, ());
-    let client = PoolXContractClient::new(&env, &contract_id);
+    let contract_id = env.register(VelaContract, ());
+    let client = VelaContractClient::new(&env, &contract_id);
 
     let admin = Address::generate(&env);
     let treasury = Address::generate(&env);
@@ -1482,8 +1482,8 @@ fn test_delete_post_non_existent() {
 fn test_initialize_stores_admin() {
     let env = Env::default();
     env.mock_all_auths();
-    let contract_id = env.register(PoolXContract, ());
-    let client = PoolXContractClient::new(&env, &contract_id);
+    let contract_id = env.register(VelaContract, ());
+    let client = VelaContractClient::new(&env, &contract_id);
     let admin = Address::generate(&env);
     let treasury = Address::generate(&env);
 
@@ -1497,8 +1497,8 @@ fn test_initialize_stores_admin() {
 fn test_initialize_stores_contract_state_version() {
     let env = Env::default();
     env.mock_all_auths();
-    let contract_id = env.register(PoolXContract, ());
-    let client = PoolXContractClient::new(&env, &contract_id);
+    let contract_id = env.register(VelaContract, ());
+    let client = VelaContractClient::new(&env, &contract_id);
     let admin = Address::generate(&env);
     let treasury = Address::generate(&env);
 
@@ -1605,8 +1605,8 @@ fn test_report_post_uphold_with_slashing() {
     let env = Env::default();
     env.mock_all_auths();
 
-    let contract_id = env.register(PoolXContract, ());
-    let client = PoolXContractClient::new(&env, &contract_id);
+    let contract_id = env.register(VelaContract, ());
+    let client = VelaContractClient::new(&env, &contract_id);
     let admin = Address::generate(&env);
     let treasury = Address::generate(&env);
     client.initialize(&admin, &treasury, &0);
@@ -1722,8 +1722,8 @@ fn test_report_post_dismiss_slashes_reporter() {
     let env = Env::default();
     env.mock_all_auths();
 
-    let contract_id = env.register(PoolXContract, ());
-    let client = PoolXContractClient::new(&env, &contract_id);
+    let contract_id = env.register(VelaContract, ());
+    let client = VelaContractClient::new(&env, &contract_id);
     let admin = Address::generate(&env);
     let treasury = Address::generate(&env);
     client.initialize(&admin, &treasury, &0);
@@ -1807,8 +1807,8 @@ fn test_report_post_already_reported_panics() {
     let env = Env::default();
     env.mock_all_auths();
 
-    let contract_id = env.register(PoolXContract, ());
-    let client = PoolXContractClient::new(&env, &contract_id);
+    let contract_id = env.register(VelaContract, ());
+    let client = VelaContractClient::new(&env, &contract_id);
     let admin = Address::generate(&env);
     let treasury = Address::generate(&env);
     client.initialize(&admin, &treasury, &0);
@@ -1892,8 +1892,8 @@ fn test_report_post_reporter_cannot_report_own_post() {
     let env = Env::default();
     env.mock_all_auths();
 
-    let contract_id = env.register(PoolXContract, ());
-    let client = PoolXContractClient::new(&env, &contract_id);
+    let contract_id = env.register(VelaContract, ());
+    let client = VelaContractClient::new(&env, &contract_id);
     let admin = Address::generate(&env);
     let treasury = Address::generate(&env);
     client.initialize(&admin, &treasury, &0);
@@ -1919,8 +1919,8 @@ fn test_report_post_upheld_without_slashing_when_no_allowance() {
     let env = Env::default();
     env.mock_all_auths();
 
-    let contract_id = env.register(PoolXContract, ());
-    let client = PoolXContractClient::new(&env, &contract_id);
+    let contract_id = env.register(VelaContract, ());
+    let client = VelaContractClient::new(&env, &contract_id);
     let admin = Address::generate(&env);
     let treasury = Address::generate(&env);
     client.initialize(&admin, &treasury, &0);
@@ -1993,8 +1993,8 @@ fn test_report_post_upheld_without_slashing_when_no_allowance() {
 fn test_initialize_twice_panics() {
     let env = Env::default();
     env.mock_all_auths();
-    let contract_id = env.register(PoolXContract, ());
-    let client = PoolXContractClient::new(&env, &contract_id);
+    let contract_id = env.register(VelaContract, ());
+    let client = VelaContractClient::new(&env, &contract_id);
     let admin = Address::generate(&env);
     let treasury = Address::generate(&env);
 
@@ -2010,8 +2010,8 @@ fn test_initialize_twice_panics() {
 fn test_initialize_twice_preserves_state() {
     let env = Env::default();
     env.mock_all_auths();
-    let contract_id = env.register(PoolXContract, ());
-    let client = PoolXContractClient::new(&env, &contract_id);
+    let contract_id = env.register(VelaContract, ());
+    let client = VelaContractClient::new(&env, &contract_id);
 
     let admin = Address::generate(&env);
     let treasury = Address::generate(&env);
@@ -2028,7 +2028,7 @@ fn test_initialize_twice_preserves_state() {
     assert_eq!(client.get_fee_bps(), 250);
 }
 
-// Ignored: uploads the full poolx_contracts.wasm (~135 KB), which exceeds the
+// Ignored: uploads the full vela_contracts.wasm (~135 KB), which exceeds the
 // soroban test host's 131072-byte (128 KB) max contract-code-entry / write-bytes
 // upload limit, causing Error(Budget, ExceededLimit). The release profile is
 // already at maximum size optimization, so this can only be re-enabled once the
@@ -2089,8 +2089,8 @@ fn test_upgrade_by_non_admin_panics() {
 fn test_upgrade_before_initialize_panics() {
     let env = Env::default();
     env.mock_all_auths();
-    let contract_id = env.register(PoolXContract, ());
-    let client = PoolXContractClient::new(&env, &contract_id);
+    let contract_id = env.register(VelaContract, ());
+    let client = VelaContractClient::new(&env, &contract_id);
 
     let mock_hash = BytesN::from_array(&env, &[0u8; 32]);
     let admin = Address::generate(&env);
@@ -2268,8 +2268,8 @@ fn test_initialize_fee_boundary_max_valid() {
     let env = Env::default();
     env.mock_all_auths();
 
-    let contract_id = env.register(PoolXContract, ());
-    let client = PoolXContractClient::new(&env, &contract_id);
+    let contract_id = env.register(VelaContract, ());
+    let client = VelaContractClient::new(&env, &contract_id);
 
     let admin = Address::generate(&env);
     let treasury = Address::generate(&env);
@@ -2285,8 +2285,8 @@ fn test_initialize_fee_boundary_max_invalid() {
     let env = Env::default();
     env.mock_all_auths();
 
-    let contract_id = env.register(PoolXContract, ());
-    let client = PoolXContractClient::new(&env, &contract_id);
+    let contract_id = env.register(VelaContract, ());
+    let client = VelaContractClient::new(&env, &contract_id);
 
     let admin = Address::generate(&env);
     let treasury = Address::generate(&env);
@@ -2795,8 +2795,8 @@ fn test_get_following_offset_beyond_list_length_returns_empty() {
     // offset beyond list length must return an empty vec
     let env = Env::default();
     env.mock_all_auths();
-    let contract_id = env.register(PoolXContract, ());
-    let client = PoolXContractClient::new(&env, &contract_id);
+    let contract_id = env.register(VelaContract, ());
+    let client = VelaContractClient::new(&env, &contract_id);
 
     let alice = Address::generate(&env);
     let bob = Address::generate(&env);
@@ -2816,8 +2816,8 @@ fn test_get_following_limit_50_returns_at_most_50() {
     // limit of 50 must return at most 50 results
     let env = Env::default();
     env.mock_all_auths();
-    let contract_id = env.register(PoolXContract, ());
-    let client = PoolXContractClient::new(&env, &contract_id);
+    let contract_id = env.register(VelaContract, ());
+    let client = VelaContractClient::new(&env, &contract_id);
 
     let alice = Address::generate(&env);
     // Follow 60 people
@@ -2837,8 +2837,8 @@ fn test_get_following_limit_51_panics() {
     // limit of 51 must panic with "limit must be between 1 and 50"
     let env = Env::default();
     env.mock_all_auths();
-    let contract_id = env.register(PoolXContract, ());
-    let client = PoolXContractClient::new(&env, &contract_id);
+    let contract_id = env.register(VelaContract, ());
+    let client = VelaContractClient::new(&env, &contract_id);
 
     let alice = Address::generate(&env);
     let bob = Address::generate(&env);
@@ -2852,8 +2852,8 @@ fn test_get_following_mid_list_offset_returns_correct_page() {
     // correct page returned for a mid-list offset
     let env = Env::default();
     env.mock_all_auths();
-    let contract_id = env.register(PoolXContract, ());
-    let client = PoolXContractClient::new(&env, &contract_id);
+    let contract_id = env.register(VelaContract, ());
+    let client = VelaContractClient::new(&env, &contract_id);
 
     let alice = Address::generate(&env);
     let mut followees = soroban_sdk::vec![&env];
@@ -2881,8 +2881,8 @@ fn test_get_followers_offset_beyond_list_length_returns_empty() {
     // offset beyond list length must return an empty vec
     let env = Env::default();
     env.mock_all_auths();
-    let contract_id = env.register(PoolXContract, ());
-    let client = PoolXContractClient::new(&env, &contract_id);
+    let contract_id = env.register(VelaContract, ());
+    let client = VelaContractClient::new(&env, &contract_id);
 
     let alice = Address::generate(&env);
     let bob = Address::generate(&env);
@@ -2901,8 +2901,8 @@ fn test_get_followers_limit_50_returns_at_most_50() {
     // limit of 50 must return at most 50 results
     let env = Env::default();
     env.mock_all_auths();
-    let contract_id = env.register(PoolXContract, ());
-    let client = PoolXContractClient::new(&env, &contract_id);
+    let contract_id = env.register(VelaContract, ());
+    let client = VelaContractClient::new(&env, &contract_id);
 
     let alice = Address::generate(&env);
     // 60 people follow alice
@@ -2922,8 +2922,8 @@ fn test_get_followers_limit_51_panics() {
     // limit of 51 must panic with "limit must be between 1 and 50"
     let env = Env::default();
     env.mock_all_auths();
-    let contract_id = env.register(PoolXContract, ());
-    let client = PoolXContractClient::new(&env, &contract_id);
+    let contract_id = env.register(VelaContract, ());
+    let client = VelaContractClient::new(&env, &contract_id);
 
     let alice = Address::generate(&env);
     let bob = Address::generate(&env);
@@ -2937,8 +2937,8 @@ fn test_get_followers_mid_list_offset_returns_correct_page() {
     // correct page returned for a mid-list offset
     let env = Env::default();
     env.mock_all_auths();
-    let contract_id = env.register(PoolXContract, ());
-    let client = PoolXContractClient::new(&env, &contract_id);
+    let contract_id = env.register(VelaContract, ());
+    let client = VelaContractClient::new(&env, &contract_id);
 
     let alice = Address::generate(&env);
     let mut followers = soroban_sdk::vec![&env];
@@ -3030,7 +3030,7 @@ fn setup_pool<'a>(
     m: u32,
     balance: i128,
 ) -> (
-    PoolXContractClient<'a>,
+    VelaContractClient<'a>,
     Address,
     soroban_sdk::Symbol,
     Address,
@@ -3265,8 +3265,8 @@ fn test_tip_full_flow_no_fee() {
     let env = Env::default();
     env.mock_all_auths();
 
-    let contract_id = env.register(PoolXContract, ());
-    let client = PoolXContractClient::new(&env, &contract_id);
+    let contract_id = env.register(VelaContract, ());
+    let client = VelaContractClient::new(&env, &contract_id);
 
     let admin = Address::generate(&env);
     let treasury = Address::generate(&env);
@@ -3315,8 +3315,8 @@ fn test_tip_full_flow_with_5_percent_fee() {
     let env = Env::default();
     env.mock_all_auths();
 
-    let contract_id = env.register(PoolXContract, ());
-    let client = PoolXContractClient::new(&env, &contract_id);
+    let contract_id = env.register(VelaContract, ());
+    let client = VelaContractClient::new(&env, &contract_id);
 
     let admin = Address::generate(&env);
     let treasury = Address::generate(&env);
@@ -3369,8 +3369,8 @@ fn test_tip_total_increments_across_multiple_tips() {
     let env = Env::default();
     env.mock_all_auths();
 
-    let contract_id = env.register(PoolXContract, ());
-    let client = PoolXContractClient::new(&env, &contract_id);
+    let contract_id = env.register(VelaContract, ());
+    let client = VelaContractClient::new(&env, &contract_id);
 
     let admin = Address::generate(&env);
     let treasury = Address::generate(&env);
@@ -3407,8 +3407,8 @@ fn test_tip_fee_split_matches_fee_bps_config() {
     let env = Env::default();
     env.mock_all_auths();
 
-    let contract_id = env.register(PoolXContract, ());
-    let client = PoolXContractClient::new(&env, &contract_id);
+    let contract_id = env.register(VelaContract, ());
+    let client = VelaContractClient::new(&env, &contract_id);
 
     let admin = Address::generate(&env);
     let treasury = Address::generate(&env);
@@ -4019,8 +4019,8 @@ fn test_tip_cooldown_rejects_within_window() {
     let env = Env::default();
     env.mock_all_auths();
 
-    let contract_id = env.register(PoolXContract, ());
-    let client = PoolXContractClient::new(&env, &contract_id);
+    let contract_id = env.register(VelaContract, ());
+    let client = VelaContractClient::new(&env, &contract_id);
 
     let admin = Address::generate(&env);
     let treasury = Address::generate(&env);
@@ -4050,8 +4050,8 @@ fn test_tip_cooldown_allows_after_window() {
     let env = Env::default();
     env.mock_all_auths();
 
-    let contract_id = env.register(PoolXContract, ());
-    let client = PoolXContractClient::new(&env, &contract_id);
+    let contract_id = env.register(VelaContract, ());
+    let client = VelaContractClient::new(&env, &contract_id);
 
     let admin = Address::generate(&env);
     let treasury = Address::generate(&env);
@@ -4093,8 +4093,8 @@ fn test_set_tip_cooldown_window_zero_panics() {
     let env = Env::default();
     env.mock_all_auths();
 
-    let contract_id = env.register(PoolXContract, ());
-    let client = PoolXContractClient::new(&env, &contract_id);
+    let contract_id = env.register(VelaContract, ());
+    let client = VelaContractClient::new(&env, &contract_id);
 
     let admin = Address::generate(&env);
     let treasury = Address::generate(&env);
@@ -4115,8 +4115,8 @@ fn test_set_tip_cooldown_window_valid_value_is_stored() {
     let env = Env::default();
     env.mock_all_auths();
 
-    let contract_id = env.register(PoolXContract, ());
-    let client = PoolXContractClient::new(&env, &contract_id);
+    let contract_id = env.register(VelaContract, ());
+    let client = VelaContractClient::new(&env, &contract_id);
 
     let admin = Address::generate(&env);
     let treasury = Address::generate(&env);
@@ -4152,8 +4152,8 @@ fn test_tip_amount_zero_panics() {
     let env = Env::default();
     env.mock_all_auths();
 
-    let contract_id = env.register(PoolXContract, ());
-    let client = PoolXContractClient::new(&env, &contract_id);
+    let contract_id = env.register(VelaContract, ());
+    let client = VelaContractClient::new(&env, &contract_id);
 
     let admin = Address::generate(&env);
     let treasury = Address::generate(&env);
@@ -4181,8 +4181,8 @@ fn test_tip_amount_negative_panics() {
     let env = Env::default();
     env.mock_all_auths();
 
-    let contract_id = env.register(PoolXContract, ());
-    let client = PoolXContractClient::new(&env, &contract_id);
+    let contract_id = env.register(VelaContract, ());
+    let client = VelaContractClient::new(&env, &contract_id);
 
     let admin = Address::generate(&env);
     let treasury = Address::generate(&env);
@@ -4367,8 +4367,8 @@ fn test_tip_cooldown_uses_typed_storage_key() {
     let env = Env::default();
     env.mock_all_auths();
 
-    let contract_id = env.register(PoolXContract, ());
-    let client = PoolXContractClient::new(&env, &contract_id);
+    let contract_id = env.register(VelaContract, ());
+    let client = VelaContractClient::new(&env, &contract_id);
 
     let admin = Address::generate(&env);
     let treasury = Address::generate(&env);
@@ -4468,7 +4468,7 @@ fn test_get_dm_key_returns_none_when_not_published() {
 
 // ── Issue #538: On-chain governance tests ────────────────────────────────────
 
-fn setup_governance(env: &Env) -> (PoolXContractClient<'_>, Address, Address) {
+fn setup_governance(env: &Env) -> (VelaContractClient<'_>, Address, Address) {
     let (client, admin, treasury) = setup_contract(env);
     client.gov_init_config(&admin, &60, &100, &200, &50, &30);
     (client, admin, treasury)
@@ -4477,7 +4477,7 @@ fn setup_governance(env: &Env) -> (PoolXContractClient<'_>, Address, Address) {
 fn setup_governance_with_pool(
     env: &Env,
 ) -> (
-    PoolXContractClient<'_>,
+    VelaContractClient<'_>,
     Address,
     Address,
     Symbol,
@@ -5294,8 +5294,8 @@ fn test_gov_snapshot_decay_rate_immutable() {
     let env = Env::default();
     env.mock_all_auths();
     // Use custom setup to have a non-zero decay rate
-    let contract_id = env.register(PoolXContract, ());
-    let client = PoolXContractClient::new(&env, &contract_id);
+    let contract_id = env.register(VelaContract, ());
+    let client = VelaContractClient::new(&env, &contract_id);
     let admin = Address::generate(&env);
     let treasury = Address::generate(&env);
     client.initialize(&admin, &treasury, &0);
@@ -5474,8 +5474,8 @@ fn test_tip_cooldown_100_ledgers_immediate_retip_panics() {
     let env = Env::default();
     env.mock_all_auths();
 
-    let contract_id = env.register(PoolXContract, ());
-    let client = PoolXContractClient::new(&env, &contract_id);
+    let contract_id = env.register(VelaContract, ());
+    let client = VelaContractClient::new(&env, &contract_id);
 
     let admin = Address::generate(&env);
     let treasury = Address::generate(&env);
@@ -5505,8 +5505,8 @@ fn test_tip_cooldown_100_ledgers_allows_after_advance() {
     let env = Env::default();
     env.mock_all_auths();
 
-    let contract_id = env.register(PoolXContract, ());
-    let client = PoolXContractClient::new(&env, &contract_id);
+    let contract_id = env.register(VelaContract, ());
+    let client = VelaContractClient::new(&env, &contract_id);
 
     let admin = Address::generate(&env);
     let treasury = Address::generate(&env);
@@ -5771,8 +5771,8 @@ fn test_remove_pool_admin_threshold_valid_succeeds() {
 fn test_get_following_offset_beyond_list_returns_empty() {
     let env = Env::default();
     env.mock_all_auths();
-    let contract_id = env.register(PoolXContract, ());
-    let client = PoolXContractClient::new(&env, &contract_id);
+    let contract_id = env.register(VelaContract, ());
+    let client = VelaContractClient::new(&env, &contract_id);
 
     let user_a = Address::generate(&env);
     let user_b = Address::generate(&env);
@@ -5794,8 +5794,8 @@ fn test_get_following_offset_beyond_list_returns_empty() {
 fn test_get_followers_offset_beyond_list_returns_empty() {
     let env = Env::default();
     env.mock_all_auths();
-    let contract_id = env.register(PoolXContract, ());
-    let client = PoolXContractClient::new(&env, &contract_id);
+    let contract_id = env.register(VelaContract, ());
+    let client = VelaContractClient::new(&env, &contract_id);
 
     let user_a = Address::generate(&env);
     let user_b = Address::generate(&env);
@@ -5817,8 +5817,8 @@ fn test_get_followers_offset_beyond_list_returns_empty() {
 fn test_get_following_large_offset_no_panic() {
     let env = Env::default();
     env.mock_all_auths();
-    let contract_id = env.register(PoolXContract, ());
-    let client = PoolXContractClient::new(&env, &contract_id);
+    let contract_id = env.register(VelaContract, ());
+    let client = VelaContractClient::new(&env, &contract_id);
 
     let user_a = Address::generate(&env);
     let user_b = Address::generate(&env);
@@ -5835,8 +5835,8 @@ fn test_get_following_large_offset_no_panic() {
 fn test_get_followers_large_offset_no_panic() {
     let env = Env::default();
     env.mock_all_auths();
-    let contract_id = env.register(PoolXContract, ());
-    let client = PoolXContractClient::new(&env, &contract_id);
+    let contract_id = env.register(VelaContract, ());
+    let client = VelaContractClient::new(&env, &contract_id);
 
     let user_a = Address::generate(&env);
     let user_b = Address::generate(&env);
@@ -6395,7 +6395,7 @@ fn sign_attestation(env: &Env, signing_key: &SigningKey, report_cbor: &Bytes) ->
 }
 
 fn register_oracle(
-    client: &PoolXContractClient<'_>,
+    client: &VelaContractClient<'_>,
     admin: &Address,
     name: &Symbol,
     signing_key: &SigningKey,

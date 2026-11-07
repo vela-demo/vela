@@ -1,11 +1,11 @@
 /**
- * End-to-end encrypted direct messages for PoolX.
+ * End-to-end encrypted direct messages for Vela.
  *
  * This module provides cryptographic functions and relay client for secure
  * direct messaging without central key management.
  */
 
-import { PoolXClient } from "../client.js";
+import { VelaClient } from "../client.js";
 import { Keypair } from "@stellar/stellar-base";
 import {
   generateDmKeypair,
@@ -55,7 +55,7 @@ export {
  * High-level DM service that combines contract interaction, encryption, and relay communication
  */
 export class DmService {
-  private client: PoolXClient;
+  private client: VelaClient;
   private relayClient: RelayClient;
   private keypair: DmKeyPair | null = null;
   private userAddress: string;
@@ -63,7 +63,7 @@ export class DmService {
 
   constructor(wallet: WalletLike, relayUrl: string) {
     // Create a minimal client config for contract interaction
-    this.client = new PoolXClient({
+    this.client = new VelaClient({
       networkPassphrase: wallet?.networkPassphrase || "Test SDF Network ; September 2015",
       rpcUrl: wallet?.rpcUrl || "https://soroban-testnet.stellar.org",
       contractId: process.env.NEXT_PUBLIC_CONTRACT_ID || "",

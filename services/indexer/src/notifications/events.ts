@@ -3,7 +3,7 @@ import { scValToNative, xdr } from "@stellar/stellar-sdk";
 import { ALL_EVENTS, EventBus, BusEvent } from "../bus";
 import { NotificationService } from "./service";
 
-type PoolXNotificationEvent =
+type VelaNotificationEvent =
   | {
       type: "follow";
       follower: string;
@@ -39,7 +39,7 @@ type PoolXNotificationEvent =
       reason: string;
     };
 
-const EVENT_NAMES: Record<string, PoolXNotificationEvent["type"]> = {
+const EVENT_NAMES: Record<string, VelaNotificationEvent["type"]> = {
   follow: "follow",
   Follow: "follow",
   tip: "tip",
@@ -104,7 +104,7 @@ function payloadFrom(topics: unknown[], data: Record<string, unknown>): Record<s
   return payload;
 }
 
-function findEventType(topics: unknown[]): PoolXNotificationEvent["type"] | null {
+function findEventType(topics: unknown[]): VelaNotificationEvent["type"] | null {
   for (const topic of topics) {
     if (typeof topic === "string" && EVENT_NAMES[topic]) {
       return EVENT_NAMES[topic];
@@ -122,7 +122,7 @@ function asBigInt(value: unknown): bigint {
   return typeof value === "bigint" ? value : BigInt(String(value));
 }
 
-export function parseNotificationEvent(event: BusEvent): PoolXNotificationEvent | null {
+export function parseNotificationEvent(event: BusEvent): VelaNotificationEvent | null {
   const topics = decodeTopics(event.topic);
   const type = findEventType(topics);
   if (!type) {
@@ -261,7 +261,7 @@ export async function dispatchNotificationForBusEvent(
         recipient: parsed.followee,
         payload: {
           followerAddress: parsed.follower,
-          deepLink: `poolx://profile/${parsed.follower}`,
+          deepLink: `vela://profile/${parsed.follower}`,
         },
       });
       if (followResult) {
@@ -285,7 +285,7 @@ export async function dispatchNotificationForBusEvent(
           senderAddress: parsed.tipper,
           postId: parsed.post_id.toString(),
           amount: parsed.amount.toString(),
-          deepLink: `poolx://post/${parsed.post_id.toString()}`,
+          deepLink: `vela://post/${parsed.post_id.toString()}`,
         },
       });
       if (tipResult) {
@@ -308,7 +308,7 @@ export async function dispatchNotificationForBusEvent(
         payload: {
           senderAddress: parsed.user,
           postId: parsed.post_id.toString(),
-          deepLink: `poolx://post/${parsed.post_id.toString()}`,
+          deepLink: `vela://post/${parsed.post_id.toString()}`,
         },
       });
       if (likeResult) {
@@ -332,7 +332,7 @@ export async function dispatchNotificationForBusEvent(
           postId: parsed.post_id.toString(),
           reporterAddress: parsed.reporter_address,
           reason: parsed.reason,
-          deepLink: `poolx://post/${parsed.post_id.toString()}`,
+          deepLink: `vela://post/${parsed.post_id.toString()}`,
         },
       });
       if (reportResult) {
@@ -350,7 +350,7 @@ export async function dispatchNotificationForBusEvent(
         payload: {
           postId: parsed.post_id.toString(),
           moderatorNotes: parsed.moderator_notes,
-          deepLink: `poolx://post/${parsed.post_id.toString()}`,
+          deepLink: `vela://post/${parsed.post_id.toString()}`,
         },
       });
       if (dismissResult) {
@@ -376,7 +376,7 @@ export async function dispatchNotificationForBusEvent(
           postId: parsed.post_id.toString(),
           moderatorAddress: parsed.moderator_address,
           reason: parsed.reason,
-          deepLink: `poolx://post/${parsed.post_id.toString()}`,
+          deepLink: `vela://post/${parsed.post_id.toString()}`,
         },
       });
       if (removalResult) {

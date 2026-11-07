@@ -11,10 +11,10 @@
  * handled without requiring a manual reconnect.
  */
 
-import type { DmKeyPair } from "poolx-sdk";
+import type { DmKeyPair } from "vela-sdk";
 import { bytesToBase64, base64ToBytes } from "./crypto";
 
-const PREFIX = "poolx_dm_";
+const PREFIX = "vela_dm_";
 
 function pubKey(addr: string) {
   return `${PREFIX}x25519_pub_${addr}`;

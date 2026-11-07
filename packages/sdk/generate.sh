@@ -15,7 +15,7 @@ set -euo pipefail
 cd "$(dirname "$0")/../.."
 ROOT="$(pwd)"
 
-WASM="$ROOT/packages/contracts/contracts/poolx-contracts/poolx_contracts.wasm"
+WASM="$ROOT/packages/contracts/contracts/vela-contracts/vela_contracts.wasm"
 
 if [ ! -f "$WASM" ]; then
   echo "WASM not found at $WASM — run 'pnpm build:contracts' first." >&2
@@ -24,7 +24,7 @@ fi
 
 if [ ! -d "$ROOT/packages/codegen/node_modules" ]; then
   echo "Installing codegen dependencies..."
-  pnpm install --filter @poolx/codegen
+  pnpm install --filter @vela/codegen
 fi
 
-pnpm --filter @poolx/codegen generate
+pnpm --filter @vela/codegen generate

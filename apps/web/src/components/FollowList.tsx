@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import Link from "next/link";
-import { PoolXClient } from "poolx-sdk";
+import { VelaClient } from "vela-sdk";
 import { OptimisticStore } from "@/lib/optimisticStore";
 import { AnimatedList } from "@/components/AnimatedList";
 
@@ -47,10 +47,10 @@ export function FollowList({ address, type }: FollowListProps) {
   const [, setTick] = useState(0);
 
   const loadingRef = useRef(false);
-  const client = useRef<PoolXClient | null>(null);
+  const client = useRef<VelaClient | null>(null);
 
   useEffect(() => {
-    client.current = new PoolXClient({
+    client.current = new VelaClient({
       contractId:
         process.env.NEXT_PUBLIC_CONTRACT_ID ||
         "CBQHLSNMBF4HS3UX2PV72T75V2SXE7M2EZZTQ6YC5DSXIGGY4NPSAFAF",
@@ -59,11 +59,11 @@ export function FollowList({ address, type }: FollowListProps) {
 
     if (typeof window !== "undefined") {
       const storedUser =
-        localStorage.getItem("poolx_wallet_address") ||
-        localStorage.getItem("poolx_wallet_public_key");
+        localStorage.getItem("vela_wallet_address") ||
+        localStorage.getItem("vela_wallet_public_key");
       setCurrentUser(storedUser);
 
-      const storedBlocked = localStorage.getItem("poolx_blocked_accounts");
+      const storedBlocked = localStorage.getItem("vela_blocked_accounts");
       if (storedBlocked) {
         try {
           setBlockedList(JSON.parse(storedBlocked));

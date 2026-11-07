@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useCallback, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
@@ -64,7 +64,7 @@ export function GuidedTour() {
     >
       <svg className="pointer-events-none fixed inset-0 h-full w-full" aria-hidden="true">
         <defs>
-          <mask id="poolx-tour-mask">
+          <mask id="vela-tour-mask">
             <rect width="100%" height="100%" fill="white" />
             {rect && (
               <rect
@@ -78,7 +78,7 @@ export function GuidedTour() {
             )}
           </mask>
         </defs>
-        <rect width="100%" height="100%" fill="rgba(0,0,0,0.65)" mask="url(#poolx-tour-mask)" />
+        <rect width="100%" height="100%" fill="rgba(0,0,0,0.65)" mask="url(#vela-tour-mask)" />
       </svg>
 
       {rect && (
@@ -94,7 +94,7 @@ export function GuidedTour() {
       )}
 
       <div
-        className="pointer-events-auto fixed z-[101] w-[min(20rem,calc(100vw-2rem))] rounded-2xl border border-[var(--border)] bg-[var(--muted)] p-4 shadow-2xl"
+        className="pointer-events-auto fixed z-[101] w-[min(20rem,calc(100vw-2rem))] rounded-2xl border border-[var(--border)] bg-[var(--bg-subtle)] p-4 shadow-2xl"
         style={
           rect
             ? { top: tooltipPosition.top, left: tooltipPosition.left }
@@ -108,17 +108,17 @@ export function GuidedTour() {
         <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-violet-400">
           Step {context.stepIndex + 1} of {context.totalSteps}
         </p>
-        <h2 id="guided-tour-title" className="mb-2 text-lg font-bold text-[var(--foreground)]">
+        <h2 id="guided-tour-title" className="mb-2 text-lg font-bold text-[var(--fg)]">
           {context.currentStep.title}
         </h2>
-        <p id="guided-tour-description" className="mb-4 text-sm text-[var(--text-muted)]">
+        <p id="guided-tour-description" className="mb-4 text-sm text-[var(--fg-muted)]">
           {context.currentStep.description}
         </p>
         <div className="flex items-center justify-between gap-3">
           <button
             type="button"
             onClick={context.dismiss}
-            className="text-sm font-medium text-[var(--text-muted)] transition-colors hover:text-[var(--foreground)]"
+            className="text-sm font-medium text-[var(--fg-muted)] transition-colors hover:text-[var(--fg)]"
           >
             Skip tour
           </button>
@@ -127,7 +127,7 @@ export function GuidedTour() {
               <button
                 type="button"
                 onClick={context.prev}
-                className="rounded-lg border border-[var(--border)] px-3 py-1.5 text-sm font-medium text-[var(--foreground)] transition-colors hover:border-violet-500/50"
+                className="rounded-lg border border-[var(--border)] px-3 py-1.5 text-sm font-medium text-[var(--fg)] transition-colors hover:border-violet-500/50"
               >
                 Back
               </button>

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { RichTextComposer } from "@/components/RichTextComposer";
 import { useState } from "react";
@@ -20,12 +20,12 @@ export default function ComposerDemoPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[var(--background)] p-8">
+    <div className="min-h-screen bg-[var(--bg)] p-8">
       <div className="max-w-3xl mx-auto">
-        <h1 className="text-3xl font-bold text-[var(--text-primary)] mb-2">
+        <h1 className="text-3xl font-bold text-[var(--fg)] mb-2">
           Rich Text Composer Demo
         </h1>
-        <p className="text-[var(--text-muted)] mb-8">
+        <p className="text-[var(--fg-muted)] mb-8">
           Test the new rich text composer with mentions, hashtags, attachments, and polls.
         </p>
 
@@ -39,19 +39,19 @@ export default function ComposerDemoPage() {
 
         {submittedPosts.length > 0 && (
           <div>
-            <h2 className="text-xl font-bold text-[var(--text-primary)] mb-4">
+            <h2 className="text-xl font-bold text-[var(--fg)] mb-4">
               Submitted Posts ({submittedPosts.length})
             </h2>
             <div className="space-y-4">
               {submittedPosts.map((post, index) => (
                 <div
                   key={index}
-                  className="bg-[var(--muted)] border border-[var(--border)] rounded-xl p-4"
+                  className="bg-[var(--bg-subtle)] border border-[var(--border)] rounded-xl p-4"
                 >
-                  <div className="text-sm text-[var(--text-muted)] mb-2">
+                  <div className="text-sm text-[var(--fg-muted)] mb-2">
                     {post.timestamp.toLocaleString()}
                   </div>
-                  <div className="text-[var(--text-primary)] whitespace-pre-wrap">{post.content}</div>
+                  <div className="text-[var(--fg)] whitespace-pre-wrap">{post.content}</div>
                 </div>
               ))}
             </div>

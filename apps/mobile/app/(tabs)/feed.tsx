@@ -72,7 +72,7 @@ export default function FeedScreen() {
         <EmptyState
           icon="📭"
           title="No posts yet"
-          subtitle="Be the first to post on PoolX."
+          subtitle="Be the first to post on Vela."
           actionLabel="Explore creators"
           onAction={() => router.push("/(tabs)/explore" as Parameters<typeof router.push>[0])}
         />

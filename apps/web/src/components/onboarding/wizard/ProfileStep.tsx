@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React, { useState } from "react";
 import { useWallet } from "@/hooks/useWallet";
@@ -46,7 +46,7 @@ export function ProfileStep({ onNext, onBack, onSkip }: ProfileStepProps) {
         avatar: avatar.trim(),
         address,
       };
-      localStorage.setItem("poolx_profile_draft", JSON.stringify(profileData));
+      localStorage.setItem("vela_profile_draft", JSON.stringify(profileData));
 
       console.log("Profile saved (draft)", profileData);
       onNext();
@@ -63,7 +63,7 @@ export function ProfileStep({ onNext, onBack, onSkip }: ProfileStepProps) {
       <div className="mb-8 text-center">
         <div className="text-6xl mb-4">👤</div>
         <h2 className="text-3xl font-bold mb-2">Create Your Profile</h2>
-        <p className="text-[var(--text-muted)]">
+        <p className="text-[var(--fg-muted)]">
           Tell the community who you are
         </p>
       </div>
@@ -92,7 +92,7 @@ export function ProfileStep({ onNext, onBack, onSkip }: ProfileStepProps) {
               usernameError
                 ? "border-red-500 focus:ring-red-500"
                 : "border-[var(--border)] focus:ring-violet-500"
-            } focus:outline-none focus:ring-2 bg-[var(--background)] text-[var(--text)]`}
+            } focus:outline-none focus:ring-2 bg-[var(--bg)] text-[var(--text)]`}
           />
           {usernameError && (
             <p className="text-red-500 text-sm mt-1">{usernameError}</p>
@@ -110,9 +110,9 @@ export function ProfileStep({ onNext, onBack, onSkip }: ProfileStepProps) {
             value={displayName}
             onChange={(e) => setDisplayName(e.target.value)}
             placeholder="e.g. Alice Johnson"
-            className="w-full px-4 py-3 rounded-lg border border-[var(--border)] focus:outline-none focus:ring-2 focus:ring-violet-500 bg-[var(--background)] text-[var(--text)]"
+            className="w-full px-4 py-3 rounded-lg border border-[var(--border)] focus:outline-none focus:ring-2 focus:ring-violet-500 bg-[var(--bg)] text-[var(--text)]"
           />
-          <p className="text-xs text-[var(--text-muted)] mt-1">
+          <p className="text-xs text-[var(--fg-muted)] mt-1">
             Optional - defaults to your username
           </p>
         </div>
@@ -129,11 +129,11 @@ export function ProfileStep({ onNext, onBack, onSkip }: ProfileStepProps) {
             placeholder="Tell us about yourself..."
             rows={4}
             maxLength={200}
-            className="w-full px-4 py-3 rounded-lg border border-[var(--border)] focus:outline-none focus:ring-2 focus:ring-violet-500 resize-none bg-[var(--background)] text-[var(--text)]"
+            className="w-full px-4 py-3 rounded-lg border border-[var(--border)] focus:outline-none focus:ring-2 focus:ring-violet-500 resize-none bg-[var(--bg)] text-[var(--text)]"
           />
           <div className="flex justify-between mt-1">
-            <p className="text-xs text-[var(--text-muted)]">Optional</p>
-            <p className="text-xs text-[var(--text-muted)]">{bio.length}/200</p>
+            <p className="text-xs text-[var(--fg-muted)]">Optional</p>
+            <p className="text-xs text-[var(--fg-muted)]">{bio.length}/200</p>
           </div>
         </div>
 
@@ -148,9 +148,9 @@ export function ProfileStep({ onNext, onBack, onSkip }: ProfileStepProps) {
             value={avatar}
             onChange={(e) => setAvatar(e.target.value)}
             placeholder="https://example.com/avatar.jpg"
-            className="w-full px-4 py-3 rounded-lg border border-[var(--border)] focus:outline-none focus:ring-2 focus:ring-violet-500 bg-[var(--background)] text-[var(--text)]"
+            className="w-full px-4 py-3 rounded-lg border border-[var(--border)] focus:outline-none focus:ring-2 focus:ring-violet-500 bg-[var(--bg)] text-[var(--text)]"
           />
-          <p className="text-xs text-[var(--text-muted)] mt-1">
+          <p className="text-xs text-[var(--fg-muted)] mt-1">
             Optional - link to your profile picture
           </p>
         </div>
@@ -160,7 +160,7 @@ export function ProfileStep({ onNext, onBack, onSkip }: ProfileStepProps) {
           <button
             type="button"
             onClick={onBack}
-            className="px-6 py-3 border border-[var(--border)] rounded-lg hover:bg-[var(--muted)] transition-colors"
+            className="px-6 py-3 border border-[var(--border)] rounded-lg hover:bg-[var(--bg-subtle)] transition-colors"
           >
             Back
           </button>
@@ -174,7 +174,7 @@ export function ProfileStep({ onNext, onBack, onSkip }: ProfileStepProps) {
           <button
             type="button"
             onClick={onSkip}
-            className="px-6 py-3 text-[var(--text-muted)] hover:text-[var(--text)] transition-colors"
+            className="px-6 py-3 text-[var(--fg-muted)] hover:text-[var(--text)] transition-colors"
           >
             Skip
           </button>

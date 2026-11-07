@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Tip Jar — PoolX Mini App</title>
+    <title>Tip Jar — Vela Mini App</title>
     <style>
       *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -160,7 +160,7 @@
   <body>
     <div class="card">
       <h1>🫙 Tip Jar</h1>
-      <p class="subtitle">Send XLM tips to any PoolX post</p>
+      <p class="subtitle">Send XLM tips to any Vela post</p>
 
       <!-- Wallet status -->
       <div class="wallet-row">
@@ -200,12 +200,12 @@
     </div>
 
     <script>
-      // ── PoolXSDK bridge ──────────────────────────────────────────────────
-      // When running inside the PoolX mobile app the host injects
-      // window.PoolXSDK.  Outside the app we fall back to a mock so the
+      // ── VelaSDK bridge ──────────────────────────────────────────────────
+      // When running inside the Vela mobile app the host injects
+      // window.VelaSDK.  Outside the app we fall back to a mock so the
       // page is still usable for development / testing.
 
-      const SDK = window.PoolXSDK || {
+      const SDK = window.VelaSDK || {
         wallet: {
           getAddress: async () => {
             // Dev fallback — returns a dummy Stellar address
@@ -315,7 +315,7 @@
        * Replace with real stellar-sdk TransactionBuilder logic in production.
        */
       function buildTipTxXdr(sender, postId, amount) {
-        return JSON.stringify({ sender, postId, amount, memo: "poolx-tip" });
+        return JSON.stringify({ sender, postId, amount, memo: "vela-tip" });
       }
 
       function showStatus(html, type) {

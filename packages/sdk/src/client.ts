@@ -12,7 +12,7 @@ import {
   StrKey,
   xdr,
 } from "@stellar/stellar-base";
-import { GeneratedPoolXClient } from "./generated/client.js";
+import { GeneratedVelaClient } from "./generated/client.js";
 import { Profile, Post, Pool, SimulationResult, LedgerFootprint } from "./types.js";
 import {
   mapError,
@@ -21,7 +21,7 @@ import {
   ValidationError,
   InvalidInputError,
   NetworkError,
-  PoolXError,
+  VelaError,
   VersionMismatchError,
   ReadResult,
 } from "./errors.js";
@@ -96,7 +96,7 @@ function resolveAllowHttp(config: { rpcUrl: string; allowHttp?: boolean }): bool
 
   // eslint-disable-next-line no-console
   console.warn(
-    `[poolx-sdk] Warning: connecting to an insecure HTTP RPC at "${config.rpcUrl}". ` +
+    `[vela-sdk] Warning: connecting to an insecure HTTP RPC at "${config.rpcUrl}". ` +
       `This is intended for local development only and should never be used with a ` +
       `production or mainnet endpoint.`
   );
@@ -238,12 +238,12 @@ export interface SetProfileWithNewTokenParams {
 }
 
 /**
- * Typed client for all PoolX social contract methods.
+ * Typed client for all Vela social contract methods.
  *
- * Extends the auto-generated GeneratedPoolXClient with connection management,
+ * Extends the auto-generated GeneratedVelaClient with connection management,
  * error handling, and type conversions (e.g. bigint ↔ number).
  */
-export class PoolXClient extends GeneratedPoolXClient {
+export class VelaClient extends GeneratedVelaClient {
   public readonly classic: ClassicAccountClient;
   private tokenFactoryId?: string;
   private readonly _rpcUrl: string;
@@ -300,7 +300,7 @@ export class PoolXClient extends GeneratedPoolXClient {
   }
 
   /** Build a string-XDR {@link RpcClient} adapter for use with `TransactionQueue`. */
-  createRpcClient(): RpcClient {
+  createRpcClientAdapter(): RpcClient {
     return createRpcClientAdapter(this.createRpcServer(), this._networkPassphrase);
   }
 
@@ -503,7 +503,7 @@ export class PoolXClient extends GeneratedPoolXClient {
 
   /**
    * Like {@link prepareTransaction}, but builds the Soroban invocation against an
-   * arbitrary contract (e.g. a SEP-41 token contract) instead of the PoolX
+   * arbitrary contract (e.g. a SEP-41 token contract) instead of the Vela
    * contract. Used to prepare the token `increase_allowance` pre-approval step.
    */
   private async prepareTransactionOnContract(
@@ -770,7 +770,7 @@ export class PoolXClient extends GeneratedPoolXClient {
    * Fetch the configured maximum post content length from the contract.
    *
    * Falls back to the Rust default `MAX_CONTENT_LEN` (280 bytes, defined in
-   * `packages/contracts/contracts/poolx-contracts/src/validation.rs`) when
+   * `packages/contracts/contracts/vela-contracts/src/validation.rs`) when
    * the contract has no override stored.
    *
    * @returns The max post content length in UTF-8 bytes.
@@ -815,11 +815,11 @@ export class PoolXClient extends GeneratedPoolXClient {
       }
       return { ok: true, value };
     } catch (error: unknown) {
-      const poolxErr = error instanceof PoolXError ? error : mapError(error);
-      if (poolxErr instanceof NotFoundError) {
+      const velaErr = error instanceof VelaError ? error : mapError(error);
+      if (velaErr instanceof NotFoundError) {
         return { ok: true, value: null, absent: true };
       }
-      return { ok: false, error: poolxErr };
+      return { ok: false, error: velaErr };
     }
   }
 
@@ -933,7 +933,7 @@ export class PoolXClient extends GeneratedPoolXClient {
    * @example
    * ```ts
    * if (await client.isPaused()) {
-   *   console.warn("PoolX is temporarily paused.");
+   *   console.warn("Vela is temporarily paused.");
    * }
    * ```
    */

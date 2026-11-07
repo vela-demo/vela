@@ -154,15 +154,15 @@ importers:
 
   apps/web:
     dependencies:
-      '@poolx/types':
-        specifier: workspace:*
-        version: link:../../packages/types
       '@radix-ui/react-dialog':
         specifier: ^1.1.20
         version: 1.1.20(@types/react-dom@19.2.3(@types/react@19.2.16))(@types/react@19.2.16)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       '@stellar/freighter-api':
         specifier: ^2.0.0
         version: 2.0.0
+      '@vela/types':
+        specifier: workspace:*
+        version: link:../../packages/types
       browser-image-compression:
         specifier: ^2.0.2
         version: 2.0.2
@@ -175,9 +175,6 @@ importers:
       next:
         specifier: 15.5.19
         version: 15.5.19(@babel/core@7.29.7)(@playwright/test@1.60.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
-      poolx-sdk:
-        specifier: workspace:*
-        version: link:../../packages/sdk
       react:
         specifier: ^19.0.0
         version: 19.2.7
@@ -190,6 +187,9 @@ importers:
       recharts:
         specifier: ^3.9.0
         version: 3.9.0(@types/react@19.2.16)(react-dom@19.2.7(react@19.2.7))(react-is@19.2.8)(react@19.2.7)(redux@5.0.1)
+      vela-sdk:
+        specifier: workspace:*
+        version: link:../../packages/sdk
     devDependencies:
       '@playwright/test':
         specifier: ^1.45.0
@@ -342,12 +342,12 @@ importers:
       '@noble/hashes':
         specifier: ^1.7.2
         version: 1.8.0
-      '@poolx/types':
-        specifier: workspace:*
-        version: link:../../packages/types
       '@stellar/stellar-sdk':
         specifier: 13.1.0
         version: 13.1.0
+      '@vela/types':
+        specifier: workspace:*
+        version: link:../../packages/types
       cbor-x:
         specifier: 1.5.9
         version: 1.5.9
@@ -415,12 +415,12 @@ importers:
       '@noble/hashes':
         specifier: ^1.8.0
         version: 1.8.0
-      '@poolx/types':
-        specifier: workspace:*
-        version: link:../../packages/types
       '@stellar/stellar-sdk':
         specifier: ^15.1.0
         version: 15.1.0
+      '@vela/types':
+        specifier: workspace:*
+        version: link:../../packages/types
       cors:
         specifier: ^2.8.5
         version: 2.8.6
@@ -509,12 +509,12 @@ importers:
 
   services/indexer:
     dependencies:
-      '@poolx/types':
-        specifier: workspace:*
-        version: link:../../packages/types
       '@stellar/stellar-sdk':
         specifier: ^15.1.0
         version: 15.1.0
+      '@vela/types':
+        specifier: workspace:*
+        version: link:../../packages/types
       express:
         specifier: ^4.19.2
         version: 4.22.2
@@ -10948,9 +10948,7 @@ snapshots:
       metro-runtime: 0.84.4
     transitivePeerDependencies:
       - '@babel/core'
-      - bufferutil
       - supports-color
-      - utf-8-validate
 
   '@react-native/normalize-colors@0.86.0': {}
 

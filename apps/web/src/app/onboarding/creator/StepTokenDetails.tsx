@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import type { TokenParams } from "./CreatorTokenWizard";
@@ -74,7 +74,7 @@ export function StepTokenDetails({ initial, onNext }: Props) {
     >
       <div>
         <h2 className="text-xl font-bold mb-1">Token details</h2>
-        <p className="text-sm text-[var(--text-muted)]">Define your SEP-41 creator token.</p>
+        <p className="text-sm text-[var(--fg-muted)]">Define your SEP-41 creator token.</p>
       </div>
 
       {/* Name */}
@@ -152,7 +152,7 @@ export function StepTokenDetails({ initial, onNext }: Props) {
           className={inputClass(!!errors.decimals)}
         />
         {!errors.decimals && (
-          <p id="token-decimals-hint" className="mt-1 text-xs text-[var(--text-muted)]">
+          <p id="token-decimals-hint" className="mt-1 text-xs text-[var(--fg-muted)]">
             7 is standard for Stellar tokens
           </p>
         )}
@@ -209,7 +209,7 @@ export function StepTokenDetails({ initial, onNext }: Props) {
 
 function inputClass(hasError: boolean) {
   return [
-    "w-full rounded-lg border px-3 py-2 text-sm bg-[var(--bg-tertiary)] text-[var(--text-primary)]",
+    "w-full rounded-lg border px-3 py-2 text-sm bg-[var(--bg-tertiary)] text-[var(--fg)]",
     "focus:outline-none focus:ring-2 focus:ring-violet-500",
     hasError ? "border-red-500" : "border-[var(--border)]",
   ].join(" ");
@@ -234,9 +234,9 @@ function TokenPreview({
       <p className="text-xs text-violet-400 uppercase tracking-widest mb-2">Preview</p>
       <div className="flex justify-between">
         <span className="font-mono font-bold text-violet-300">{symbol}</span>
-        <span className="text-[var(--text-muted)]">{name}</span>
+        <span className="text-[var(--fg-muted)]">{name}</span>
       </div>
-      <div className="flex justify-between mt-1 text-xs text-[var(--text-muted)]">
+      <div className="flex justify-between mt-1 text-xs text-[var(--fg-muted)]">
         <span>Decimals: {decimals}</span>
         <span>
           Supply: {Number(supply).toLocaleString(undefined, { maximumFractionDigits: 0 })}

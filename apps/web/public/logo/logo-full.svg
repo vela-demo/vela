@@ -1,4 +1,4 @@
-﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 64" width="100%" height="100%" fill="none">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 64" width="100%" height="100%" fill="none">
   <defs>
     <linearGradient id="stellar-grad-full" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#1E3A5F" />
@@ -27,5 +27,5 @@
   <path d="M 40 12 L 41 14 L 43 15 L 41 16 L 40 18 L 39 16 L 37 15 L 39 14 Z" fill="#FFFFFF" opacity="0.75"/>
 
   <!-- Wordmark Section -->
-  <text x="68" y="43" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="32" font-weight="600" letter-spacing="-0.5" fill="url(#stellar-grad-full)">PoolX</text>
+  <text x="68" y="43" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="32" font-weight="600" letter-spacing="-0.5" fill="url(#stellar-grad-full)">Vela</text>
 </svg>

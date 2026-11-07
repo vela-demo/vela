@@ -12,7 +12,7 @@ import {
   setDmSyncCursor,
 } from "./db";
 import { Post } from "../components/PostCard";
-import { PoolXClient } from "poolx-sdk";
+import { VelaClient } from "vela-sdk";
 
 function shortAddress(address: string): string {
   return `${address.slice(0, 6)}...${address.slice(-4)}`;
@@ -144,7 +144,7 @@ async function submitAndConfirmPost(
   author: string,
   content: string
 ): Promise<string> {
-  const client = new PoolXClient({
+  const client = new VelaClient({
     contractId,
     rpcUrl,
     networkPassphrase,

@@ -11,8 +11,8 @@ import React, {
 } from "react";
 import { useWalletContext } from "@/components/WalletProvider";
 
-const LS_UNREAD_KEY = "poolx:notifications:unread";
-const LS_NOTIFICATIONS_KEY = "poolx:notifications:items";
+const LS_UNREAD_KEY = "vela:notifications:unread";
+const LS_NOTIFICATIONS_KEY = "vela:notifications:items";
 const PAGE_SIZE = 10;
 const EXCERPT_LEN = 60;
 const INDEXER_URL = process.env.NEXT_PUBLIC_INDEXER_URL ?? "http://localhost:3001";

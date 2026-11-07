@@ -16,7 +16,7 @@ export interface SorobanEvent {
   txHash?: string;
 }
 
-export interface PoolXEventMeta {
+export interface VelaEventMeta {
   ledger?: number;
   ledgerClosedAt?: string;
   contractId?: string;
@@ -26,11 +26,11 @@ export interface PoolXEventMeta {
   raw: SorobanEvent;
 }
 
-interface BasePoolXEvent {
-  meta: PoolXEventMeta;
+interface BaseVelaEvent {
+  meta: VelaEventMeta;
 }
 
-export interface RentPaidEvent extends BasePoolXEvent {
+export interface RentPaidEvent extends BaseVelaEvent {
   type: "rent_paid";
   user: string;
   payer: string;
@@ -39,94 +39,94 @@ export interface RentPaidEvent extends BasePoolXEvent {
   extended_to_ledger: number;
 }
 
-export type ProfileSetEvent = BasePoolXEvent &
+export type ProfileSetEvent = BaseVelaEvent &
   Omit<Gen.ProfileSetEvent, "type"> & { type: "profile_set" };
 
-export type FollowEvent = BasePoolXEvent & Omit<Gen.FollowEvent, "type"> & { type: "follow" };
+export type FollowEvent = BaseVelaEvent & Omit<Gen.FollowEvent, "type"> & { type: "follow" };
 
-export type UnfollowEvent = BasePoolXEvent &
+export type UnfollowEvent = BaseVelaEvent &
   Omit<Gen.UnfollowEvent, "type"> & { type: "unfollow" };
 
-export type BlockEvent = BasePoolXEvent & Omit<Gen.BlockEvent, "type"> & { type: "block" };
+export type BlockEvent = BaseVelaEvent & Omit<Gen.BlockEvent, "type"> & { type: "block" };
 
-export type UnblockEvent = BasePoolXEvent & Omit<Gen.UnblockEvent, "type"> & { type: "unblock" };
+export type UnblockEvent = BaseVelaEvent & Omit<Gen.UnblockEvent, "type"> & { type: "unblock" };
 
-export type PostCreatedEvent = BasePoolXEvent &
+export type PostCreatedEvent = BaseVelaEvent &
   Omit<Gen.PostCreatedEvent, "type"> & { type: "post_created" };
 
-export type TipEvent = BasePoolXEvent & Omit<Gen.TipEvent, "type"> & { type: "tip" };
+export type TipEvent = BaseVelaEvent & Omit<Gen.TipEvent, "type"> & { type: "tip" };
 
-export type PoolDepositEvent = BasePoolXEvent &
+export type PoolDepositEvent = BaseVelaEvent &
   Omit<Gen.PoolDepositEvent, "type"> & { type: "pool_deposit" };
 
-export type PoolWithdrawEvent = BasePoolXEvent &
+export type PoolWithdrawEvent = BaseVelaEvent &
   Omit<Gen.PoolWithdrawEvent, "type"> & { type: "pool_withdraw" };
 
-export type PoolCreatedEvent = BasePoolXEvent &
+export type PoolCreatedEvent = BaseVelaEvent &
   Omit<Gen.PoolCreatedEvent, "type"> & { type: "pool_created" };
 
-export type LikePostEvent = BasePoolXEvent & Omit<Gen.LikePostEvent, "type"> & { type: "like" };
+export type LikePostEvent = BaseVelaEvent & Omit<Gen.LikePostEvent, "type"> & { type: "like" };
 
-export type ContractUpgradedEvent = BasePoolXEvent &
+export type ContractUpgradedEvent = BaseVelaEvent &
   Omit<Gen.ContractUpgraded, "type"> & { type: "contract_upgraded" };
 
-export type PostDeletedEvent = BasePoolXEvent &
+export type PostDeletedEvent = BaseVelaEvent &
   Omit<Gen.PostDeleted, "type"> & { type: "post_deleted" };
 
-export type ProposalCreatedEvent = BasePoolXEvent &
+export type ProposalCreatedEvent = BaseVelaEvent &
   Omit<Gen.ProposalCreatedEvent, "type"> & { type: "proposal_created" };
 
-export type ProposalSignedEvent = BasePoolXEvent &
+export type ProposalSignedEvent = BaseVelaEvent &
   Omit<Gen.ProposalSignedEvent, "type"> & { type: "proposal_signed" };
 
-export type ProposalExecutedEvent = BasePoolXEvent &
+export type ProposalExecutedEvent = BaseVelaEvent &
   Omit<Gen.ProposalExecutedEvent, "type"> & { type: "proposal_executed" };
 
-export type PoolAdminAddedEvent = BasePoolXEvent &
+export type PoolAdminAddedEvent = BaseVelaEvent &
   Omit<Gen.PoolAdminAddedEvent, "type"> & { type: "pool_admin_added" };
 
-export type PoolAdminRemovedEvent = BasePoolXEvent &
+export type PoolAdminRemovedEvent = BaseVelaEvent &
   Omit<Gen.PoolAdminRemovedEvent, "type"> & { type: "pool_admin_removed" };
 
-export type PoolThresholdUpdatedEvent = BasePoolXEvent &
+export type PoolThresholdUpdatedEvent = BaseVelaEvent &
   Omit<Gen.PoolThresholdUpdatedEvent, "type"> & { type: "pool_threshold_updated" };
 
-export type DmKeyPublishedEvent = BasePoolXEvent &
+export type DmKeyPublishedEvent = BaseVelaEvent &
   Omit<Gen.DmKeyPublishedEvent, "type"> & { type: "dm_key_published" };
 
-export interface CredentialRootUpdatedEvent extends BasePoolXEvent {
+export interface CredentialRootUpdatedEvent extends BaseVelaEvent {
   type: "credential_root_updated";
   user: string;
   root: string;
 }
 
-export interface CredentialVerifiedEvent extends BasePoolXEvent {
+export interface CredentialVerifiedEvent extends BaseVelaEvent {
   type: "credential_verified";
   user: string;
   nullifier: string;
 }
 
-export type FeeUpdatedEvent = BasePoolXEvent &
+export type FeeUpdatedEvent = BaseVelaEvent &
   Omit<Gen.FeeUpdatedEvent, "type"> & { type: "fee_updated" };
 
-export type TreasuryUpdatedEvent = BasePoolXEvent &
+export type TreasuryUpdatedEvent = BaseVelaEvent &
   Omit<Gen.TreasuryUpdatedEvent, "type"> & { type: "treasury_updated" };
 
-export type GovProposalCreatedEvent = BasePoolXEvent &
+export type GovProposalCreatedEvent = BaseVelaEvent &
   Omit<Gen.GovProposalCreatedEvent, "type"> & { type: "gov_proposal_created" };
 
-export type GovVoteEvent = BasePoolXEvent & Omit<Gen.GovVoteEvent, "type"> & { type: "gov_vote" };
+export type GovVoteEvent = BaseVelaEvent & Omit<Gen.GovVoteEvent, "type"> & { type: "gov_vote" };
 
-export type GovProposalExecutedEvent = BasePoolXEvent &
+export type GovProposalExecutedEvent = BaseVelaEvent &
   Omit<Gen.GovProposalExecutedEvent, "type"> & { type: "gov_proposal_executed" };
 
-export type GovProposalVetoedEvent = BasePoolXEvent &
+export type GovProposalVetoedEvent = BaseVelaEvent &
   Omit<Gen.GovProposalVetoedEvent, "type"> & { type: "gov_proposal_vetoed" };
 
-export type EmergencyBypassEvent = BasePoolXEvent &
+export type EmergencyBypassEvent = BaseVelaEvent &
   Omit<Gen.EmergencyBypassEvent, "type"> & { type: "emergency_bypass" };
 
-export interface AttestationVerifiedEvent extends BasePoolXEvent {
+export interface AttestationVerifiedEvent extends BaseVelaEvent {
   type: "attestation_verified";
   oracle_name: string;
   report_hash: string;
@@ -135,26 +135,26 @@ export interface AttestationVerifiedEvent extends BasePoolXEvent {
   window_end: number;
 }
 
-export interface PostReportedEvent extends BasePoolXEvent {
+export interface PostReportedEvent extends BaseVelaEvent {
   type: "post_reported";
   post_id: bigint;
   reporter: string;
   stake_amount: bigint;
 }
 
-export interface PostRemovedByModerationEvent extends BasePoolXEvent {
+export interface PostRemovedByModerationEvent extends BaseVelaEvent {
   type: "post_removed_by_moderation";
   post_id: bigint;
   reporter: string;
 }
 
-export interface ReportDismissedEvent extends BasePoolXEvent {
+export interface ReportDismissedEvent extends BaseVelaEvent {
   type: "report_dismissed";
   post_id: bigint;
   reporter: string;
 }
 
-export type PoolXEvent =
+export type VelaEvent =
   | RentPaidEvent
   | ProfileSetEvent
   | FollowEvent
@@ -190,7 +190,7 @@ export type PoolXEvent =
   | PostRemovedByModerationEvent
   | ReportDismissedEvent;
 
-const EVENT_NAMES: Record<string, PoolXEvent["type"]> = {
+const EVENT_NAMES: Record<string, VelaEvent["type"]> = {
   RentPaidEvent: "rent_paid",
   rent_paid: "rent_paid",
   ProfileSetEvent: "profile_set",
@@ -284,7 +284,7 @@ function decodeData(encoded: string | undefined): Record<string, unknown> {
   return { value: decoded };
 }
 
-function findEventType(topics: unknown[]): PoolXEvent["type"] | null {
+function findEventType(topics: unknown[]): VelaEvent["type"] | null {
   for (const topic of topics) {
     if (typeof topic === "string" && EVENT_NAMES[topic]) return EVENT_NAMES[topic];
   }
@@ -301,7 +301,7 @@ function payloadFrom(topics: unknown[], data: Record<string, unknown>): Record<s
   return payload;
 }
 
-function meta(raw: SorobanEvent): PoolXEventMeta {
+function meta(raw: SorobanEvent): VelaEventMeta {
   return {
     ledger: raw.ledger,
     ledgerClosedAt: raw.ledgerClosedAt,
@@ -331,10 +331,10 @@ function strArray(value: unknown): string[] {
 }
 
 /**
- * Parse a raw Soroban event into a strongly-typed PoolXEvent.
+ * Parse a raw Soroban event into a strongly-typed VelaEvent.
  *
  * @param raw The raw event payload from the Soroban RPC.
- * @returns The parsed PoolXEvent, or null if the event type is unrecognized.
+ * @returns The parsed VelaEvent, or null if the event type is unrecognized.
  *
  * @example
  * ```ts
@@ -353,7 +353,7 @@ function strArray(value: unknown): string[] {
  * }
  * ```
  */
-export function parseContractEvent(raw: SorobanEvent): PoolXEvent | null {
+export function parseContractEvent(raw: SorobanEvent): VelaEvent | null {
   try {
     const topics = decodeMany(raw.topics ?? raw.topic);
     const eventType = findEventType(topics);

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
 
@@ -99,7 +99,7 @@ export function FollowDrawer({ isOpen, onClose, type, address }: FollowDrawerPro
 
       {/* Drawer panel */}
       <div
-        className="relative w-full max-w-sm bg-[var(--bg-secondary)] h-full shadow-xl flex flex-col"
+        className="relative w-full max-w-sm bg-[var(--bg-subtle)] h-full shadow-xl flex flex-col"
         role="dialog"
         aria-modal="true"
         aria-label={`${type === "followers" ? "Followers" : "Following"} list`}
@@ -109,13 +109,13 @@ export function FollowDrawer({ isOpen, onClose, type, address }: FollowDrawerPro
       >
         {/* Header */}
         <div className="p-4 border-b border-[var(--bg-tertiary)] flex justify-between items-center">
-          <h2 className="text-lg font-semibold text-[var(--text-primary)] capitalize">
-            {type} <span className="text-sm text-[var(--text-muted)] font-normal">({total})</span>
+          <h2 className="text-lg font-semibold text-[var(--fg)] capitalize">
+            {type} <span className="text-sm text-[var(--fg-muted)] font-normal">({total})</span>
           </h2>
           <button
             onClick={onClose}
             aria-label="Close drawer"
-            className="text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors text-xl leading-none"
+            className="text-[var(--fg-muted)] hover:text-[var(--fg)] transition-colors text-xl leading-none"
           >
             ✕
           </button>
@@ -140,18 +140,18 @@ export function FollowDrawer({ isOpen, onClose, type, address }: FollowDrawerPro
                 alt=""
                 className="w-10 h-10 rounded-full"
               />
-              <span className="font-mono text-sm text-[var(--text-primary)] truncate">
+              <span className="font-mono text-sm text-[var(--fg)] truncate">
                 {addr.slice(0, 6)}…{addr.slice(-4)}
               </span>
             </a>
           ))}
 
           {loading && (
-            <div className="text-center text-sm text-[var(--text-muted)] py-4">Loading…</div>
+            <div className="text-center text-sm text-[var(--fg-muted)] py-4">Loading…</div>
           )}
 
           {!loading && users.length === 0 && (
-            <div className="text-center text-sm text-[var(--text-muted)] py-12">No {type} yet.</div>
+            <div className="text-center text-sm text-[var(--fg-muted)] py-12">No {type} yet.</div>
           )}
         </div>
       </div>

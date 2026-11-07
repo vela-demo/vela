@@ -11,7 +11,7 @@ import http from "node:http";
 import express from "express";
 import { jest } from "@jest/globals";
 import { Pool } from "pg";
-import { RateLimitConfigError } from "@poolx/types/src/rate-limit-env.js";
+import { RateLimitConfigError } from "@vela/types/src/rate-limit-env.js";
 import { loadRateLimitConfig } from "../config.js";
 import { createHealthRouter, HealthDeps } from "../routes/health.js";
 

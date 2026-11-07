@@ -1,9 +1,9 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect, useCallback } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
-import { PoolXClient, type Post } from "poolx-sdk";
+import { VelaClient, type Post } from "vela-sdk";
 
 const RPC_URL = process.env.NEXT_PUBLIC_SOROBAN_RPC_URL ?? "https://soroban-testnet.stellar.org";
 const CONTRACT_ID =
@@ -32,7 +32,7 @@ export default function PostDetailPage() {
       return;
     }
 
-    const client = new PoolXClient({
+    const client = new VelaClient({
       rpcUrl: RPC_URL,
       contractId: CONTRACT_ID,
     });
@@ -73,7 +73,7 @@ export default function PostDetailPage() {
       <main className="max-w-xl mx-auto px-4 py-12 flex flex-col gap-6 text-center">
         <div className="text-5xl" aria-hidden="true">🔍</div>
         <h1 className="text-2xl font-bold text-white">Post Not Found</h1>
-        <p className="text-[var(--text-muted)]">
+        <p className="text-[var(--fg-muted)]">
           {error
             ? `Error: ${error}`
             : "This post may not exist or has been removed from the blockchain."}
@@ -95,7 +95,7 @@ export default function PostDetailPage() {
       </Link>
 
       <h1 className="sr-only">Post Detail</h1>
-      <article className="bg-[var(--muted)] border border-[var(--border)] rounded-2xl p-6 shadow-xl flex flex-col gap-4">
+      <article className="bg-[var(--bg-subtle)] border border-[var(--border)] rounded-2xl p-6 shadow-xl flex flex-col gap-4">
         {/* Author */}
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-full bg-[var(--accent)] flex items-center justify-center text-white font-bold text-sm">
@@ -105,7 +105,7 @@ export default function PostDetailPage() {
             <span className="text-sm font-bold text-white">
               {post.author.slice(0, 6)}...{post.author.slice(-4)}
             </span>
-            <span className="text-xs text-[var(--text-muted)] font-mono">{post.author}</span>
+            <span className="text-xs text-[var(--fg-muted)] font-mono">{post.author}</span>
           </div>
         </div>
 
@@ -115,7 +115,7 @@ export default function PostDetailPage() {
         </p>
 
         {/* Footer/Metrics */}
-        <div className="border-t border-[var(--border)] pt-4 mt-2 flex items-center gap-6 text-xs text-[var(--text-muted)]">
+        <div className="border-t border-[var(--border)] pt-4 mt-2 flex items-center gap-6 text-xs text-[var(--fg-muted)]">
           <div>
             Likes: <span className="font-bold text-white">{post.like_count.toString()}</span>
           </div>
@@ -135,7 +135,7 @@ export default function PostDetailPage() {
           {/* Share / Copy link */}
           <button
             onClick={handleCopyLink}
-            className="ml-auto flex items-center gap-1.5 text-[var(--text-muted)] hover:text-violet-400 transition-colors"
+            className="ml-auto flex items-center gap-1.5 text-[var(--fg-muted)] hover:text-violet-400 transition-colors"
             aria-label="Copy post link to clipboard"
           >
             {copyFeedback ? (

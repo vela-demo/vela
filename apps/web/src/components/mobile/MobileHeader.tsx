@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -19,7 +19,7 @@ function pillClass(active: boolean): string {
   return `shrink-0 rounded-full border px-4 py-1.5 text-sm font-semibold transition-colors min-h-[36px] ${
     active
       ? "border-[var(--color-info)] bg-[var(--color-info)] text-white"
-      : "border-[var(--color-border)] bg-transparent text-[var(--color-text-secondary)]"
+      : "border-[var(--border)] bg-transparent text-[var(--color-text-secondary)]"
   }`;
 }
 

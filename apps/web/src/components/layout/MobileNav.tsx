@@ -1,4 +1,4 @@
-import React from "react";
+﻿import React from "react";
 import Link from "next/link";
 import { Logo } from "@/components/branding/Logo";
 
@@ -17,7 +17,7 @@ export const MobileNav: React.FC<MobileNavProps> = ({
 }) => {
   return (
     <div
-      className={`fixed bottom-0 left-0 right-0 z-50 border-t border-[var(--border)] bg-[var(--background)]/90 backdrop-blur-md px-4 py-2 md:hidden flex justify-around items-center shadow-lg ${className}`}
+      className={`fixed bottom-0 left-0 right-0 z-50 border-t border-[var(--border)] bg-[var(--bg)]/90 backdrop-blur-md px-4 py-2 md:hidden flex justify-around items-center shadow-lg ${className}`}
     >
       <div className="hidden">
         <Logo variant="icon" size="sm" />
@@ -28,7 +28,7 @@ export const MobileNav: React.FC<MobileNavProps> = ({
         className={`flex flex-col items-center justify-center p-1.5 transition-colors ${
           activePath === "/" || activePath === "/feed"
             ? "text-[#6366F1]"
-            : "text-[var(--text-muted)] hover:text-violet-400"
+            : "text-[var(--fg-muted)] hover:text-violet-400"
         }`}
         aria-label="Home Feed"
       >
@@ -54,7 +54,7 @@ export const MobileNav: React.FC<MobileNavProps> = ({
         className={`flex flex-col items-center justify-center p-1.5 transition-colors ${
           activePath === "/explore"
             ? "text-[#6366F1]"
-            : "text-[var(--text-muted)] hover:text-violet-400"
+            : "text-[var(--fg-muted)] hover:text-violet-400"
         }`}
         aria-label="Explore"
       >
@@ -99,7 +99,7 @@ export const MobileNav: React.FC<MobileNavProps> = ({
         className={`relative flex flex-col items-center justify-center p-1.5 transition-colors ${
           activePath === "/notifications"
             ? "text-[#6366F1]"
-            : "text-[var(--text-muted)] hover:text-violet-400"
+            : "text-[var(--fg-muted)] hover:text-violet-400"
         }`}
         aria-label="Notifications"
       >
@@ -130,7 +130,7 @@ export const MobileNav: React.FC<MobileNavProps> = ({
         className={`flex flex-col items-center justify-center p-1.5 transition-colors ${
           activePath === "/analytics"
             ? "text-[#6366F1]"
-            : "text-[var(--text-muted)] hover:text-violet-400"
+            : "text-[var(--fg-muted)] hover:text-violet-400"
         }`}
         aria-label="Analytics"
       >

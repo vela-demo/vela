@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { z, ZodError } from "zod";
-import { validationError } from "@poolx/types";
+import { validationError } from "@vela/types";
 import { sanitizeObject, CONTROL_CHAR_REGEX } from "../codec.js";
 
 type ValidationTarget = "body" | "query" | "params";

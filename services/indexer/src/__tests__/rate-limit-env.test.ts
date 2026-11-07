@@ -1,7 +1,7 @@
 /**
  * Deployment-time validation of the shared rate-limit store.
  *
- * Covers the shared helper in @poolx/types plus the indexer's own startup
+ * Covers the shared helper in @vela/types plus the indexer's own startup
  * path, which is where the requirement actually bites.
  */
 
@@ -9,7 +9,7 @@ import {
   RateLimitConfigError,
   inMemoryRateLimitWarning,
   resolveRateLimitEnv,
-} from "@poolx/types/src/rate-limit-env";
+} from "@vela/types/src/rate-limit-env";
 import { loadConfig } from "../config";
 
 describe("resolveRateLimitEnv", () => {
@@ -95,7 +95,7 @@ describe("resolveRateLimitEnv", () => {
 
 describe("indexer loadConfig", () => {
   const REQUIRED = {
-    DATABASE_URL: "postgresql://poolx:poolx@localhost:5432/poolx",
+    DATABASE_URL: "postgresql://vela:vela@localhost:5432/vela",
     STELLAR_RPC_URL: "https://soroban-testnet.stellar.org",
     CONTRACT_ID: "CTEST",
     START_LEDGER: "1",

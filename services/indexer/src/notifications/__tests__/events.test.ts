@@ -73,7 +73,7 @@ describe("notification event projector", () => {
         data: expect.objectContaining({
           type: "TIP_RECEIVED",
           postId: "42",
-          deepLink: "poolx://post/42",
+          deepLink: "vela://post/42",
         }),
       })
     );
@@ -100,7 +100,7 @@ describe("notification event projector", () => {
         to: "ExpoPushToken[token-2]",
         data: expect.objectContaining({
           type: "NEW_FOLLOWER",
-          deepLink: "poolx://profile/GFOLLOWER",
+          deepLink: "vela://profile/GFOLLOWER",
         }),
       })
     );

@@ -56,8 +56,8 @@ function installFakeWalletKit(
   const { signedXdr = SIGNED_XDR, failSign = false } = opts;
 
   (
-    globalThis as { __POOLX_WALLET_KIT__?: unknown }
-  ).__POOLX_WALLET_KIT__ = {
+    globalThis as { __VELA_WALLET_KIT__?: unknown }
+  ).__VELA_WALLET_KIT__ = {
     signTransaction: jest.fn(async () => {
       if (failSign) throw new Error("User rejected signing");
       return { signedTxXdr: signedXdr };
@@ -66,7 +66,7 @@ function installFakeWalletKit(
 }
 
 function clearFakeWalletKit() {
-  delete (globalThis as { __POOLX_WALLET_KIT__?: unknown }).__POOLX_WALLET_KIT__;
+  delete (globalThis as { __VELA_WALLET_KIT__?: unknown }).__VELA_WALLET_KIT__;
 }
 
 /**

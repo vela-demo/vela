@@ -61,7 +61,7 @@ export function PostForm({ onSubmit, disabled = false }: PostFormProps) {
           className={`w-full rounded-lg border px-3 py-2 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-violet-500 disabled:opacity-50 ${
             error ? 'border-red-500' : 'border-gray-300'
           }`}
-          placeholder="Share something with the PoolX community…"
+          placeholder="Share something with the Vela community…"
         />
         <div className="flex items-center justify-between">
           <FieldError id="post-content-error" message={error} />

@@ -94,9 +94,9 @@ proptest! {
         env.mock_all_auths();
         env.ledger().set_timestamp(500);
 
-        let contract_id = env.register(poolx_contracts::PoolXContract, ());
-        use poolx_contracts::PoolXContractClient;
-        let client = PoolXContractClient::new(&env, &contract_id);
+        let contract_id = env.register(vela_contracts::VelaContract, ());
+        use vela_contracts::VelaContractClient;
+        let client = VelaContractClient::new(&env, &contract_id);
         let admin = Address::generate(&env);
         let treasury = Address::generate(&env);
         client.initialize(&admin, &treasury, &0);

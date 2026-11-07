@@ -1,5 +1,5 @@
 /**
- * Tests for PoolXClient token factory methods:
+ * Tests for VelaClient token factory methods:
  *   - deployCreatorToken
  *   - setProfileWithNewToken
  *   - simulateDeployCreatorToken
@@ -8,7 +8,7 @@
  * intercepted; no network access required.
  */
 
-import { PoolXClient } from "../client";
+import { VelaClient } from "../client";
 
 const mockCall = jest.fn();
 const mockAddOperation = jest.fn();
@@ -52,14 +52,14 @@ const addr = (s: string) => expect.objectContaining({ _val: s });
 const val = (v: unknown) => expect.objectContaining({ _val: v });
 
 function makeClient() {
-  return new PoolXClient({
+  return new VelaClient({
     contractId: CONTRACT_ID,
     rpcUrl: "https://dummy.example.com",
     tokenFactoryId: FACTORY_ID,
   });
 }
 
-describe("PoolXClient — token factory methods", () => {
+describe("VelaClient — token factory methods", () => {
   beforeEach(() => {
     jest.clearAllMocks();
     mockAddOperation.mockReturnValue({ setTimeout: mockSetTimeout });
@@ -100,7 +100,7 @@ describe("PoolXClient — token factory methods", () => {
     });
 
     it("throws if tokenFactoryId is not configured", () => {
-      const client = new PoolXClient({
+      const client = new VelaClient({
         contractId: CONTRACT_ID,
         rpcUrl: "https://dummy.example.com",
         // tokenFactoryId intentionally omitted
@@ -178,7 +178,7 @@ describe("PoolXClient — token factory methods", () => {
     });
 
     it("throws if tokenFactoryId is not configured", async () => {
-      const client = new PoolXClient({
+      const client = new VelaClient({
         contractId: CONTRACT_ID,
         rpcUrl: "https://dummy.example.com",
       });
@@ -252,7 +252,7 @@ describe("PoolXClient — token factory methods", () => {
     });
 
     it("throws if tokenFactoryId is not configured", async () => {
-      const client = new PoolXClient({
+      const client = new VelaClient({
         contractId: CONTRACT_ID,
         rpcUrl: "https://dummy.example.com",
       });

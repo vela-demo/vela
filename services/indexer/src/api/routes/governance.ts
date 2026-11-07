@@ -1,8 +1,8 @@
 import { Router, Request, Response } from "express";
 import { Database } from "../../db";
 import { validateQuery } from "../../middleware/validate";
-import { offsetPaginationSchema } from "@poolx/types/src/schemas";
-import { internalError } from "@poolx/types/src/errors";
+import { offsetPaginationSchema } from "@vela/types/src/schemas";
+import { internalError } from "@vela/types/src/errors";
 
 export function createGovernanceRouter(db: Database): Router {
   const router = Router();

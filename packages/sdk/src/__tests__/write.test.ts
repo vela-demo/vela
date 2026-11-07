@@ -1,5 +1,5 @@
 import { Account } from "@stellar/stellar-base";
-import { PoolXClient } from "../client";
+import { VelaClient } from "../client";
 import { InvalidInputError, ValidationError } from "../errors";
 
 const mockCall = jest.fn();
@@ -40,12 +40,12 @@ jest.mock("@stellar/stellar-base", () => ({
 
 const XDR = "AAAAfakexdrbase64encodedstring";
 
-describe("PoolXClient write methods", () => {
-  let client: PoolXClient;
+describe("VelaClient write methods", () => {
+  let client: VelaClient;
 
   beforeEach(() => {
     jest.clearAllMocks();
-    client = new PoolXClient({ contractId: "CDUMMY", rpcUrl: "https://dummy.example.com" });
+    client = new VelaClient({ contractId: "CDUMMY", rpcUrl: "https://dummy.example.com" });
     mockAddOperation.mockReturnValue({ setTimeout: mockSetTimeout });
     mockSetTimeout.mockReturnValue({ build: mockBuild });
     mockBuild.mockReturnValue({ toEnvelope: mockToEnvelope });
@@ -256,11 +256,11 @@ describe("PoolXClient write methods", () => {
 });
 
 describe("prepare*Tx methods (Submittable)", () => {
-  let client: PoolXClient;
+  let client: VelaClient;
 
   beforeEach(() => {
     jest.clearAllMocks();
-    client = new PoolXClient({ contractId: "CDUMMY", rpcUrl: "https://dummy.example.com" });
+    client = new VelaClient({ contractId: "CDUMMY", rpcUrl: "https://dummy.example.com" });
     mockAddOperation.mockReturnValue({ setTimeout: mockSetTimeout });
     mockSetTimeout.mockReturnValue({ build: mockBuild });
     mockBuild.mockReturnValue({ toEnvelope: mockToEnvelope });

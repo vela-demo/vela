@@ -15,7 +15,7 @@ async function fetchFollowersPage(
   const ALL_FOLLOWERS: FollowUser[] = [
     { address: "GABCD1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ", username: "stellar_dev" },
     { address: "GXYZ9876543210ABCDEFGHIJKLMNOPQRSTUVWXYZ", username: "crypto_enthusiast" },
-    { address: "GDEF5678901234ABCDEFGHIJKLMNOPQRSTUVWXYZ", username: "poolx_fan" },
+    { address: "GDEF5678901234ABCDEFGHIJKLMNOPQRSTUVWXYZ", username: "vela_fan" },
     { address: "GHIJ1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ", username: "soroban_builder" },
     { address: "GKLM5678901234ABCDEFGHIJKLMNOPQRSTUVWXYZ", username: "defi_explorer" },
     { address: "GNOP1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ", username: "nft_collector" },

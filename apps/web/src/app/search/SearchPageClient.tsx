@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -176,11 +176,11 @@ export function SearchPageClient() {
       </div>
 
       <div className="mb-6 flex flex-col sm:flex-row sm:flex-wrap items-start sm:items-center justify-between gap-4">
-        <div className="flex rounded-lg border border-[var(--border)] bg-[var(--muted)] p-1">
+        <div className="flex rounded-lg border border-[var(--border)] bg-[var(--bg-subtle)] p-1">
           <button
             type="button"
             onClick={() => updateParams({ tab: "posts" })}
-            className={`rounded-md px-4 py-2 text-sm font-semibold ${activeTab === "posts" ? "bg-violet-600 text-white" : "text-[var(--text-muted)] hover:text-[var(--foreground)]"}`}
+            className={`rounded-md px-4 py-2 text-sm font-semibold ${activeTab === "posts" ? "bg-violet-600 text-white" : "text-[var(--fg-muted)] hover:text-[var(--fg)]"}`}
             aria-pressed={activeTab === "posts"}
           >
             Posts
@@ -188,7 +188,7 @@ export function SearchPageClient() {
           <button
             type="button"
             onClick={() => updateParams({ tab: "profiles" })}
-            className={`rounded-md px-4 py-2 text-sm font-semibold ${activeTab === "profiles" ? "bg-violet-600 text-white" : "text-[var(--text-muted)] hover:text-[var(--foreground)]"}`}
+            className={`rounded-md px-4 py-2 text-sm font-semibold ${activeTab === "profiles" ? "bg-violet-600 text-white" : "text-[var(--fg-muted)] hover:text-[var(--fg)]"}`}
             aria-pressed={activeTab === "profiles"}
           >
             Profiles
@@ -197,34 +197,34 @@ export function SearchPageClient() {
 
         {activeTab === "posts" && (
           <div className="flex flex-col sm:flex-row flex-wrap items-start sm:items-center gap-3 w-full sm:w-auto">
-            <label className="text-sm text-[var(--text-muted)]">
+            <label className="text-sm text-[var(--fg-muted)]">
               Sort
               <select
                 value={sort}
                 onChange={(event) => updateParams({ sort: event.target.value })}
-                className="ml-2 rounded-lg border border-[var(--border)] bg-[var(--muted)] px-3 py-2 text-[var(--foreground)]"
+                className="ml-2 rounded-lg border border-[var(--border)] bg-[var(--bg-subtle)] px-3 py-2 text-[var(--fg)]"
               >
                 <option value="relevance">Relevance</option>
                 <option value="recent">Recent</option>
                 <option value="most_tipped">Most Tipped</option>
               </select>
             </label>
-            <label className="text-sm text-[var(--text-muted)]">
+            <label className="text-sm text-[var(--fg-muted)]">
               From
               <input
                 type="date"
                 value={from}
                 onChange={(event) => updateParams({ from: event.target.value })}
-                className="ml-2 rounded-lg border border-[var(--border)] bg-[var(--muted)] px-3 py-2 text-[var(--foreground)]"
+                className="ml-2 rounded-lg border border-[var(--border)] bg-[var(--bg-subtle)] px-3 py-2 text-[var(--fg)]"
               />
             </label>
-            <label className="text-sm text-[var(--text-muted)]">
+            <label className="text-sm text-[var(--fg-muted)]">
               To
               <input
                 type="date"
                 value={to}
                 onChange={(event) => updateParams({ to: event.target.value })}
-                className="ml-2 rounded-lg border border-[var(--border)] bg-[var(--muted)] px-3 py-2 text-[var(--foreground)]"
+                className="ml-2 rounded-lg border border-[var(--border)] bg-[var(--bg-subtle)] px-3 py-2 text-[var(--fg)]"
               />
             </label>
           </div>
@@ -241,7 +241,7 @@ export function SearchPageClient() {
       )}
 
       {!hasQuery && (
-        <div className="rounded-lg border border-[var(--border)] bg-[var(--muted)] p-8 text-center text-[var(--text-muted)]">
+        <div className="rounded-lg border border-[var(--border)] bg-[var(--bg-subtle)] p-8 text-center text-[var(--fg-muted)]">
           Enter a search term to find posts and profiles.
         </div>
       )}
@@ -254,7 +254,7 @@ export function SearchPageClient() {
             hasPostResults &&
             visiblePosts.map((post) => <PostCard key={post.id} post={post} query={query} />)}
           {!loading && !error && !hasPostResults && (
-            <div className="rounded-lg border border-[var(--border)] bg-[var(--muted)] p-8 text-center text-[var(--text-muted)]">
+            <div className="rounded-lg border border-[var(--border)] bg-[var(--bg-subtle)] p-8 text-center text-[var(--fg-muted)]">
               No posts found for &quot;{query}&quot;.
             </div>
           )}
@@ -264,7 +264,7 @@ export function SearchPageClient() {
       {hasQuery && activeTab === "profiles" && (
         <div className="space-y-4" aria-live="polite">
           {loading && (
-            <div className="rounded-lg border border-[var(--border)] bg-[var(--muted)] p-8 text-center text-[var(--text-muted)]">
+            <div className="rounded-lg border border-[var(--border)] bg-[var(--bg-subtle)] p-8 text-center text-[var(--fg-muted)]">
               Loading profiles...
             </div>
           )}
@@ -273,7 +273,7 @@ export function SearchPageClient() {
             hasProfileResults &&
             profiles.map((profile) => <ProfileCard key={profile.address} profile={profile} />)}
           {!loading && !error && !hasProfileResults && (
-            <div className="rounded-lg border border-[var(--border)] bg-[var(--muted)] p-8 text-center text-[var(--text-muted)]">
+            <div className="rounded-lg border border-[var(--border)] bg-[var(--bg-subtle)] p-8 text-center text-[var(--fg-muted)]">
               No profiles found for &quot;{query}&quot;.
             </div>
           )}

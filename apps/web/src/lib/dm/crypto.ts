@@ -4,8 +4,8 @@
  * DM crypto helpers for apps/web.
  *
  * Re-exports the canonical X25519 + HKDF + ChaCha20-Poly1305 functions from
- * the poolx-sdk so both the web app and the SDK stay on the same wire format.
- * The webpack alias in next.config.mjs maps `poolx-sdk` → the SDK TypeScript
+ * the vela-sdk so both the web app and the SDK stay on the same wire format.
+ * The webpack alias in next.config.mjs maps `vela-sdk` → the SDK TypeScript
  * source so no pre-built dist/ is required.
  */
 
@@ -15,9 +15,9 @@ export {
   decryptDirectMessage,
   createConversationId,
   DecryptionError,
-} from "poolx-sdk";
+} from "vela-sdk";
 
-export type { DmKeyPair } from "poolx-sdk";
+export type { DmKeyPair } from "vela-sdk";
 
 // ── Browser-safe byte utilities ───────────────────────────────────────────────
 

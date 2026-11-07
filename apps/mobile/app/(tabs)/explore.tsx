@@ -189,7 +189,7 @@ export default function ExploreScreen() {
         ) : !hasQuery ? (
           <EmptyState
             icon="🔎"
-            title="Search PoolX"
+            title="Search Vela"
             subtitle="Find creators and community pools."
           />
         ) : !hasResults ? (

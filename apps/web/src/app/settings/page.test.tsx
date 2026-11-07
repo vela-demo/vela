@@ -165,7 +165,7 @@ describe("SettingsPage", () => {
         fireEvent.click(screen.getByRole("button", { name: "Dark" }));
       });
 
-      expect(localStorageMock.getItem("poolx_theme")).toBe("dark");
+      expect(localStorageMock.getItem("vela_theme")).toBe("dark");
       expect(document.documentElement.dataset.theme).toBe("dark");
     });
   });

@@ -1,5 +1,5 @@
 import { parseContractEvent as _parseContractEvent } from "../events/types.js";
-import { RawPoolXEvent as _RawPoolXEvent } from "../generated/events.js";
+import { RawVelaEvent as _RawVelaEvent } from "../generated/events.js";
 import { parseRawContractEvent as _parseRawContractEvent } from "../generated/events.js";
 
 describe("Event type drift", () => {

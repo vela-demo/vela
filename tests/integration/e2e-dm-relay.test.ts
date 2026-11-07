@@ -52,7 +52,7 @@ function addr(kp: { publicKey(): string }): string {
 // In tests compiled with ts-jest/commonjs, we use require().
 const dmCrypto: any = (() => {
   try {
-    return require("@poolx/sdk").dm;
+    return require("@vela/sdk").dm;
   } catch {
     // Fallback inline import path
     return null;
@@ -72,7 +72,7 @@ describe("DM Relay E2E", () => {
     let bobDmKeypair: { publicKey: Uint8Array; privateKey: Uint8Array };
 
     try {
-      const { generateDmKeypair } = require("@poolx/sdk");
+      const { generateDmKeypair } = require("@vela/sdk");
       aliceDmKeypair = generateDmKeypair();
       bobDmKeypair = generateDmKeypair();
       console.log("  ✓ X25519 keypairs generated");
@@ -136,7 +136,7 @@ describe("DM Relay E2E", () => {
     let conversationId: string;
 
     try {
-      const { encryptDirectMessage, createConversationId } = require("@poolx/sdk");
+      const { encryptDirectMessage, createConversationId } = require("@vela/sdk");
       ciphertext = encryptDirectMessage(
         aliceDmKeypair.privateKey,
         bobDmKeypair.publicKey,

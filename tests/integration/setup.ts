@@ -27,7 +27,7 @@ import {
 function sha256(data: Uint8Array): Uint8Array {
   return createHash("sha256").update(data).digest();
 }
-import { PoolXClient } from "@poolx/sdk";
+import { VelaClient } from "@vela/sdk";
 
 // Node 18+ has global fetch. Use it or fallback.
 const _fetch: typeof globalThis.fetch =
@@ -92,7 +92,7 @@ function getServer(rpcUrl = TEST_CONFIG.rpcUrl): StellarRpc.Server {
  * Submit a contract operation using the SDK: prepare (simulate), sign, submit,
  * and poll for confirmation.
  *
- * @param client   - PoolXClient (used for prepareTransaction).
+ * @param client   - VelaClient (used for prepareTransaction).
  * @param keypair  - Signing keypair for the source account.
  * @param method   - Contract method name (e.g. "set_profile", "create_post").
  * @param args     - ScVal-encoded arguments for the method.
@@ -100,7 +100,7 @@ function getServer(rpcUrl = TEST_CONFIG.rpcUrl): StellarRpc.Server {
  * @returns The transaction hash.
  */
 export async function submitContractTx(
-  client: PoolXClient,
+  client: VelaClient,
   keypair: Keypair,
   method: string,
   args: xdr.ScVal[],
@@ -232,12 +232,12 @@ async function pollForAccount(
 // ─── Contract deployment helpers (via stellar CLI) ────────────────────────────
 
 export function buildContractWasm(projectRoot: string = TEST_CONFIG.projectRoot): string {
-  const contractDir = path.join(projectRoot, "packages/contracts/contracts/poolx-contracts");
+  const contractDir = path.join(projectRoot, "packages/contracts/contracts/vela-contracts");
   console.log(`[setup] Building contract WASM in ${contractDir}...`);
 
   const result = spawnSync(
     "cargo",
-    ["build", "--target", "wasm32v1-none", "--release", "-p", "poolx-contracts"],
+    ["build", "--target", "wasm32v1-none", "--release", "-p", "vela-contracts"],
     { cwd: contractDir, stdio: "pipe", timeout: 120_000 }
   );
 
@@ -249,7 +249,7 @@ export function buildContractWasm(projectRoot: string = TEST_CONFIG.projectRoot)
   // not inside the crate directory.
   const wasmPath = path.join(
     projectRoot,
-    "packages/contracts/target/wasm32v1-none/release/poolx_contracts.wasm"
+    "packages/contracts/target/wasm32v1-none/release/vela_contracts.wasm"
   );
   console.log(`[setup] Contract WASM built at ${wasmPath}`);
   return wasmPath;
@@ -348,14 +348,14 @@ export function invokeContract(
 }
 
 /**
- * Create a PoolXClient for SDK operations.
+ * Create a VelaClient for SDK operations.
  */
 export function createSdkClient(
   contractId: string = TEST_CONFIG.contractId,
   rpcUrl: string = TEST_CONFIG.rpcUrl,
   networkPassphrase: string = TEST_CONFIG.networkPassphrase
-): PoolXClient {
-  return new PoolXClient({ contractId, rpcUrl, networkPassphrase });
+): VelaClient {
+  return new VelaClient({ contractId, rpcUrl, networkPassphrase });
 }
 
 // ─── Indexer polling helpers ──────────────────────────────────────────────────
@@ -521,7 +521,7 @@ export async function retry<T>(
 export async function bootstrap(): Promise<{
   accounts: TestAccounts;
   contracts: DeployedContracts;
-  sdk: PoolXClient;
+  sdk: VelaClient;
 }> {
   const projectRoot = TEST_CONFIG.projectRoot;
   const rpcUrl = TEST_CONFIG.rpcUrl;
@@ -590,7 +590,7 @@ export async function bootstrap(): Promise<{
   const { sequence: latestLedger } = await getServer().getLatestLedger();
   const startLedger = Math.max(2, latestLedger - 2);
   execSync(
-    `docker compose -p poolx-e2e -f "${composeFile}" up -d --no-deps --force-recreate indexer`,
+    `docker compose -p vela-e2e -f "${composeFile}" up -d --no-deps --force-recreate indexer`,
     {
       encoding: "utf-8",
       timeout: 180_000,

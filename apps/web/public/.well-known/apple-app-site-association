@@ -1,5 +1,5 @@
 /*
- * Apple App Site Association (AASA) file for poolx.social
+ * Apple App Site Association (AASA) file for vela.social
  *
  * Universal links are verified by iOS against this file. Before deploying
  * to production you MUST replace the placeholder Team ID below with your
@@ -13,13 +13,13 @@
  *      It is a 10-character alphanumeric string, e.g. "1A2B3C4D5E".
  *
  * Once you have the real Team ID, replace YOUR_APPLE_TEAM_ID below with
- * it so the appID reads: "REAL_TEAM_ID.social.poolx.app"
+ * it so the appID reads: "REAL_TEAM_ID.social.vela.app"
  */
 {
   "applinks": {
     "details": [
       {
-        "appIDs": ["YOUR_APPLE_TEAM_ID.social.poolx.app"],
+        "appIDs": ["YOUR_APPLE_TEAM_ID.social.vela.app"],
         "components": [
           { "/": "/post/*", "comment": "Post detail links" },
           { "/": "/profile/*", "comment": "Profile links" },

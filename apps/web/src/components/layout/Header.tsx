@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React, { useState } from "react";
 import Link from "next/link";
@@ -14,13 +14,13 @@ export function Header({ userAddress, onPostCreated }: HeaderProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-[var(--border)] bg-[var(--background)]/80 backdrop-blur-sm px-4 py-3">
+    <header className="sticky top-0 z-40 w-full border-b border-[var(--border)] bg-[var(--bg)]/80 backdrop-blur-sm px-4 py-3">
       <div className="mx-auto flex max-w-5xl items-center justify-between">
         <Link
           href="/"
           className="text-xl font-extrabold tracking-tight text-violet-500 hover:text-violet-400 transition-colors"
         >
-          PoolX
+          Vela
         </Link>
 
         <div className="flex items-center gap-3">

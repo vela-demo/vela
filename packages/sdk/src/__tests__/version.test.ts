@@ -1,4 +1,4 @@
-import { PoolXClient } from "../client.js";
+import { VelaClient } from "../client.js";
 import { VersionMismatchError } from "../errors.js";
 import { nativeToScVal } from "@stellar/stellar-base";
 
@@ -15,11 +15,11 @@ jest.mock("@stellar/stellar-sdk/rpc", () => {
 });
 
 describe("Issue #1362: SDK contract version capability check", () => {
-  let client: PoolXClient;
+  let client: VelaClient;
 
   beforeEach(() => {
     jest.clearAllMocks();
-    client = new PoolXClient({
+    client = new VelaClient({
       contractId: "CAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD2KM",
       rpcUrl: "https://rpc.example.com",
     });

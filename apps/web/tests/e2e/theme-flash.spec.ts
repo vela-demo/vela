@@ -13,7 +13,7 @@ test.describe("Theme FOUC prevention", () => {
   }) => {
     // Seed localStorage with a dark theme preference before navigating
     await page.addInitScript(() => {
-      localStorage.setItem("poolx_theme", "dark");
+      localStorage.setItem("vela_theme", "dark");
     });
 
     await page.goto("/");
@@ -26,7 +26,7 @@ test.describe("Theme FOUC prevention", () => {
 
   test("sets data-theme='light' on <html> when localStorage has light", async ({ page }) => {
     await page.addInitScript(() => {
-      localStorage.setItem("poolx_theme", "light");
+      localStorage.setItem("vela_theme", "light");
     });
 
     await page.goto("/");
@@ -38,7 +38,7 @@ test.describe("Theme FOUC prevention", () => {
   test("falls back to system preference when no stored theme", async ({ page }) => {
     // Ensure localStorage is empty
     await page.addInitScript(() => {
-      localStorage.removeItem("poolx_theme");
+      localStorage.removeItem("vela_theme");
     });
 
     await page.goto("/");
@@ -51,7 +51,7 @@ test.describe("Theme FOUC prevention", () => {
 
   test("never flashes light background for dark-theme users", async ({ page }) => {
     await page.addInitScript(() => {
-      localStorage.setItem("poolx_theme", "dark");
+      localStorage.setItem("vela_theme", "dark");
     });
 
     await page.goto("/");
@@ -69,7 +69,7 @@ test.describe("Theme FOUC prevention", () => {
 
   test("ThemeContext initializes with correct theme from the start", async ({ page }) => {
     await page.addInitScript(() => {
-      localStorage.setItem("poolx_theme", "dark");
+      localStorage.setItem("vela_theme", "dark");
     });
 
     await page.goto("/");

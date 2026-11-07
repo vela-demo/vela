@@ -31,7 +31,7 @@ const RESERVED_WORDS: &[&str] = &[
     "app",
     "web",
     "mobile",
-    "poolx",
+    "vela",
 ];
 
 #[macro_export]

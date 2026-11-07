@@ -7,7 +7,7 @@ import {
   unauthorizedError,
   forbiddenError,
   internalError,
-} from "@poolx/types/src/errors";
+} from "@vela/types/src/errors";
 
 export function messageAuthMiddleware(authService: AuthService) {
   return (req: Request, res: Response, next: NextFunction): void => {

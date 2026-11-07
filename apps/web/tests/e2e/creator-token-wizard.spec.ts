@@ -46,9 +46,9 @@ test.describe("Creator Token Wizard", () => {
     // Inject a connected wallet AND a stored creator token key so the guard fires.
     await page.addInitScript(
       ({ addr, token }) => {
-        localStorage.setItem("poolx_wallet_address", addr);
-        localStorage.setItem("poolx_wallet_network", "TESTNET");
-        localStorage.setItem(`poolx:creator_token:${addr}`, token);
+        localStorage.setItem("vela_wallet_address", addr);
+        localStorage.setItem("vela_wallet_network", "TESTNET");
+        localStorage.setItem(`vela:creator_token:${addr}`, token);
       },
       { addr: WALLET_ADDRESS, token: "CTOKEN_ALREADY_SET" }
     );
@@ -61,7 +61,7 @@ test.describe("Creator Token Wizard", () => {
 
   test("step 1: fills token details and advances to step 2", async ({ page }) => {
     await page.addInitScript((addr) => {
-      localStorage.setItem("poolx_wallet_address", addr);
+      localStorage.setItem("vela_wallet_address", addr);
     }, WALLET_ADDRESS);
 
     await page.goto("/onboarding/creator");
@@ -90,7 +90,7 @@ test.describe("Creator Token Wizard", () => {
 
   test("step 2: shows token summary and fee estimate", async ({ page }) => {
     await page.addInitScript((addr) => {
-      localStorage.setItem("poolx_wallet_address", addr);
+      localStorage.setItem("vela_wallet_address", addr);
     }, WALLET_ADDRESS);
 
     await page.goto("/onboarding/creator");
@@ -122,7 +122,7 @@ test.describe("Creator Token Wizard", () => {
 
   test("step 2: back button returns to step 1 with values preserved", async ({ page }) => {
     await page.addInitScript((addr) => {
-      localStorage.setItem("poolx_wallet_address", addr);
+      localStorage.setItem("vela_wallet_address", addr);
     }, WALLET_ADDRESS);
 
     await page.goto("/onboarding/creator");
@@ -145,7 +145,7 @@ test.describe("Creator Token Wizard", () => {
 
   test("step 3: deploy form requires username before deploying", async ({ page }) => {
     await page.addInitScript((addr) => {
-      localStorage.setItem("poolx_wallet_address", addr);
+      localStorage.setItem("vela_wallet_address", addr);
     }, WALLET_ADDRESS);
 
     await page.goto("/onboarding/creator");
@@ -171,7 +171,7 @@ test.describe("Creator Token Wizard", () => {
   test("full wizard: step 1 → 2 → 3 renders correctly with mocked wallet", async ({ page }) => {
     await page.addInitScript(
       ({ wallet, token, factory }) => {
-        localStorage.setItem("poolx_wallet_address", wallet);
+        localStorage.setItem("vela_wallet_address", wallet);
         (window as unknown as Record<string, unknown>).__testMocks = {
           tokenAddress: token,
           factoryId: factory,
@@ -200,7 +200,7 @@ test.describe("Creator Token Wizard", () => {
 
     // ── Step 3 ──
     await expect(page.getByTestId("step-deploy")).toBeVisible();
-    await page.getByTestId("deploy-username").fill("alice_poolx");
+    await page.getByTestId("deploy-username").fill("alice_vela");
 
     // Verify both action buttons are accessible.
     await expect(page.getByTestId("step3-deploy")).toBeEnabled();

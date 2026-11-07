@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { PoolXClient } from "poolx-sdk";
+import { VelaClient } from "vela-sdk";
 import { validateStellarAddress } from "@/lib/validate";
 import {
   BLOCKED_EVENT,
@@ -67,7 +67,7 @@ export function BlockListSection({ address }: BlockListSectionProps) {
     const { signTransaction } = await import("@stellar/freighter-api");
     const { rpc: rpcModule, Transaction } = await import("@stellar/stellar-sdk");
 
-    const client = new PoolXClient({
+    const client = new VelaClient({
       contractId: process.env.NEXT_PUBLIC_CONTRACT_ID || "",
       rpcUrl: process.env.NEXT_PUBLIC_RPC_URL || "https://soroban-testnet.stellar.org",
     });

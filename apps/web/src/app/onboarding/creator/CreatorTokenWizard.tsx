@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useReducer } from "react";
 import { useRouter } from "next/navigation";
@@ -68,7 +68,7 @@ export function CreatorTokenWizard() {
   // Guard: if the user already has a creator token, redirect to their profile.
   useEffect(() => {
     if (typeof window === "undefined" || !address) return;
-    const storedCreatorToken = localStorage.getItem(`poolx:creator_token:${address}`);
+    const storedCreatorToken = localStorage.getItem(`vela:creator_token:${address}`);
     if (storedCreatorToken && storedCreatorToken !== address) {
       router.replace(`/profile/${address}`);
       return;
@@ -88,7 +88,7 @@ export function CreatorTokenWizard() {
     return (
       <div className="min-h-screen flex items-center justify-center px-4">
         <div className="text-center">
-          <p className="text-[var(--text-muted)] mb-4">
+          <p className="text-[var(--fg-muted)] mb-4">
             Connect your wallet to launch a creator token.
           </p>
           <a href="/" className="btn-primary" style={{ width: "auto", display: "inline-flex" }}>
@@ -106,8 +106,8 @@ export function CreatorTokenWizard() {
         <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight mb-2">
           Launch Your <span className="text-violet-500">Creator Token</span>
         </h1>
-        <p className="text-[var(--text-muted)] max-w-md mx-auto text-sm">
-          Deploy a SEP-41 token on Stellar and link it to your PoolX profile.
+        <p className="text-[var(--fg-muted)] max-w-md mx-auto text-sm">
+          Deploy a SEP-41 token on Stellar and link it to your Vela profile.
         </p>
       </div>
 
@@ -115,7 +115,7 @@ export function CreatorTokenWizard() {
       <WizardStepIndicator current={state.step} />
 
       {/* Step card */}
-      <div className="w-full max-w-md bg-[var(--muted)] border border-[var(--border)] rounded-2xl p-8 shadow-xl">
+      <div className="w-full max-w-md bg-[var(--bg-subtle)] border border-[var(--border)] rounded-2xl p-8 shadow-xl">
         {state.step === 1 && (
           <StepTokenDetails
             initial={state.tokenParams}
@@ -171,7 +171,7 @@ function WizardStepIndicator({ current }: { current: WizardStep }) {
                   ? "bg-violet-500 text-white"
                   : active
                     ? "bg-violet-600 text-white ring-2 ring-violet-400 ring-offset-2 ring-offset-[var(--muted)]"
-                    : "bg-[var(--border)] text-[var(--text-muted)]",
+                    : "bg-[var(--border)] text-[var(--fg-muted)]",
               ].join(" ")}
             >
               {done ? "✓" : step}
@@ -179,7 +179,7 @@ function WizardStepIndicator({ current }: { current: WizardStep }) {
             <span
               className={[
                 "text-xs hidden sm:inline",
-                active ? "text-white font-medium" : "text-[var(--text-muted)]",
+                active ? "text-white font-medium" : "text-[var(--fg-muted)]",
               ].join(" ")}
             >
               {label}

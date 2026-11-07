@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { ProfileForm, ProfileFormValues } from "@/components/forms/ProfileForm";
-import { PoolXClient } from "poolx-sdk";
+import { VelaClient } from "vela-sdk";
 
 interface ProfileSectionProps {
   address: string;
@@ -17,7 +17,7 @@ export function ProfileSection({ address }: ProfileSectionProps) {
   useEffect(() => {
     async function loadProfile() {
       try {
-        const client = new PoolXClient({
+        const client = new VelaClient({
           contractId: process.env.NEXT_PUBLIC_CONTRACT_ID || "",
           rpcUrl: process.env.NEXT_PUBLIC_RPC_URL || "https://soroban-testnet.stellar.org",
         });
@@ -43,7 +43,7 @@ export function ProfileSection({ address }: ProfileSectionProps) {
       const { signTransaction } = await import("@stellar/freighter-api");
       const { rpc: rpcModule, Transaction } = await import("@stellar/stellar-sdk");
 
-      const client = new PoolXClient({
+      const client = new VelaClient({
         contractId: process.env.NEXT_PUBLIC_CONTRACT_ID || "",
         rpcUrl: process.env.NEXT_PUBLIC_RPC_URL || "https://soroban-testnet.stellar.org",
       });

@@ -21,7 +21,7 @@ export function useOnboardingProfile() {
 
   // Load draft from localStorage
   useEffect(() => {
-    const stored = localStorage.getItem("poolx_profile_draft");
+    const stored = localStorage.getItem("vela_profile_draft");
     if (stored) {
       try {
         setDraft(JSON.parse(stored));
@@ -37,7 +37,7 @@ export function useOnboardingProfile() {
   const saveDraft = useCallback((data: Partial<ProfileDraft>) => {
     const newDraft = { ...draft, ...data } as ProfileDraft;
     setDraft(newDraft);
-    localStorage.setItem("poolx_profile_draft", JSON.stringify(newDraft));
+    localStorage.setItem("vela_profile_draft", JSON.stringify(newDraft));
   }, [draft]);
 
   /**
@@ -58,7 +58,7 @@ export function useOnboardingProfile() {
       await new Promise(resolve => setTimeout(resolve, 1000));
 
       // Clear draft on success
-      localStorage.removeItem("poolx_profile_draft");
+      localStorage.removeItem("vela_profile_draft");
       setDraft(null);
 
       return true;
@@ -74,7 +74,7 @@ export function useOnboardingProfile() {
    * Clear profile draft
    */
   const clearDraft = useCallback(() => {
-    localStorage.removeItem("poolx_profile_draft");
+    localStorage.removeItem("vela_profile_draft");
     setDraft(null);
   }, []);
 

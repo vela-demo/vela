@@ -150,7 +150,7 @@ describe("handleFollow", () => {
       recipient: "GXYZ789",
       payload: {
         followerAddress: "GABC123",
-        deepLink: "poolx://profile/GABC123",
+        deepLink: "vela://profile/GABC123",
       },
     });
   });

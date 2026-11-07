@@ -1,7 +1,7 @@
 {
-  "name": "poolx-dm-relay",
+  "name": "vela-dm-relay",
   "version": "0.1.0",
-  "description": "DM relay service for PoolX - transport-only encrypted message relay",
+  "description": "DM relay service for Vela - transport-only encrypted message relay",
   "main": "dist/server.js",
   "scripts": {
     "dev": "tsx watch src/server.ts",
@@ -15,13 +15,13 @@
     "db:rollback": "tsx src/migrate.ts rollback"
   },
   "keywords": [
-    "poolx",
+    "vela",
     "dm",
     "relay",
     "encryption",
     "stellar"
   ],
-  "author": "PoolX Contributors",
+  "author": "Vela Contributors",
   "license": "MIT",
   "dependencies": {
     "@noble/hashes": "^1.8.0",
@@ -37,7 +37,7 @@
     "pg": "^8.11.3",
     "pino": "^8.21.0",
     "ws": "^8.18.0",
-    "@poolx/types": "workspace:*",
+    "@vela/types": "workspace:*",
     "zod": "^3.22.4"
   },
   "devDependencies": {

@@ -1,5 +1,5 @@
 {
-  "name": "poolx-socials",
+  "name": "vela-socials",
   "private": true,
   "scripts": {
     "dev": "turbo run dev",
@@ -9,7 +9,7 @@
     "lint": "turbo run lint",
     "test": "turbo run test",
     "test:integration": "pnpm --filter contracts test:integration",
-    "codegen": "pnpm build:contracts && pnpm --filter @poolx/codegen generate",
+    "codegen": "pnpm build:contracts && pnpm --filter @vela/codegen generate",
     "codegen:check": "pnpm codegen && git diff --exit-code packages/sdk/src/generated/ packages/sdk/src/events/types.ts",
     "typecheck": "turbo run typecheck",
     "format": "turbo run format",

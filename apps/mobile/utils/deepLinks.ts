@@ -16,9 +16,9 @@ export type DeepLinkRoute =
       path: `/dm/${string}`;
     };
 
-const POOLX_SCHEME = "poolx:";
-const POOLX_PREFIX = "poolx://";
-const UNIVERSAL_LINK_PREFIXES = ["https://poolx.social/", "https://www.poolx.social/"];
+const VELA_SCHEME = "vela:";
+const VELA_PREFIX = "vela://";
+const UNIVERSAL_LINK_PREFIXES = ["https://vela.social/", "https://www.vela.social/"];
 const ID_PATTERN = /^[A-Za-z0-9_-]{1,128}$/;
 const STELLAR_PUBLIC_KEY_PATTERN = /^G[A-Z2-7]{55}$/;
 
@@ -33,8 +33,8 @@ function safeDecode(value: string): string | null {
 function getDeepLinkSegments(value: string): Array<string | null> | null {
   const trimmed = value.trim();
 
-  if (trimmed.startsWith(POOLX_PREFIX)) {
-    const withoutScheme = trimmed.slice(POOLX_PREFIX.length);
+  if (trimmed.startsWith(VELA_PREFIX)) {
+    const withoutScheme = trimmed.slice(VELA_PREFIX.length);
     const pathEndIndex = withoutScheme.search(/[?#]/);
     const rawPath = pathEndIndex === -1 ? withoutScheme : withoutScheme.slice(0, pathEndIndex);
     const path = rawPath.startsWith("/") ? rawPath.slice(1) : rawPath;
@@ -75,7 +75,7 @@ function isValidProfileAddress(value: string): boolean {
 }
 
 export function parseDeepLink(value: string): DeepLinkRoute | null {
-  if (!value.startsWith(POOLX_SCHEME) && !value.startsWith("https://")) {
+  if (!value.startsWith(VELA_SCHEME) && !value.startsWith("https://")) {
     return null;
   }
 

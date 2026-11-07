@@ -2,8 +2,8 @@ import { Router, Request, Response } from "express";
 import { Database } from "../../db";
 import { validateParams } from "../../middleware/validate";
 import { z } from "zod";
-import { stellarAddressSchema } from "@poolx/types/src/schemas";
-import { notFoundError } from "@poolx/types/src/errors";
+import { stellarAddressSchema } from "@vela/types/src/schemas";
+import { notFoundError } from "@vela/types/src/errors";
 
 const getProfileParamsSchema = z.object({
   address: stellarAddressSchema,

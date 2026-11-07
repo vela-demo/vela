@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { Keypair } from "@stellar/stellar-sdk";
 import { createHash } from "crypto";
-import { buildAuthMessage, canonicalizeAuthPath } from "@poolx/types/src/auth";
+import { buildAuthMessage, canonicalizeAuthPath } from "@vela/types/src/auth";
 import { logger } from "../logger";
 import "./rawBody";
 

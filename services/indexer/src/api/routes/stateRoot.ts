@@ -3,7 +3,7 @@ import { Pool as PgPool } from "pg";
 import { getStateRoot } from "../../stateRoot";
 import { validateQuery } from "../../middleware/validate";
 import { z } from "zod";
-import { notFoundError } from "@poolx/types/src/errors";
+import { notFoundError } from "@vela/types/src/errors";
 
 const stateRootQuerySchema = z.object({
   ledger: z.coerce.number({

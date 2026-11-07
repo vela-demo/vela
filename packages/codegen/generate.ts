@@ -7,7 +7,7 @@ import { xdr } from "@stellar/stellar-sdk";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, "../..");
-const WASM = resolve(ROOT, "packages/contracts/contracts/poolx-contracts/poolx_contracts.wasm");
+const WASM = resolve(ROOT, "packages/contracts/contracts/vela-contracts/vela_contracts.wasm");
 const OUT_DIR = resolve(ROOT, "packages/sdk/src/generated");
 
 // ── Soroban-to-TypeScript type mappings ───────────────────────────────────
@@ -300,7 +300,7 @@ function generateClient(
   );
 
   // Client class
-  lines.push("export class GeneratedPoolXClient {");
+  lines.push("export class GeneratedVelaClient {");
   lines.push("  private contractId: string;");
   lines.push("  private rpcUrl: string;");
   lines.push("  private networkPassphrase: string;");
@@ -513,7 +513,7 @@ function generateEvents(events: EventType[], structs: StructType[], enums: EnumT
 
   lines.push("// ── Event parser ─────────────────────────────────────────────");
   lines.push("");
-  lines.push("export type PoolXEvent =");
+  lines.push("export type VelaEvent =");
   for (const ev of events) {
     lines.push(`  | { type: "${ev.name}"; } & ${ev.name}`);
   }
@@ -523,13 +523,13 @@ function generateEvents(events: EventType[], structs: StructType[], enums: EnumT
 
   // Parser function
   lines.push("/**");
-  lines.push(" * Parse a Soroban contract event into a typed PoolXEvent.");
+  lines.push(" * Parse a Soroban contract event into a typed VelaEvent.");
   lines.push(" * The event name in topics[0] is matched against known event types.");
   lines.push(" * Topic fields are read from topics[1..N], and data fields from the event value.");
   lines.push(" */");
   lines.push("export function parseContractEvent(");
   lines.push("  event: rpc.Api.Event,");
-  lines.push("): PoolXEvent | null {");
+  lines.push("): VelaEvent | null {");
   lines.push("  if (!event.topic || event.topic.length < 1) return null;");
   lines.push("  const topic0 = event.topic[0];");
   lines.push("  const eventType = scValToNative(topic0);");

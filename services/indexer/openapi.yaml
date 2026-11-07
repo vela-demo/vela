@@ -1,8 +1,8 @@
 openapi: "3.1.0"
 info:
-  title: PoolX Indexer API
+  title: Vela Indexer API
   version: "0.1.0"
-  description: REST API for querying indexed on-chain data from the PoolX protocol.
+  description: REST API for querying indexed on-chain data from the Vela protocol.
 
 servers:
   - url: http://localhost:3001/api

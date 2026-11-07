@@ -2,7 +2,7 @@ import { Router, Request, Response } from "express";
 import { Database } from "../../db";
 import { validateQuery } from "../../middleware/validate";
 import { z } from "zod";
-import { offsetPaginationSchema } from "@poolx/types/src/schemas";
+import { offsetPaginationSchema } from "@vela/types/src/schemas";
 
 const searchPostsQuerySchema = offsetPaginationSchema
   .extend({

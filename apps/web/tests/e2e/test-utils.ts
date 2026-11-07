@@ -4,12 +4,12 @@ const MOCK_ADDRESS = "GAAZI4TCR3TY5OJHCTJC2A4QSY6CJWJH5IAJTGKIN2ER7LBNVKOCCWN";
 
 export async function injectWalletMock(page: Page): Promise<void> {
   await page.addInitScript((address) => {
-    window.localStorage.setItem("poolx_guided_tour_dismissed", "true");
+    window.localStorage.setItem("vela_guided_tour_dismissed", "true");
     // Mark onboarding as complete so the OnboardingGuard never redirects
     // connected test wallets to /onboarding (which covers the whole page and
     // blocks clicks on the search suggestions dropdown).
     window.localStorage.setItem(
-      "poolx_onboarding_state",
+      "vela_onboarding_state",
       JSON.stringify({
         isComplete: true,
         currentStep: 5,
@@ -23,9 +23,9 @@ export async function injectWalletMock(page: Page): Promise<void> {
         skipped: true,
       })
     );
-    window.localStorage.setItem("poolx_wallet_public_key", address);
-    window.localStorage.setItem("poolx_wallet_address", address);
-    window.localStorage.setItem("poolx_wallet_network", "TESTNET");
+    window.localStorage.setItem("vela_wallet_public_key", address);
+    window.localStorage.setItem("vela_wallet_address", address);
+    window.localStorage.setItem("vela_wallet_network", "TESTNET");
     (window as Window & { freighterApi?: unknown; freighter?: unknown }).freighterApi = {
       getPublicKey: () => Promise.resolve(address),
       isConnected: () => Promise.resolve(true),
@@ -40,7 +40,7 @@ export async function injectWalletMock(page: Page): Promise<void> {
 
 export async function waitForWalletConnection(page: Page, timeout = 15000): Promise<string> {
   const initialStored = await page.evaluate(() =>
-    localStorage.getItem("poolx_wallet_public_key")
+    localStorage.getItem("vela_wallet_public_key")
   );
   if (initialStored) return initialStored;
 
@@ -51,7 +51,7 @@ export async function waitForWalletConnection(page: Page, timeout = 15000): Prom
   }
 
   const storedAddress = await page.evaluate(() =>
-    localStorage.getItem("poolx_wallet_public_key")
+    localStorage.getItem("vela_wallet_public_key")
   );
   if (storedAddress) return storedAddress;
 

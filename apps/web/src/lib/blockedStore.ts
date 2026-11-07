@@ -4,15 +4,15 @@
  * Shared, event-driven store for the user's blocked-accounts list.
  *
  * Backed by localStorage so the list survives refreshes, and emits a
- * `poolx:blocked:changed` DOM event whenever the set changes so that any open
+ * `vela:blocked:changed` DOM event whenever the set changes so that any open
  * panel (settings block list, follow list, profile card) can refresh
  * immediately — fixing the stale block-list issue where a block/unblock from
  * one surface was not reflected in another until a manual page refresh.
  */
 
-export const BLOCKED_STORAGE_KEY = "poolx_blocked_accounts";
+export const BLOCKED_STORAGE_KEY = "vela_blocked_accounts";
 
-export const BLOCKED_EVENT = "poolx:blocked:changed";
+export const BLOCKED_EVENT = "vela:blocked:changed";
 
 export function readBlockedList(): string[] {
   if (typeof window === "undefined") return [];

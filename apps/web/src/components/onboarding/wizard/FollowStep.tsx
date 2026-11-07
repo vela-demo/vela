@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React, { useState, useEffect } from "react";
 import { useWallet } from "@/hooks/useWallet";
@@ -81,7 +81,7 @@ export function FollowStep({ onNext, onBack, onSkip }: FollowStepProps) {
       console.log("Following creators:", follows);
 
       // Store locally for now
-      localStorage.setItem("poolx_initial_follows", JSON.stringify(follows));
+      localStorage.setItem("vela_initial_follows", JSON.stringify(follows));
 
       onNext();
     } catch (error) {
@@ -97,10 +97,10 @@ export function FollowStep({ onNext, onBack, onSkip }: FollowStepProps) {
       <div className="mb-8 text-center">
         <div className="text-6xl mb-4">🤝</div>
         <h2 className="text-3xl font-bold mb-2">Follow Creators</h2>
-        <p className="text-[var(--text-muted)]">
+        <p className="text-[var(--fg-muted)]">
           Build your feed by following interesting creators
         </p>
-        <p className="text-sm text-[var(--text-muted)] mt-2">
+        <p className="text-sm text-[var(--fg-muted)] mt-2">
           Selected: <span className="font-semibold text-violet-500">{selectedCreators.size}</span>
         </p>
       </div>
@@ -115,7 +115,7 @@ export function FollowStep({ onNext, onBack, onSkip }: FollowStepProps) {
               className={`p-4 rounded-lg border-2 transition-all text-left ${
                 isSelected
                   ? "border-violet-500 bg-violet-50 dark:bg-violet-950/30"
-                  : "border-[var(--border)] bg-[var(--muted)] hover:border-violet-300"
+                  : "border-[var(--border)] bg-[var(--bg-subtle)] hover:border-violet-300"
               }`}
             >
               <div className="flex items-start justify-between mb-2">
@@ -128,7 +128,7 @@ export function FollowStep({ onNext, onBack, onSkip }: FollowStepProps) {
                     <h3 className="font-semibold text-[var(--text)]">
                       @{creator.username}
                     </h3>
-                    <p className="text-xs text-[var(--text-muted)]">
+                    <p className="text-xs text-[var(--fg-muted)]">
                       {creator.followers.toLocaleString()} followers
                     </p>
                   </div>
@@ -156,7 +156,7 @@ export function FollowStep({ onNext, onBack, onSkip }: FollowStepProps) {
                   )}
                 </div>
               </div>
-              <p className="text-sm text-[var(--text-muted)] line-clamp-2">
+              <p className="text-sm text-[var(--fg-muted)] line-clamp-2">
                 {creator.bio}
               </p>
             </button>
@@ -169,7 +169,7 @@ export function FollowStep({ onNext, onBack, onSkip }: FollowStepProps) {
         <button
           type="button"
           onClick={onBack}
-          className="px-6 py-3 border border-[var(--border)] rounded-lg hover:bg-[var(--muted)] transition-colors"
+          className="px-6 py-3 border border-[var(--border)] rounded-lg hover:bg-[var(--bg-subtle)] transition-colors"
         >
           Back
         </button>
@@ -184,7 +184,7 @@ export function FollowStep({ onNext, onBack, onSkip }: FollowStepProps) {
         <button
           type="button"
           onClick={onSkip}
-          className="px-6 py-3 text-[var(--text-muted)] hover:text-[var(--text)] transition-colors"
+          className="px-6 py-3 text-[var(--fg-muted)] hover:text-[var(--text)] transition-colors"
         >
           Skip
         </button>

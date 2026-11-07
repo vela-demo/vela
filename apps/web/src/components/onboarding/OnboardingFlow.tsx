@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import { useOnboardingWallet } from "@/hooks/useWallet";
@@ -18,7 +18,7 @@ export function OnboardingFlow() {
   function renderStep() {
     switch (state) {
       case "loading":
-        return <p className="text-[var(--text-muted)] animate-pulse">Detecting wallet…</p>;
+        return <p className="text-[var(--fg-muted)] animate-pulse">Detecting wallet…</p>;
       case "not_installed":
         return <NotInstalledState />;
       case "not_connected":
@@ -45,9 +45,9 @@ export function OnboardingFlow() {
       <div className="text-center mb-10">
         <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight mb-3">
           Welcome to{" "}
-          <span className="text-violet-500">PoolX</span>
+          <span className="text-violet-500">Vela</span>
         </h1>
-        <p className="text-[var(--text-muted)] text-lg max-w-md mx-auto">
+        <p className="text-[var(--fg-muted)] text-lg max-w-md mx-auto">
           A decentralised social layer on Stellar. Connect your wallet to get started.
         </p>
       </div>
@@ -58,7 +58,7 @@ export function OnboardingFlow() {
       )}
 
       {/* State card */}
-      <div className="w-full max-w-sm bg-[var(--muted)] border border-[var(--border)] rounded-2xl p-8 shadow-xl">
+      <div className="w-full max-w-sm bg-[var(--bg-subtle)] border border-[var(--border)] rounded-2xl p-8 shadow-xl">
         {renderStep()}
       </div>
     </div>

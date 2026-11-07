@@ -64,7 +64,7 @@
  *                               deployments.
  */
 
-import { resolveRateLimitEnv } from "@poolx/types/src/rate-limit-env";
+import { resolveRateLimitEnv } from "@vela/types/src/rate-limit-env";
 
 function requireEnv(name: string): string {
   const value = process.env[name];

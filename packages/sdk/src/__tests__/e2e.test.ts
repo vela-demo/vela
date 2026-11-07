@@ -1,4 +1,4 @@
-import { PoolXClient } from "../client";
+import { VelaClient } from "../client";
 import { Keypair, Networks } from "@stellar/stellar-base";
 
 function isNetworkError(e: unknown): boolean {
@@ -9,12 +9,12 @@ function isNetworkError(e: unknown): boolean {
 }
 
 describe("SDK E2E Tests against Stellar Testnet", () => {
-  let client: PoolXClient;
+  let client: VelaClient;
 
   beforeAll(() => {
-    client = new PoolXClient({
+    client = new VelaClient({
       contractId:
-        process.env.POOLX_CONTRACT_ID ||
+        process.env.VELA_CONTRACT_ID ||
         "CDLDVFKHEZ2RVB3NG4UQA4VPD3TSHV6XMHXMHP2BSGCJ2IIWVTOHGDSG",
       rpcUrl: "https://soroban-testnet.stellar.org",
       networkPassphrase: Networks.TESTNET,

@@ -78,7 +78,7 @@ jest.mock("@/lib/tx", () => ({
 }));
 
 jest.mock("../../../../../packages/sdk/src/client", () => ({
-  PoolXClient: jest.fn(),
+  VelaClient: jest.fn(),
 }));
 
 describe("FeedPage websocket cleanup", () => {

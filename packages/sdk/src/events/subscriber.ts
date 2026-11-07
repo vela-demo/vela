@@ -1,12 +1,12 @@
 import { createDefaultCursorStore, CursorStore } from "./cursor.js";
-import { PoolXEvent, parseContractEvent, SorobanEvent } from "./types.js";
+import { VelaEvent, parseContractEvent, SorobanEvent } from "./types.js";
 import { fetchWithTimeout } from "../utils/fetch.js";
 
-export type PoolXEventHandlers = {
-  [T in PoolXEvent["type"]]?: (event: Extract<PoolXEvent, { type: T }>) => void | Promise<void>;
+export type VelaEventHandlers = {
+  [T in VelaEvent["type"]]?: (event: Extract<VelaEvent, { type: T }>) => void | Promise<void>;
 };
 
-export interface PoolXEventSubscriberConfig {
+export interface VelaEventSubscriberConfig {
   rpcUrl: string;
   contractId: string;
   cursorStore?: CursorStore;
@@ -26,7 +26,7 @@ interface GetEventsResult {
   latestLedger?: number;
 }
 
-interface PoolXWebSocket {
+interface VelaWebSocket {
   onopen: (() => void) | null;
   onmessage: ((event: { data: unknown }) => void) | null;
   onclose: (() => void) | null;
@@ -35,16 +35,16 @@ interface PoolXWebSocket {
   close(): void;
 }
 
-export type WebSocketFactory = (url: string) => PoolXWebSocket;
+export type WebSocketFactory = (url: string) => VelaWebSocket;
 
 const DEFAULT_PAGE_LIMIT = 100;
 const DEFAULT_START_LEDGER = 0;
 const DEFAULT_MIN_POLL_INTERVAL_MS = 100;
 const DEFAULT_MAX_POLL_INTERVAL_MS = 5_000;
 
-export class PoolXEventSubscriber {
+export class VelaEventSubscriber {
   private readonly cursorStore: CursorStore;
-  private handlers: PoolXEventHandlers = {};
+  private handlers: VelaEventHandlers = {};
   private running = false;
   private stopRequested = false;
   private timer: unknown;
@@ -52,9 +52,9 @@ export class PoolXEventSubscriber {
   private loopPromise?: Promise<void>;
   private cursor?: string;
   private pollIntervalMs: number;
-  private socket?: PoolXWebSocket;
+  private socket?: VelaWebSocket;
 
-  constructor(private readonly config: PoolXEventSubscriberConfig) {
+  constructor(private readonly config: VelaEventSubscriberConfig) {
     this.cursorStore = config.cursorStore ?? createDefaultCursorStore(config.cursorKeyOrPath);
     this.pollIntervalMs = config.minPollIntervalMs ?? DEFAULT_MIN_POLL_INTERVAL_MS;
   }
@@ -80,10 +80,10 @@ export class PoolXEventSubscriber {
    * // unsubscribe();
    * ```
    */
-  subscribe(handlers: PoolXEventHandlers): () => void {
+  subscribe(handlers: VelaEventHandlers): () => void {
     this.handlers = { ...this.handlers, ...handlers };
     return () => {
-      for (const type of Object.keys(handlers) as PoolXEvent["type"][]) {
+      for (const type of Object.keys(handlers) as VelaEvent["type"][]) {
         delete this.handlers[type];
       }
     };
@@ -236,9 +236,9 @@ export class PoolXEventSubscriber {
     }
   }
 
-  private async emit(event: PoolXEvent): Promise<void> {
+  private async emit(event: VelaEvent): Promise<void> {
     const handler = this.handlers[event.type] as
-      | ((event: PoolXEvent) => void | Promise<void>)
+      | ((event: VelaEvent) => void | Promise<void>)
       | undefined;
     await handler?.(event);
   }
@@ -359,7 +359,7 @@ export class PoolXEventSubscriber {
 }
 
 function getGlobalWebSocketFactory(): WebSocketFactory | undefined {
-  const WebSocketCtor = (globalThis as { WebSocket?: new (url: string) => PoolXWebSocket })
+  const WebSocketCtor = (globalThis as { WebSocket?: new (url: string) => VelaWebSocket })
     .WebSocket;
   return WebSocketCtor ? (url: string) => new WebSocketCtor(url) : undefined;
 }

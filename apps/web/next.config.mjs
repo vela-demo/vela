@@ -5,7 +5,7 @@ const __dirname = fileURLToPath(new URL('.', import.meta.url));
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  transpilePackages: ['poolx-sdk', '@poolx/types'],
+  transpilePackages: ['vela-sdk', '@vela/types'],
   eslint: {
     ignoreDuringBuilds: true,
   },
@@ -13,9 +13,9 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
   webpack: (config) => {
-    // Resolve poolx-sdk to its TypeScript source so Next.js can transpile it
+    // Resolve vela-sdk to its TypeScript source so Next.js can transpile it
     // directly instead of relying on a pre-built dist/ folder.
-    config.resolve.alias['poolx-sdk'] = path.resolve(
+    config.resolve.alias['vela-sdk'] = path.resolve(
       __dirname,
       '../../packages/sdk/src',
     );

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
@@ -73,7 +73,7 @@ export function ExploreStep({ onComplete, onBack }: ExploreStepProps) {
       <div className="mb-8 text-center">
         <div className="text-6xl mb-4">🌟</div>
         <h2 className="text-3xl font-bold mb-2">Explore Featured Posts</h2>
-        <p className="text-[var(--text-muted)]">See what&apos;s trending on PoolX</p>
+        <p className="text-[var(--fg-muted)]">See what&apos;s trending on Vela</p>
       </div>
 
       {/* Featured Posts Preview */}
@@ -81,7 +81,7 @@ export function ExploreStep({ onComplete, onBack }: ExploreStepProps) {
         {FEATURED_POSTS.map((post) => (
           <div
             key={post.id}
-            className="p-5 rounded-lg border border-[var(--border)] bg-[var(--background)] hover:bg-[var(--muted)] transition-colors"
+            className="p-5 rounded-lg border border-[var(--border)] bg-[var(--bg)] hover:bg-[var(--bg-subtle)] transition-colors"
           >
             {/* Author */}
             <div className="flex items-center gap-3 mb-3">
@@ -90,7 +90,7 @@ export function ExploreStep({ onComplete, onBack }: ExploreStepProps) {
               </div>
               <div>
                 <h4 className="font-semibold text-[var(--text)]">@{post.username}</h4>
-                <p className="text-xs text-[var(--text-muted)]">{post.author.slice(0, 8)}...</p>
+                <p className="text-xs text-[var(--fg-muted)]">{post.author.slice(0, 8)}...</p>
               </div>
             </div>
 
@@ -98,7 +98,7 @@ export function ExploreStep({ onComplete, onBack }: ExploreStepProps) {
             <p className="text-[var(--text)] mb-3 whitespace-pre-line">{post.content}</p>
 
             {/* Engagement Stats */}
-            <div className="flex items-center gap-4 text-sm text-[var(--text-muted)]">
+            <div className="flex items-center gap-4 text-sm text-[var(--fg-muted)]">
               <div className="flex items-center gap-1">
                 <span>❤️</span>
                 <span>{post.likes}</span>
@@ -116,8 +116,8 @@ export function ExploreStep({ onComplete, onBack }: ExploreStepProps) {
       <div className="p-6 rounded-lg bg-gradient-to-br from-violet-50 to-purple-50 dark:from-violet-950/30 dark:to-purple-950/30 border border-violet-200 dark:border-violet-800 text-center mb-8">
         <div className="text-4xl mb-3">🎉</div>
         <h3 className="text-xl font-bold mb-2">You&apos;re All Set!</h3>
-        <p className="text-[var(--text-muted)]">
-          Your PoolX profile is ready. Start exploring, posting, and connecting with the
+        <p className="text-[var(--fg-muted)]">
+          Your Vela profile is ready. Start exploring, posting, and connecting with the
           community!
         </p>
       </div>
@@ -127,7 +127,7 @@ export function ExploreStep({ onComplete, onBack }: ExploreStepProps) {
         <button
           type="button"
           onClick={onBack}
-          className="px-6 py-3 border border-[var(--border)] rounded-lg hover:bg-[var(--muted)] transition-colors"
+          className="px-6 py-3 border border-[var(--border)] rounded-lg hover:bg-[var(--bg-subtle)] transition-colors"
         >
           Back
         </button>
@@ -137,7 +137,7 @@ export function ExploreStep({ onComplete, onBack }: ExploreStepProps) {
           disabled={submitting}
           className="flex-1 px-6 py-3 bg-gradient-to-r from-violet-600 to-purple-600 text-white font-semibold rounded-lg hover:from-violet-700 hover:to-purple-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
         >
-          {submitting ? "Loading..." : "Start Using PoolX 🚀"}
+          {submitting ? "Loading..." : "Start Using Vela 🚀"}
         </button>
       </div>
     </div>

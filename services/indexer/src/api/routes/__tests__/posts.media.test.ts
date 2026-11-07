@@ -16,7 +16,7 @@ function buildApp(mediaUpload: MediaUploadConfig = DEFAULT_MEDIA_UPLOAD_CONFIG) 
 }
 
 function multipartBody(fieldName: string, filename: string, contentType: string, data: Buffer) {
-  const boundary = "----poolxTestBoundary";
+  const boundary = "----velaTestBoundary";
   const head = Buffer.from(
     `--${boundary}\r\nContent-Disposition: form-data; name="${fieldName}"; filename="${filename}"\r\nContent-Type: ${contentType}\r\n\r\n`
   );
@@ -48,7 +48,7 @@ describe("posts media upload API", () => {
     let uploadDir: string;
 
     beforeEach(async () => {
-      uploadDir = await mkdtemp(join(tmpdir(), "poolx-media-"));
+      uploadDir = await mkdtemp(join(tmpdir(), "vela-media-"));
     });
 
     afterEach(async () => {

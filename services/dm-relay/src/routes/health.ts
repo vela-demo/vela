@@ -15,7 +15,7 @@
  */
 
 import { Router } from "express";
-import type { RateLimitStoreStatus } from "@poolx/types/src/rate-limit-env";
+import type { RateLimitStoreStatus } from "@vela/types/src/rate-limit-env";
 import { Database } from "../database";
 import { getRateLimitStoreStatus } from "../middleware/rateLimit";
 

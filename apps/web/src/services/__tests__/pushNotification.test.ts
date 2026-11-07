@@ -1,6 +1,6 @@
 import { createHash } from "crypto";
 import { TextEncoder as NodeTextEncoder, TextDecoder as NodeTextDecoder } from "util";
-import { buildAuthMessage } from "@poolx/types/src/auth";
+import { buildAuthMessage } from "@vela/types/src/auth";
 
 function toBuffer(data: BufferSource): Buffer {
   return ArrayBuffer.isView(data)

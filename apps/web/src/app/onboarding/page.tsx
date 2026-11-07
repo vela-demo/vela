@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
@@ -28,7 +28,7 @@ export default function OnboardingPage() {
   if (!shouldShowOnboarding() || !connected) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-pulse text-[var(--text-muted)]">Loading...</div>
+        <div className="animate-pulse text-[var(--fg-muted)]">Loading...</div>
       </div>
     );
   }

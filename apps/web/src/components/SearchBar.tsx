@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { FormEvent, useEffect, useState, useRef } from "react";
 import { validateSearchQuery } from "@/lib/validate";
@@ -148,7 +148,7 @@ export default function SearchBar({
 
     return parts.map((part, index) =>
       regex.test(part) ? (
-        <mark key={index} className="bg-violet-500/30 text-[var(--foreground)] font-semibold">
+        <mark key={index} className="bg-violet-500/30 text-[var(--fg)] font-semibold">
           {part}
         </mark>
       ) : (
@@ -184,7 +184,7 @@ export default function SearchBar({
             aria-activedescendant={
               activeSuggestionIndex >= 0 ? `suggestion-${activeSuggestionIndex}` : undefined
             }
-            className={`w-full rounded-lg border border-[var(--border)] bg-[var(--muted)] px-3 md:px-4 py-2 pr-20 md:pr-24 text-[var(--foreground)] placeholder:text-[var(--text-muted)] focus:outline-none focus:ring-2 focus:ring-violet-500 ${inputClassName}`}
+            className={`w-full rounded-lg border border-[var(--border)] bg-[var(--bg-subtle)] px-3 md:px-4 py-2 pr-20 md:pr-24 text-[var(--fg)] placeholder:text-[var(--fg-muted)] focus:outline-none focus:ring-2 focus:ring-violet-500 ${inputClassName}`}
           />
           <button
             type="submit"
@@ -205,7 +205,7 @@ export default function SearchBar({
           className="absolute z-50 mt-2 w-full rounded-lg border border-[var(--border)] bg-[var(--card)] shadow-lg max-h-80 overflow-y-auto"
         >
           {loading && query.trim() && (
-            <div className="px-4 py-3 text-sm text-[var(--text-muted)] flex items-center gap-2">
+            <div className="px-4 py-3 text-sm text-[var(--fg-muted)] flex items-center gap-2">
               <svg
                 className="animate-spin h-4 w-4"
                 xmlns="http://www.w3.org/2000/svg"
@@ -232,7 +232,7 @@ export default function SearchBar({
 
           {!query.trim() && recentSearches.length > 0 && (
             <div className="flex items-center justify-between px-4 py-2 border-b border-[var(--border)]">
-              <span className="text-xs font-semibold text-[var(--text-muted)] uppercase">
+              <span className="text-xs font-semibold text-[var(--fg-muted)] uppercase">
                 Recent Searches
               </span>
               <button
@@ -257,8 +257,8 @@ export default function SearchBar({
               aria-selected={index === activeSuggestionIndex}
               type="button"
               onClick={() => handleSuggestionClick(suggestion)}
-              className={`w-full px-4 py-3 text-left hover:bg-[var(--muted)] transition-colors flex items-center gap-3 ${
-                index === activeSuggestionIndex ? "bg-[var(--muted)]" : ""
+              className={`w-full px-4 py-3 text-left hover:bg-[var(--bg-subtle)] transition-colors flex items-center gap-3 ${
+                index === activeSuggestionIndex ? "bg-[var(--bg-subtle)]" : ""
               }`}
             >
               {/* Icon */}
@@ -274,7 +274,7 @@ export default function SearchBar({
                   </div>
                 )}
                 {suggestion.type === "recent" && (
-                  <div className="w-8 h-8 flex items-center justify-center text-[var(--text-muted)]">
+                  <div className="w-8 h-8 flex items-center justify-center text-[var(--fg-muted)]">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
@@ -295,16 +295,16 @@ export default function SearchBar({
 
               {/* Content */}
               <div className="flex-1 min-w-0">
-                <div className="text-sm font-medium text-[var(--foreground)] truncate">
+                <div className="text-sm font-medium text-[var(--fg)] truncate">
                   {query.trim() && suggestion.type !== "recent"
                     ? highlightMatch(suggestion.displayName || suggestion.value, query)
                     : suggestion.displayName || suggestion.value}
                 </div>
                 {suggestion.type === "profile" && (
-                  <div className="text-xs text-[var(--text-muted)] truncate">Profile</div>
+                  <div className="text-xs text-[var(--fg-muted)] truncate">Profile</div>
                 )}
                 {suggestion.type === "hashtag" && (
-                  <div className="text-xs text-[var(--text-muted)]">Hashtag</div>
+                  <div className="text-xs text-[var(--fg-muted)]">Hashtag</div>
                 )}
               </div>
 
@@ -313,7 +313,7 @@ export default function SearchBar({
                 <button
                   type="button"
                   onClick={(e) => handleRemoveRecent(e, suggestion.value)}
-                  className="flex-shrink-0 p-1 text-[var(--text-muted)] hover:text-[var(--foreground)] transition-colors"
+                  className="flex-shrink-0 p-1 text-[var(--fg-muted)] hover:text-[var(--fg)] transition-colors"
                   aria-label={`Remove ${suggestion.value} from recent searches`}
                 >
                   <svg

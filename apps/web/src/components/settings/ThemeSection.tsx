@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import {
@@ -20,12 +20,12 @@ export function ThemeSection() {
   }
 
   return (
-    <section className="bg-[var(--bg-secondary)] rounded-lg border border-[var(--border)] p-6">
-      <h2 className="text-xl font-semibold mb-4 text-[var(--text-primary)]">Appearance</h2>
+    <section className="bg-[var(--bg-subtle)] rounded-lg border border-[var(--border)] p-6">
+      <h2 className="text-xl font-semibold mb-4 text-[var(--fg)]">Appearance</h2>
       <div className="flex items-center justify-between gap-4">
         <div>
-          <p className="text-sm font-medium text-[var(--text-primary)]">Theme</p>
-          <p className="text-xs text-[var(--text-muted)] mt-1">Choose how PoolX looks on this device.</p>
+          <p className="text-sm font-medium text-[var(--fg)]">Theme</p>
+          <p className="text-xs text-[var(--fg-muted)] mt-1">Choose how Vela looks on this device.</p>
         </div>
         <div
           className="inline-flex rounded-lg border border-[var(--border)] bg-[var(--bg-tertiary)] p-1"
@@ -40,7 +40,7 @@ export function ThemeSection() {
               className={`min-w-[72px] rounded-md px-3 py-1.5 text-sm font-semibold transition-colors ${
                 theme === option
                   ? "bg-violet-600 text-white"
-                  : "text-[var(--text-primary)] hover:bg-[var(--bg-secondary)]"
+                  : "text-[var(--fg)] hover:bg-[var(--bg-subtle)]"
               }`}
               aria-pressed={theme === option}
             >
